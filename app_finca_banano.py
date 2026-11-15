@@ -143,73 +143,75 @@ elif rol == "Puyero (Consulta)":
 elif rol == "Administrador":
     clave = st.text_input("Clave de Administrador:", type="password")
     
-    if clave == CLAVE_ADMIN:
-        tab1, tab2 = st.tabs(["Inventario y Cajas", "Subir CSV de Tableta"])
-        
-        with tab1:
-            st.subheader("Proyección de Cosecha (86.1 Ha)")
-            col_r1, col_r2 = st.columns(2)
-            ratio = col_r1.number_input("Ratio (Cajas / Racimo):", value=1.15, min_value=0.50, max_value=2.50, step=0.05)
-            merma = col_r2.slider("Merma estimada (%):", 0, 20, 5)
-            
-            df = cargar_datos()
-            if df.empty:
-                st.warning("Aún no hay movimientos registrados.")
-            else:
-                saldo_general = df.groupby(["Lote", "Color_Cinta"])["Racimos"].sum().reset_index()
-                saldo_activo = saldo_general[saldo_general["Racimos"] > 0].copy()
-                
-                total_racimos = int(saldo_activo["Racimos"].sum())
-                cajas_est = total_racimos * (1 - merma / 100.0) * ratio
-                
-                m1, m2 = st.columns(2)
-                m1.metric("Saldo Real en Mata", f"{total_racimos:,} racimos")
-                m2.metric("Cajas Proyectadas (20 kg)", f"{cajas_est:,.0f} cajas")
-                
-                st.write("Saldo por Color de Cinta (Toda la Finca)")
-                por_cinta = saldo_activo.groupby("Color_Cinta")["Racimos"].sum().reset_index()
-                por_cinta["Cajas_Est"] = (por_cinta["Racimos"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
-                st.dataframe(por_cinta, use_container_width=True)
-                
-                st.write("Saldo Detallado por Lote (Fruta que quedó en mata)")
-                saldo_activo["Cajas_Est"] = (saldo_activo["Racimos"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
-                st.dataframe(saldo_activo, use_container_width=True)
-                
-                st.write("Embolse por Trabajador")
-                solo_embolse = df[df["Racimos"] > 0]
-                por_trabajador = solo_embolse.groupby(["Parcelero", "Fecha"])["Racimos"].sum().reset_index()
-                st.dataframe(por_trabajador, use_container_width=True)
+    if clave != CLAVE_ADMIN:
+        if clave != "":
+            st.error("Clave incorrecta.")
+        st.stop()
 
-        with tab2:
-            st.subheader("Descontar Corte con CSV Directo de Tableta")
-            st.write("Sube el archivo .csv que genera la tableta (sin necesidad de pasarlo a Excel).")
+    tab1, tab2 = st.tabs(["Inventario y Cajas", "Subir CSV de Tableta"])
+    
+    with tab1:
+        st.subheader("Proyección de Cosecha (86.1 Ha)")
+        col_r1, col_r2 = st.columns(2)
+        ratio = col_r1.number_input("Ratio (Cajas / Racimo):", value=1.15, min_value=0.50, max_value=2.50, step=0.05)
+        merma = col_r2.slider("Merma estimada (%):", 0, 20, 5)
+        
+        df = cargar_datos()
+        if df.empty:
+            st.warning("Aún no hay movimientos registrados.")
+        else:
+            saldo_general = df.groupby(["Lote", "Color_Cinta"])["Racimos"].sum().reset_index()
+            saldo_activo = saldo_general[saldo_general["Racimos"] > 0].copy()
             
-            archivo_csv = st.file_uploader("Seleccionar archivo .csv de la tableta", type=["csv"])
+            total_racimos = int(saldo_activo["Racimos"].sum())
+            cajas_est = total_racimos * (1 - merma / 100.0) * ratio
             
-            if archivo_csv is not None:
-                try:
-                    df_tab = pd.read_csv(archivo_csv, sep=None, engine="python")
-                except Exception:
-                    archivo_csv.seek(0)
-                    df_tab = pd.read_csv(archivo_csv)
-                
-                st.write("Vista previa del CSV cargado:")
-                st.dataframe(df_tab.head(10), use_container_width=True)
-                
-                columnas_archivo = df_tab.columns.tolist()
-                c1, c2, c3 = st.columns(3)
-                col_lote = c1.selectbox("Columna de Lote:", columnas_archivo)
-                col_color = c2.selectbox("Columna de Color:", columnas_archivo)
-                col_cant = c3.selectbox("Columna de Cantidad:", columnas_archivo)
-                
-                if st.button("Procesar CSV y Descontar Inventario", type="primary"):
-                    descuentos = procesar_csv_tableta(df_tab, col_lote, col_color, col_cant)
-                    if descuentos:
-                        df_actual = cargar_datos()
-                        df_actualizado = pd.concat([df_actual, pd.DataFrame(descuentos)], ignore_index=True)
-                        conn.update(worksheet=NOMBRE_HOJA, data=df_actualizado)
-                        st.success(f"Listo. Se descontaron {len(descuentos)} registros del CSV en tu inventario.")
-                    else:
-                        st.error("No se encontraron cantidades válidas en las columnas seleccionadas.")
-                    elif clave != "":
-                        st.error("Clave incorrecta.")
+            m1, m2 = st.columns(2)
+            m1.metric("Saldo Real en Mata", f"{total_racimos:,} racimos")
+            m2.metric("Cajas Proyectadas (20 kg)", f"{cajas_est:,.0f} cajas")
+            
+            st.write("Saldo por Color de Cinta (Toda la Finca)")
+            por_cinta = saldo_activo.groupby("Color_Cinta")["Racimos"].sum().reset_index()
+            por_cinta["Cajas_Est"] = (por_cinta["Racimos"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
+            st.dataframe(por_cinta, use_container_width=True)
+            
+            st.write("Saldo Detallado por Lote (Fruta que quedó en mata)")
+            saldo_activo["Cajas_Est"] = (saldo_activo["Racimos"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
+            st.dataframe(saldo_activo, use_container_width=True)
+            
+            st.write("Embolse por Trabajador")
+            solo_embolse = df[df["Racimos"] > 0]
+            por_trabajador = solo_embolse.groupby(["Parcelero", "Fecha"])["Racimos"].sum().reset_index()
+            st.dataframe(por_trabajador, use_container_width=True)
+
+    with tab2:
+        st.subheader("Descontar Corte con CSV Directo de Tableta")
+        st.write("Sube el archivo .csv que genera la tableta (sin necesidad de pasarlo a Excel).")
+        
+        archivo_csv = st.file_uploader("Seleccionar archivo .csv de la tableta", type=["csv"])
+        
+        if archivo_csv is not None:
+            try:
+                df_tab = pd.read_csv(archivo_csv, sep=None, engine="python")
+            except Exception:
+                archivo_csv.seek(0)
+                df_tab = pd.read_csv(archivo_csv)
+            
+            st.write("Vista previa del CSV cargado:")
+            st.dataframe(df_tab.head(10), use_container_width=True)
+            
+            columnas_archivo = df_tab.columns.tolist()
+            c1, c2, c3 = st.columns(3)
+            col_lote = c1.selectbox("Columna de Lote:", columnas_archivo)
+            col_color = c2.selectbox("Columna de Color:", columnas_archivo)
+            col_cant = c3.selectbox("Columna de Cantidad:", columnas_archivo)
+            
+            if st.button("Procesar CSV y Descontar Inventario", type="primary"):
+                descuentos = procesar_csv_tableta(df_tab, col_lote, col_color, col_cant)
+                if descuentos:
+                    df_actual = cargar_datos()
+                    df_actualizado = pd.concat([df_actual, pd.DataFrame(descuentos)], ignore_index=True)
+                    conn.update(worksheet=NOMBRE_HOJA, data=df_actualizado)
+                    st.success(f"Listo. Se descontaron {len(descuentos)} registros del CSV en tu inventario.")
+                else:
+                    st.error("No se encontraron cantidades válidas en las columnas seleccionadas.")
