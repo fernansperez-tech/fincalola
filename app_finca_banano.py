@@ -28,6 +28,28 @@ def cargar_datos():
     except Exception:
         return pd.DataFrame(columns=["Fecha", "Hora", "Semana", "Lote", "Parcelero", "Color_Cinta", "Racimos", "Estado"])
 
+def procesar_csv_tableta(df_tab, col_lote, col_color, col_cant):
+    ahora = datetime.now()
+    descuentos = []
+    for _, fila in df_tab.iterrows():
+        cant = pd.to_numeric(fila[col_cant], errors="coerce")
+        if pd.notna(cant) and cant > 0:
+            lote_raw = str(fila[col_lote]).strip()
+            num_lote = "".join(filter(str.isdigit, lote_raw))
+            lote_norm = f"Lote {int(num_lote):02d}" if num_lote else lote_raw
+            color_norm = str(fila[col_color]).strip().capitalize()
+            descuentos.append({
+                "Fecha": ahora.strftime("%Y-%m-%d"),
+                "Hora": ahora.strftime("%H:%M"),
+                "Semana": ahora.isocalendar().week,
+                "Lote": lote_norm,
+                "Parcelero": "Corte Tableta CSV",
+                "Color_Cinta": color_norm,
+                "Racimos": -int(cant),
+                "Estado": "Cortado"
+            })
+    return descuentos
+
 st.title("Gestión Finca Lola (86.1 Ha)")
 
 if len(st.session_state.cola_offline) > 0:
@@ -181,34 +203,13 @@ elif rol == "Administrador":
                 col_cant = c3.selectbox("Columna de Cantidad:", columnas_archivo)
                 
                 if st.button("Procesar CSV y Descontar Inventario", type="primary"):
-                    ahora = datetime.now()
-                    descuentos = []
-                    for _, fila in df_tab.iterrows():
-                        cant = pd.to_numeric(fila[col_cant], errors="coerce")
-                        if pd.notna(cant) and cant > 0:
-                            lote_raw = str(fila[col_lote]).strip()
-                            num_lote = "".join(filter(str.isdigit, lote_raw))
-                            lote_norm = f"Lote {int(num_lote):02d}" if num_lote else lote_raw
-                            color_norm = str(fila[col_color]).strip().capitalize()
-                            
-                            descuentos.append({
-                                "Fecha": ahora.strftime("%Y-%m-%d"),
-                                "Hora": ahora.strftime("%H:%M"),
-                                "Semana": ahora.isocalendar().week,
-                                "Lote": lote_norm,
-                                "Parcelero": "Corte Tableta CSV",
-                                "Color_Cinta": color_norm,
-                                "Racimos": -int(cant),
-                                "Estado": "Cortado"
-                            })
-                    
-                  if descuentos:
+                    descuentos = procesar_csv_tableta(df_tab, col_lote, col_color, col_cant)
+                    if descuentos:
                         df_actual = cargar_datos()
                         df_actualizado = pd.concat([df_actual, pd.DataFrame(descuentos)], ignore_index=True)
                         conn.update(worksheet=NOMBRE_HOJA, data=df_actualizado)
                         st.success(f"Listo. Se descontaron {len(descuentos)} registros del CSV en tu inventario.")
                     else:
                         st.error("No se encontraron cantidades válidas en las columnas seleccionadas.")
-
-    elif clave != "":
-        st.error("Clave incorrecta.")
+                    elif clave != "":
+                        st.error("Clave incorrecta.")
