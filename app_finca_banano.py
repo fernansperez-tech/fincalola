@@ -202,12 +202,13 @@ elif rol == "Administrador":
                                 "Estado": "Cortado"
                             })
                     
-                    if descuentos:
+                                       if descuentos:
                         df_actual = cargar_datos()
                         df_actualizado = pd.concat([df_actual, pd.DataFrame(descuentos)], ignore_index=True)
                         conn.update(worksheet=NOMBRE_HOJA, data=df_actualizado)
-                       st.success(f"Listo. Se descontaron {len(descuentos)} registros del CSV en tu inventario.")
-                       else:
-                       st.error("No se encontraron cantidades válidas en las columnas seleccionadas.")
-                       elif clave != "":
-                       st.error("Clave incorrecta.")
+                        st.success(f"Listo. Se descontaron {len(descuentos)} registros del CSV en tu inventario.")
+                    else:
+                        st.error("No se encontraron cantidades válidas en las columnas seleccionadas.")
+
+    elif clave != "":
+        st.error("Clave incorrecta.")
