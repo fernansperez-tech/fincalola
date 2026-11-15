@@ -12,6 +12,7 @@ COLORES_CINTA = ["Amarilla", "Morada", "Roja", "Café", "Negra", "Verde", "Azul"
 LOTES = [f"Lote {i:02d}" for i in range(1, 15)]
 PARCELEROS_BASE = [f"Parcelero {i:02d}" for i in range(1, 11)] + ["Otro (Escribir nombre)"]
 CLAVE_ADMIN = "banano2026"
+NOMBRE_HOJA = "Hoja 1"
 
 if "cola_offline" not in st.session_state:
     st.session_state.cola_offline = []
@@ -20,7 +21,7 @@ conn = st.connection("gsheets", type=GSheetsConnection)
 
 def cargar_datos():
     try:
-        df = conn.read(ttl=5)
+        df = conn.read(worksheet=NOMBRE_HOJA, ttl=0)
         if df.empty or "Lote" not in df.columns:
             return pd.DataFrame(columns=["Fecha", "Hora", "Semana", "Lote", "Parcelero", "Color_Cinta", "Racimos", "Estado"])
         return df.dropna(how="all")
@@ -30,17 +31,17 @@ def cargar_datos():
 st.title("Gestión Finca Lola (86.1 Ha)")
 
 if len(st.session_state.cola_offline) > 0:
-    st.warning(f"Tienes {len(st.session_state.cola_offline)} registro(s) guardados sin señal en el celular.")
+    st.warning(f"Tienes {len(st.session_state.cola_offline)} registro(s) guardados en el celular.")
     if st.button("Sincronizar ahora con Google Sheets", type="primary"):
         try:
             df_actual = cargar_datos()
             df_actualizado = pd.concat([df_actual, pd.DataFrame(st.session_state.cola_offline)], ignore_index=True)
-            conn.update(data=df_actualizado)
+            conn.update(worksheet=NOMBRE_HOJA, data=df_actualizado)
             st.session_state.cola_offline = []
             st.success("Registros sincronizados correctamente.")
             st.rerun()
-        except Exception:
-            st.error("Sigue sin haber señal estable. Intenta al salir a la guardarraya.")
+        except Exception as e:
+            st.error(f"Error al sincronizar: {e}")
 
 rol = st.radio("Selecciona perfil:", ["Parcelero (Embolse)", "Puyero (Consulta)", "Administrador"], horizontal=True)
 
@@ -83,11 +84,10 @@ if rol == "Parcelero (Embolse)":
         try:
             df_actual = cargar_datos()
             df_actualizado = pd.concat([df_actual, pd.DataFrame([registro])], ignore_index=True)
-            conn.update(data=df_actualizado)
+            conn.update(worksheet=NOMBRE_HOJA, data=df_actualizado)
             st.success(f"Guardados {racimos} racimos ({cinta}) en {lote_sel}.")
-        except Exception:
-            st.session_state.cola_offline.append(registro)
-            st.info("Sin internet. Guardado en memoria del celular; súbelo al salir del lote.")
+        except Exception as e:
+            st.error(f"Detalle del error con Google: {e}")
 
 elif rol == "Puyero (Consulta)":
     st.subheader("Consulta de Fruta Colgada en el Lote")
@@ -205,9 +205,9 @@ elif rol == "Administrador":
                     if descuentos:
                         df_actual = cargar_datos()
                         df_actualizado = pd.concat([df_actual, pd.DataFrame(descuentos)], ignore_index=True)
-                        conn.update(data=df_actualizado)
-                        st.success(f"Listo. Se descontaron {len(descuentos)} registros del CSV en tu inventario.")
-                    else:
-                        st.error("No se encontraron cantidades válidas en las columnas seleccionadas.")
-elif clave != "":
-    st.error("Clave incorrecta.")
+                        conn.update(worksheet=NOMBRE_HOJA, data=df_actualizado)
+                       st.success(f"Listo. Se descontaron {len(descuentos)} registros del CSV en tu inventario.")
+                       else:
+                       st.error("No se encontraron cantidades válidas en las columnas seleccionadas.")
+                       elif clave != "":
+                       st.error("Clave incorrecta.")
