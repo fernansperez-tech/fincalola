@@ -47,16 +47,15 @@ rol = st.radio("Selecciona perfil:", ["Parcelero (Embolse)", "Puyero (Consulta)"
 if rol == "Parcelero (Embolse)":
     st.subheader("Registro de Fruta Embolsada")
     
-        lote_detectado = "Lote 01"
-        if st.toggle("📷 Activar cámara para escanear QR", key="qr_parcelero"):
-            foto_qr = st.camera_input("Apunta al QR del Lote")
-            if foto_qr:
-                img_bgr = cv2.cvtColor(np.array(Image.open(foto_qr)), cv2.COLOR_RGB2BGR)
-                dato_qr, _, _ = cv2.QRCodeDetector().detectAndDecode(img_bgr)
-                if dato_qr in LOTES:
-                    lote_detectado = dato_qr
-                    st.success(f"Lote detectado: {lote_detectado}")
-
+    lote_detectado = "Lote 01"
+    if st.toggle("Activar cámara para escanear QR", key="qr_parcelero"):
+        foto_qr = st.camera_input("Apunta al QR del Lote")
+        if foto_qr:
+            img_bgr = cv2.cvtColor(np.array(Image.open(foto_qr)), cv2.COLOR_RGB2BGR)
+            dato_qr, _, _ = cv2.QRCodeDetector().detectAndDecode(img_bgr)
+            if dato_qr in LOTES:
+                lote_detectado = dato_qr
+                st.success(f"Lote detectado: {lote_detectado}")
 
     lote_sel = st.selectbox("Lote:", LOTES, index=LOTES.index(lote_detectado))
     
@@ -92,16 +91,17 @@ if rol == "Parcelero (Embolse)":
 
 elif rol == "Puyero (Consulta)":
     st.subheader("Consulta de Fruta Colgada en el Lote")
-    st.caption("Escanea el QR del lote para saber cuántos racimos y de qué color hay adentro.")
+    st.caption("Activa la cámara para escanear el QR del lote o selecciónalo en la lista.")
     
-    foto_qr_p = st.camera_input("Escanear QR del Lote")
     lote_q = "Lote 01"
-    if foto_qr_p:
-        img_bgr = cv2.cvtColor(np.array(Image.open(foto_qr_p)), cv2.COLOR_RGB2BGR)
-        dato_qr, _, _ = cv2.QRCodeDetector().detectAndDecode(img_bgr)
-        if dato_qr in LOTES:
-            lote_q = dato_qr
-            st.success(f"Ubicación: {lote_q}")
+    if st.toggle("Activar cámara para escanear QR", key="qr_puyero"):
+        foto_qr_p = st.camera_input("Apunta al QR del Lote")
+        if foto_qr_p:
+            img_bgr = cv2.cvtColor(np.array(Image.open(foto_qr_p)), cv2.COLOR_RGB2BGR)
+            dato_qr, _, _ = cv2.QRCodeDetector().detectAndDecode(img_bgr)
+            if dato_qr in LOTES:
+                lote_q = dato_qr
+                st.success(f"Ubicación: {lote_q}")
 
     lote_rev = st.selectbox("Lote a consultar:", LOTES, index=LOTES.index(lote_q))
     df = cargar_datos()
