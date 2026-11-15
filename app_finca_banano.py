@@ -4,7 +4,7 @@ import numpy as np
 from PIL import Image
 import pandas as pd
 from datetime import datetime
-from streamlit_gsheets import GSheetsConnection
+import gspread
 
 st.set_page_config(page_title="Finca Lola - 86.1 Ha", page_icon="🍌", layout="centered")
 
@@ -12,22 +12,40 @@ COLORES_CINTA = ["Amarilla", "Morada", "Roja", "Café", "Negra", "Verde", "Azul"
 LOTES = [f"Lote {i:02d}" for i in range(1, 15)]
 PARCELEROS_BASE = [f"Parcelero {i:02d}" for i in range(1, 11)] + ["Otro (Escribir nombre)"]
 CLAVE_ADMIN = "banano2026"
-URL_HOJA = "https://google.com"
+ID_HOJA = "1WnHs71IMeuz9X9sAtJkNYJbR9QJE2QqAKq37-PGsr-0"
 NOMBRE_HOJA = "Hoja 1"
 
 if "cola_offline" not in st.session_state:
     st.session_state.cola_offline = []
 
-conn = st.connection("gsheets", type=GSheetsConnection)
+def conectar_hoja():
+    creds = dict(st.secrets["connections"]["gsheets"])
+    # Asegurar saltos de linea reales en la llave privada
+    if "private_key" in creds:
+        creds["private_key"] = creds["private_key"].replace("\\n", "\n")
+    gc = gspread.service_account_from_dict(creds)
+    sh = gc.open_by_key(ID_HOJA)
+    return sh.worksheet(NOMBRE_HOJA)
 
 def cargar_datos():
     try:
-        df = conn.read(spreadsheet=URL_HOJA, worksheet=NOMBRE_HOJA, ttl=0)
-        if df.empty or "Lote" not in df.columns:
+        ws = conectar_hoja()
+        datos = ws.get_all_records()
+        if not datos:
             return pd.DataFrame(columns=["Fecha", "Hora", "Semana", "Lote", "Parcelero", "Color_Cinta", "Racimos", "Estado"])
-        return df.dropna(how="all")
+        return pd.DataFrame(datos)
     except Exception:
         return pd.DataFrame(columns=["Fecha", "Hora", "Semana", "Lote", "Parcelero", "Color_Cinta", "Racimos", "Estado"])
+
+def agregar_filas(lista_registros):
+    ws = conectar_hoja()
+    filas = []
+    for r in lista_registros:
+        filas.append([
+            r["Fecha"], r["Hora"], int(r["Semana"]), r["Lote"],
+            r["Parcelero"], r["Color_Cinta"], int(r["Racimos"]), r["Estado"]
+        ])
+    ws.append_rows(filas)
 
 def procesar_csv_tableta(df_tab, col_lote, col_color, col_cant):
     ahora = datetime.now()
@@ -57,14 +75,12 @@ if len(st.session_state.cola_offline) > 0:
     st.warning(f"Tienes {len(st.session_state.cola_offline)} registro(s) guardados en el celular.")
     if st.button("Sincronizar ahora con Google Sheets", type="primary"):
         try:
-            df_actual = cargar_datos()
-            df_actualizado = pd.concat([df_actual, pd.DataFrame(st.session_state.cola_offline)], ignore_index=True)
-            conn.update(spreadsheet=URL_HOJA, worksheet=NOMBRE_HOJA, data=df_actualizado)
+            agregar_filas(st.session_state.cola_offline)
             st.session_state.cola_offline = []
             st.success("Registros sincronizados correctamente.")
             st.rerun()
         except Exception as e:
-            st.error(f"Error al sincronizar: {e}")
+            st.error(f"Error al sincronizar: {repr(e)}")
 
 rol = st.radio("Selecciona perfil:", ["Parcelero (Embolse)", "Puyero (Consulta)", "Administrador"], horizontal=True)
 
@@ -105,12 +121,10 @@ if rol == "Parcelero (Embolse)":
             "Estado": "En campo"
         }
         try:
-            df_actual = cargar_datos()
-            df_actualizado = pd.concat([df_actual, pd.DataFrame([registro])], ignore_index=True)
-            conn.update(spreadsheet=URL_HOJA, worksheet=NOMBRE_HOJA, data=df_actualizado)
+            agregar_filas([registro])
             st.success(f"Guardados {racimos} racimos ({cinta}) en {lote_sel}.")
         except Exception as e:
-            st.error(f"Detalle del error con Google: {e}")
+            st.error(f"Error técnico: {repr(e)}")
 
 elif rol == "Puyero (Consulta)":
     st.subheader("Consulta de Fruta Colgada en el Lote")
@@ -210,9 +224,10 @@ elif rol == "Administrador":
             if st.button("Procesar CSV y Descontar Inventario", type="primary"):
                 descuentos = procesar_csv_tableta(df_tab, col_lote, col_color, col_cant)
                 if descuentos:
-                    df_actual = cargar_datos()
-                    df_actualizado = pd.concat([df_actual, pd.DataFrame(descuentos)], ignore_index=True)
-                    conn.update(spreadsheet=URL_HOJA, worksheet=NOMBRE_HOJA, data=df_actualizado)
-                    st.success(f"Listo. Se descontaron {len(descuentos)} registros del CSV en tu inventario.")
+                    try:
+                        agregar_filas(descuentos)
+                        st.success(f"Listo. Se descontaron {len(descuentos)} registros del CSV en tu inventario.")
+                    except Exception as e:
+                        st.error(f"Error técnico al descontar: {repr(e)}")
                 else:
-                    st.error("No se encontraron cantidades válidas en las columnas seleccionadas.")
+                        st.error("No se encontraron cantidades válidas en las columnas seleccionadas.")
