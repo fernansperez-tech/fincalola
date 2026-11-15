@@ -202,7 +202,7 @@ elif rol == "Administrador":
                                 "Estado": "Cortado"
                             })
                     
-                   if descuentos:
+                  if descuentos:
                         df_actual = cargar_datos()
                         df_actualizado = pd.concat([df_actual, pd.DataFrame(descuentos)], ignore_index=True)
                         conn.update(worksheet=NOMBRE_HOJA, data=df_actualizado)
