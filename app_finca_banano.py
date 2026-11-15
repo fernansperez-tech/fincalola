@@ -47,14 +47,16 @@ rol = st.radio("Selecciona perfil:", ["Parcelero (Embolse)", "Puyero (Consulta)"
 if rol == "Parcelero (Embolse)":
     st.subheader("Registro de Fruta Embolsada")
     
-    foto_qr = st.camera_input("Escanear QR del Lote (Opcional)")
-    lote_detectado = "Lote 01"
-    if foto_qr:
-        img_bgr = cv2.cvtColor(np.array(Image.open(foto_qr)), cv2.COLOR_RGB2BGR)
-        dato_qr, _, _ = cv2.QRCodeDetector().detectAndDecode(img_bgr)
-        if dato_qr in LOTES:
-            lote_detectado = dato_qr
-            st.success(f"Lote detectado: {lote_detectado}")
+        lote_detectado = "Lote 01"
+    if st.toggle("📷 Activar cámara para escanear QR", key="qr_parcelero"):
+        foto_qr = st.camera_input("Apunta al QR del Lote")
+        if foto_qr:
+            img_bgr = cv2.cvtColor(np.array(Image.open(foto_qr)), cv2.COLOR_RGB2BGR)
+            dato_qr, _, _ = cv2.QRCodeDetector().detectAndDecode(img_bgr)
+            if dato_qr in LOTES:
+                lote_detectado = dato_qr
+                st.success(f"Lote detectado: {lote_detectado}")
+
 
     lote_sel = st.selectbox("Lote:", LOTES, index=LOTES.index(lote_detectado))
     
