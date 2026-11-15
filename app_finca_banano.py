@@ -206,6 +206,6 @@ elif rol == "Administrador":
                         conn.update(data=df_actualizado)
                         st.success(f"Listo. Se descontaron {len(descuentos)} registros del CSV en tu inventario.")
                     else:
-st.error("No se encontraron cantidades válidas en las columnas seleccionadas.")
+                        st.error("No se encontraron cantidades válidas en las columnas seleccionadas.")
 elif clave != "":
-st.error("Clave incorrecta.")
+    st.error("Clave incorrecta.")
