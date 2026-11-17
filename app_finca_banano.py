@@ -252,18 +252,18 @@ elif rol == "Administrador":
                 df_tab = pd.read_csv(archivo_csv)
             st.write("Vista previa del CSV cargado:")
             st.dataframe(df_tab.head(10), use_container_width=True)
-            columnas_archivo = df_tab.columns.tolist()
-            c1, c2, c3 = st.columns(3)
+                        columnas_archivo = df_tab.columns.tolist()
+            c1, c2 = st.columns(2)
             col_lote = c1.selectbox("Columna de Lote:", columnas_archivo)
             col_color = c2.selectbox("Columna de Color:", columnas_archivo)
-            col_cant = c3.selectbox("Columna de Cantidad:", columnas_archivo)
             if st.button("Procesar CSV y Descontar Inventario", type="primary"):
-                descuentos = procesar_csv_tableta(df_tab, col_lote, col_color, col_cant)
+                descuentos = procesar_csv_tableta(df_tab, col_lote, col_color)
                 if descuentos:
                     try:
                         agregar_filas(descuentos)
-                        st.success(f"Listo. Se descontaron {len(descuentos)} registros del CSV.")
+                        total_desc = sum(abs(d["Racimos"]) for d in descuentos)
+                        st.success(f"Listo. Se descontaron {total_desc} racimos en total de tu inventario.")
                     except Exception as e:
                         st.error(f"Error técnico al descontar: {repr(e)}")
                 else:
-                    st.error("No se encontraron cantidades válidas.")
+                    st.error("No se encontraron registros válidos en el CSV.")
