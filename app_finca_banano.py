@@ -131,7 +131,29 @@ if rol == "Parcelero (Embolse)":
         parcelero = st.text_input("Nombre del trabajador del día:").strip() or "Trabajador Extra"
     else:
         parcelero = sel_p
-    cinta = st.selectbox("Color de Cinta:", COLORES_CINTA)
+        st.write("Toca el color de la cinta:")
+    VISUAL_CINTAS = {
+        "🟡 Amarilla": "Amarilla",
+        "🟣 Morada": "Morada",
+        "🔴 Roja": "Roja",
+        "🟤 Café": "Café",
+        "⚫ Negra": "Negra",
+        "🟢 Verde": "Verde",
+        "🔵 Azul": "Azul",
+        "⚪ Blanca": "Blanca"
+    }
+    if "cinta_elegida" not in st.session_state:
+        st.session_state.cinta_elegida = "Amarilla"
+
+    cols_cinta = st.columns(4)
+    for idx, (etiqueta, nombre_real) in enumerate(VISUAL_CINTAS.items()):
+        with cols_cinta[idx % 4]:
+            if st.button(etiqueta, key=f"cinta_{nombre_real}", use_container_width=True):
+                st.session_state.cinta_elegida = nombre_real
+
+    cinta = st.session_state.cinta_elegida
+    st.info(f"Cinta seleccionada: **{cinta}**")
+
     racimos = st.number_input("Cantidad de racimos embolsados:", min_value=1, max_value=1000, value=35)
     if st.button("Guardar Embolse", type="primary"):
         ahora = datetime.now()
