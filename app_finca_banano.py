@@ -224,7 +224,7 @@ def calc_edad(fila):
                 y = anio_actual
             s = int(fila["Semana"])
             diff_semanas = (anio_actual - y) * 52 + (semana_actual - s)
-               return max(0, diff_semanas + 1)
+            return max(0, diff_semanas + 1)
         solo_emb["Edad_Num"] = solo_emb.apply(calc_edad, axis=1)
         solo_emb["Edad"] = solo_emb["Edad_Num"].astype(str) + " sem"
         f1, f2, f3 = st.columns(3)
