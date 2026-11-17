@@ -240,9 +240,9 @@ elif rol == "Administrador":
             solo_embolse = df[df["Racimos"] > 0]
             por_trabajador = solo_embolse.groupby(["Parcelero", "Fecha"])["Racimos"].sum().reset_index()
             st.dataframe(por_trabajador, use_container_width=True)
-    with tab2:
+        with tab2:
         st.subheader("Descontar Corte con CSV Directo de Tableta")
-        st.write("Sube el archivo .csv que genera la tableta.")
+        st.write("Sube el archivo .csv de la tableta (cada fila cuenta como 1 racimo).")
         archivo_csv = st.file_uploader("Seleccionar archivo .csv de la tableta", type=["csv"])
         if archivo_csv is not None:
             try:
@@ -252,7 +252,7 @@ elif rol == "Administrador":
                 df_tab = pd.read_csv(archivo_csv)
             st.write("Vista previa del CSV cargado:")
             st.dataframe(df_tab.head(10), use_container_width=True)
-                        columnas_archivo = df_tab.columns.tolist()
+            columnas_archivo = df_tab.columns.tolist()
             c1, c2 = st.columns(2)
             col_lote = c1.selectbox("Columna de Lote:", columnas_archivo)
             col_color = c2.selectbox("Columna de Color:", columnas_archivo)
@@ -262,7 +262,7 @@ elif rol == "Administrador":
                     try:
                         agregar_filas(descuentos)
                         total_desc = sum(abs(d["Racimos"]) for d in descuentos)
-                        st.success(f"Listo. Se descontaron {total_desc} racimos en total de tu inventario.")
+                        st.success(f"Listo. Se descontaron {total_desc} racimos en total.")
                     except Exception as e:
                         st.error(f"Error técnico al descontar: {repr(e)}")
                 else:
