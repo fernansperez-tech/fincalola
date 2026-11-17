@@ -284,7 +284,7 @@ with tab1:
                 st.write("Balance Detallado por Lote y Edad (FIFO)")
                 balance["Cajas_Est"] = (balance["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
                 st.dataframe(balance, use_container_width=True)
-    with tab2:
+with tab2:
         st.subheader("Buscador y Totales de Corte")
         solo_cortes = df[df["Racimos"] < 0].copy() if not df.empty else pd.DataFrame()
         if solo_cortes.empty:
