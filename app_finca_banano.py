@@ -170,13 +170,15 @@ if rol == "Parcelero (Embolse)":
     st.info(f"Cinta seleccionada: **{cinta}**")
     col_cant, col_edad = st.columns(2)
     racimos = col_cant.number_input("Cantidad de racimos:", min_value=1, max_value=1000, value=35)
-    edad_reg = col_edad.number_input("Edad actual (semanas):", min_value=1, max_value=15, value=1, help="Deja 1 si es de esta semana, o cambia si registras embolse atrasado.")
+    edad_reg = col_edad.number_input("Edad actual (semanas):", min_value=0, max_value=15, value=1, help="Usa 0 para embolse prematuro, 1 para esta semana, o más si es atrasado.")
     if st.button("Guardar Embolse", type="primary"):
         ahora = datetime.now()
         sem_actual = ahora.isocalendar().week
         sem_real = sem_actual - (int(edad_reg) - 1)
         if sem_real <= 0:
             sem_real += 52
+        elif sem_real > 52:
+            sem_real -= 52
         registro = {
             "Fecha": ahora.strftime("%Y-%m-%d"),
             "Hora": ahora.strftime("%H:%M"),
@@ -215,14 +217,14 @@ elif rol == "Consulta de Embolse":
         solo_emb["Fecha"] = solo_emb["Fecha"].astype(str)
         solo_emb["Anio"] = solo_emb["Fecha"].str[:4]
         solo_emb["Semana"] = solo_emb["Semana"].astype(int)
-        def calc_edad(fila):
+               def calc_edad(fila):
             try:
                 y = int(fila["Anio"])
             except Exception:
                 y = anio_actual
             s = int(fila["Semana"])
             diff_semanas = (anio_actual - y) * 52 + (semana_actual - s)
-            return max(1, diff_semanas + 1)
+            return max(0, diff_semanas + 1)
         solo_emb["Edad_Num"] = solo_emb.apply(calc_edad, axis=1)
         solo_emb["Edad"] = solo_emb["Edad_Num"].astype(str) + " sem"
         f1, f2, f3 = st.columns(3)
