@@ -22,9 +22,8 @@ if "cola_offline" not in st.session_state:
 def conectar_hoja():
     sec = st.secrets["connections"]["gsheets"]
     llave_privada = sec["private_key"].replace("\\n", "\n")
-    url_token = "https://" + "://googleapis.com" + "/token"
-    url_auth = "https://" + "://google.com" + "/o/oauth2/auth"
-    url_certs = "https://" + "://googleapis.com" + "/oauth2/v1/certs"
+    prefijo = "https" + chr(58) + "//"
+    dominio_g = "googleapis.com"
     info_credenciales = {
         "type": "service_account",
         "project_id": sec["project_id"],
@@ -32,14 +31,14 @@ def conectar_hoja():
         "private_key": llave_privada,
         "client_email": sec["client_email"],
         "client_id": sec["client_id"],
-        "auth_uri": url_auth,
-        "token_uri": url_token,
-        "auth_provider_x509_cert_url": url_certs,
+        "auth_uri": prefijo + "://google.com",
+        "token_uri": prefijo + "oauth2." + dominio_g + "/token",
+        "auth_provider_x509_cert_url": prefijo + "www." + dominio_g + "/oauth2/v1/certs",
         "client_x509_cert_url": sec.get("client_x509_cert_url", "")
     }
     alcances = [
-        "https://" + "://googleapis.com" + "/auth/spreadsheets",
-        "https://" + "://googleapis.com" + "/auth/drive"
+        prefijo + "www." + dominio_g + "/auth/spreadsheets",
+        prefijo + "www." + dominio_g + "/auth/drive"
     ]
     credenciales = Credentials.from_service_account_info(info_credenciales, scopes=alcances)
     gc = gspread.authorize(credenciales)
