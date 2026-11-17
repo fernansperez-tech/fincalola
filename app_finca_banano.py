@@ -209,29 +209,44 @@ elif rol == "Consulta de Embolse":
     if solo_emb.empty:
         st.info("Aún no hay registros de embolse en el sistema.")
     else:
-        semana_actual = datetime.now().isocalendar().week
+        ahora = datetime.now()
+        semana_actual = ahora.isocalendar().week
+        anio_actual = ahora.year
         solo_emb["Fecha"] = solo_emb["Fecha"].astype(str)
+        solo_emb["Anio"] = solo_emb["Fecha"].str[:4]
         solo_emb["Semana"] = solo_emb["Semana"].astype(int)
-        solo_emb["Edad_Num"] = solo_emb["Semana"].apply(lambda s: (semana_actual - s if semana_actual >= s else (52 - s) + semana_actual) + 1)
+        def calc_edad(fila):
+            try:
+                y = int(fila["Anio"])
+            except Exception:
+                y = anio_actual
+            s = int(fila["Semana"])
+            diff_semanas = (anio_actual - y) * 52 + (semana_actual - s)
+            return max(1, diff_semanas + 1)
+        solo_emb["Edad_Num"] = solo_emb.apply(calc_edad, axis=1)
         solo_emb["Edad"] = solo_emb["Edad_Num"].astype(str) + " sem"
         f1, f2, f3 = st.columns(3)
-        fechas_op = ["Todos"] + sorted(solo_emb["Fecha"].unique().tolist(), reverse=True)
+        anios_op = ["Todos"] + sorted(solo_emb["Anio"].unique().tolist(), reverse=True)
         semanas_op = ["Todas"] + sorted(solo_emb["Semana"].unique().tolist(), reverse=True)
-        lotes_op = ["Todos"] + sorted(solo_emb["Lote"].unique().tolist())
-        idx_lote = lotes_op.index(lote_qr) if lote_qr in lotes_op else 0
-        sel_fecha = f1.selectbox("Día (Fecha):", fechas_op)
+        fechas_op = ["Todos"] + sorted(solo_emb["Fecha"].unique().tolist(), reverse=True)
+        sel_anio = f1.selectbox("Año:", anios_op)
         sel_sem = f2.selectbox("Semana Embolse:", semanas_op)
-        sel_lote = f3.selectbox("Lote:", lotes_op, index=idx_lote)
-        f4, f5 = st.columns(2)
+        sel_fecha = f3.selectbox("Día (Fecha):", fechas_op)
+        f4, f5, f6 = st.columns(3)
+        lotes_op = ["Todos"] + sorted(solo_emb["Lote"].unique().tolist())
         colores_op = ["Todos"] + sorted(solo_emb["Color_Cinta"].unique().tolist())
         edades_op = ["Todas"] + [f"{e} sem" for e in sorted(solo_emb["Edad_Num"].unique().tolist())]
-        sel_color = f4.selectbox("Color de Cinta:", colores_op)
-        sel_edad = f5.selectbox("Edad:", edades_op)
+        idx_lote = lotes_op.index(lote_qr) if lote_qr in lotes_op else 0
+        sel_lote = f4.selectbox("Lote:", lotes_op, index=idx_lote)
+        sel_color = f5.selectbox("Color de Cinta:", colores_op)
+        sel_edad = f6.selectbox("Edad:", edades_op)
         df_res = solo_emb.copy()
-        if sel_fecha != "Todos":
-            df_res = df_res[df_res["Fecha"] == sel_fecha]
+        if sel_anio != "Todos":
+            df_res = df_res[df_res["Anio"] == sel_anio]
         if sel_sem != "Todas":
             df_res = df_res[df_res["Semana"] == sel_sem]
+        if sel_fecha != "Todos":
+            df_res = df_res[df_res["Fecha"] == sel_fecha]
         if sel_lote != "Todos":
             df_res = df_res[df_res["Lote"] == sel_lote]
         if sel_color != "Todos":
@@ -246,10 +261,10 @@ elif rol == "Consulta de Embolse":
         resumen_lote_final = pd.concat([resumen_lote, fila_total_lote], ignore_index=True)
         st.dataframe(resumen_lote_final, use_container_width=True, hide_index=True)
         st.write("### Detalle por Trabajador y Día")
-        tabla_ver = df_res[["Fecha", "Semana", "Lote", "Parcelero", "Color_Cinta", "Edad", "Racimos"]].copy()
+        tabla_ver = df_res[["Fecha", "Anio", "Semana", "Lote", "Parcelero", "Color_Cinta", "Edad", "Racimos"]].copy()
         fila_total = pd.DataFrame([{
-            "Fecha": "TOTAL", "Semana": "", "Lote": "", "Parcelero": "",
-            "Color_Cinta": "", "Edad": "", "Racimos": total_filtrado
+            "Fecha": "TOTAL", "Anio": "", "Semana": "", "Lote": "",
+            "Parcelero": "", "Color_Cinta": "", "Edad": "", "Racimos": total_filtrado
         }])
         tabla_final = pd.concat([tabla_ver, fila_total], ignore_index=True)
         st.dataframe(tabla_final, use_container_width=True, hide_index=True)
