@@ -78,26 +78,34 @@ def agregar_filas(lista_registros):
         ])
     ws.append_rows(filas)
 
-def procesar_csv_tableta(df_tab, col_lote, col_color, col_cant):
+def procesar_csv_tableta(df_tab, col_lote, col_color):
     ahora = datetime.now()
+    # Limpiar filas vacias
+    df_limpio = df_tab[[col_lote, col_color]].dropna().copy()
+    if df_limpio.empty:
+        return []
+        
+    # Agrupar por Lote y Color contando cuantas filas (racimos) hay de cada uno
+    conteo = df_limpio.groupby([col_lote, col_color]).size().reset_index(name="Total_Racimos")
+    
     descuentos = []
-    for _, fila in df_tab.iterrows():
-        cant = pd.to_numeric(fila[col_cant], errors="coerce")
-        if pd.notna(cant) and cant > 0:
-            lote_raw = str(fila[col_lote]).strip()
-            num_lote = "".join(filter(str.isdigit, lote_raw))
-            lote_norm = f"Lote {int(num_lote):02d}" if num_lote else lote_raw
-            color_norm = str(fila[col_color]).strip().capitalize()
-            descuentos.append({
-                "Fecha": ahora.strftime("%Y-%m-%d"),
-                "Hora": ahora.strftime("%H:%M"),
-                "Semana": ahora.isocalendar().week,
-                "Lote": lote_norm,
-                "Parcelero": "Corte Tableta CSV",
-                "Color_Cinta": color_norm,
-                "Racimos": -int(cant),
-                "Estado": "Cortado"
-            })
+    for _, fila in conteo.iterrows():
+        lote_raw = str(fila[col_lote]).strip()
+        num_lote = "".join(filter(str.isdigit, lote_raw))
+        lote_norm = f"Lote {int(num_lote):02d}" if num_lote else lote_raw
+        color_norm = str(fila[col_color]).strip().capitalize()
+        cant = int(fila["Total_Racimos"])
+        
+        descuentos.append({
+            "Fecha": ahora.strftime("%Y-%m-%d"),
+            "Hora": ahora.strftime("%H:%M"),
+            "Semana": ahora.isocalendar().week,
+            "Lote": lote_norm,
+            "Parcelero": "Corte Tableta CSV",
+            "Color_Cinta": color_norm,
+            "Racimos": -cant,
+            "Estado": "Cortado"
+        })
     return descuentos
 st.title("Gestión Finca Lola (86.1 Ha)")
 
