@@ -211,7 +211,7 @@ elif rol == "Puyero (Consulta)":
             st.write(f"Saldo actual en {lote_rev}:")
             st.dataframe(saldo.rename(columns={"Racimos": "Racimos_Disponibles"}), use_container_width=True)
             st.metric("Total en este lote", f"{int(saldo['Racimos'].sum())} racimos")
-            elif rol == "Administrador":
+        elif rol == "Administrador":
     clave = st.text_input("Clave de Administrador:", type="password")
     if clave != CLAVE_ADMIN:
         if clave != "":
