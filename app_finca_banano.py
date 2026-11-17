@@ -133,7 +133,7 @@ if len(st.session_state.cola_offline) > 0:
         except Exception as e:
             st.error(f"Error al sincronizar: {repr(e)}")
 
-rol = st.radio("Selecciona perfil:", ["Parcelero (Embolse)", "Puyero (Consulta)", "Administrador"], horizontal=True)
+rol = st.radio("Selecciona perfil:", ["Parcelero (Embolse)", "Consulta de Embolse", "Administrador"], horizontal=True)
 
 if rol == "Parcelero (Embolse)":
     st.subheader("Registro de Fruta Embolsada")
@@ -147,9 +147,9 @@ if rol == "Parcelero (Embolse)":
                 lote_detectado = dato_qr
                 st.success(f"Lote detectado: {lote_detectado}")
     lote_sel = st.selectbox("Lote:", LOTES, index=LOTES.index(lote_detectado))
-    sel_p = st.selectbox("Parcelero:", PARCELEROS_BASE)
+    sel_p = st.selectbox("Parcelero / Responsable:", PARCELEROS_BASE)
     if sel_p == "Otro (Escribir nombre)":
-        parcelero = st.text_input("Nombre del trabajador del día:").strip() or "Trabajador Extra"
+        parcelero = st.text_input("Nombre del trabajador:").strip() or "Trabajador Extra"
     else:
         parcelero = sel_p
     st.write("Toca el color de la cinta:")
@@ -168,13 +168,19 @@ if rol == "Parcelero (Embolse)":
                 st.session_state.cinta_elegida = nombre_real
     cinta = st.session_state.cinta_elegida
     st.info(f"Cinta seleccionada: **{cinta}**")
-    racimos = st.number_input("Cantidad de racimos embolsados:", min_value=1, max_value=1000, value=35)
+    col_cant, col_edad = st.columns(2)
+    racimos = col_cant.number_input("Cantidad de racimos:", min_value=1, max_value=1000, value=35)
+    edad_reg = col_edad.number_input("Edad actual (semanas):", min_value=1, max_value=15, value=1, help="Deja 1 si es de esta semana, o cambia si registras embolse atrasado.")
     if st.button("Guardar Embolse", type="primary"):
         ahora = datetime.now()
+        sem_actual = ahora.isocalendar().week
+        sem_real = sem_actual - (int(edad_reg) - 1)
+        if sem_real <= 0:
+            sem_real += 52
         registro = {
             "Fecha": ahora.strftime("%Y-%m-%d"),
             "Hora": ahora.strftime("%H:%M"),
-            "Semana": ahora.isocalendar().week,
+            "Semana": sem_real,
             "Lote": lote_sel,
             "Parcelero": parcelero,
             "Color_Cinta": cinta,
@@ -183,47 +189,69 @@ if rol == "Parcelero (Embolse)":
         }
         try:
             agregar_filas([registro])
-            st.success(f"Guardados {racimos} racimos ({cinta}) en {lote_sel}.")
+            st.success(f"Guardados {racimos} racimos ({cinta}, {edad_reg} sem) en {lote_sel}.")
         except Exception as e:
             st.error(f"Error técnico: {repr(e)}")
 
-elif rol == "Puyero (Consulta)":
-    st.subheader("Consulta de Fruta Colgada en el Lote")
-    lote_q = "Lote 01"
-    if st.toggle("Activar cámara para escanear QR", key="qr_puyero"):
+elif rol == "Consulta de Embolse":
+    st.subheader("Consulta de Embolse (Puyas y Supervisores)")
+    lote_qr = "Todos"
+    if st.toggle("Activar cámara para escanear QR del Lote", key="qr_consulta"):
         foto_qr_p = st.camera_input("Apunta al QR del Lote")
         if foto_qr_p:
             img_bgr = cv2.cvtColor(np.array(Image.open(foto_qr_p)), cv2.COLOR_RGB2BGR)
             dato_qr, _, _ = cv2.QRCodeDetector().detectAndDecode(img_bgr)
             if dato_qr in LOTES:
-                lote_q = dato_qr
-                st.success(f"Ubicación: {lote_q}")
-    lote_rev = st.selectbox("Lote a consultar:", LOTES, index=LOTES.index(lote_q))
+                lote_qr = dato_qr
+                st.success(f"Lote escaneado: {lote_qr}")
     df = cargar_datos()
-    if not df.empty:
+    solo_emb = df[df["Racimos"] > 0].copy() if not df.empty else pd.DataFrame()
+    if solo_emb.empty:
+        st.info("Aún no hay registros de embolse en el sistema.")
+    else:
         semana_actual = datetime.now().isocalendar().week
-        df_lote = df[df["Lote"] == lote_rev]
-        entradas = df_lote[df_lote["Racimos"] > 0].groupby(["Color_Cinta", "Semana"])["Racimos"].sum().reset_index()
-        entradas = entradas.sort_values(by=["Color_Cinta", "Semana"])
-        salidas = df_lote[df_lote["Racimos"] < 0].groupby("Color_Cinta")["Racimos"].sum().abs().to_dict()
-        filas_puyero = []
-        for _, f in entradas.iterrows():
-            col = f["Color_Cinta"]
-            sem = int(f["Semana"])
-            emb = int(f["Racimos"])
-            desc = min(emb, salidas.get(col, 0))
-            salidas[col] = salidas.get(col, 0) - desc
-            saldo = emb - desc
-            if saldo > 0:
-                edad = (semana_actual - sem if semana_actual >= sem else (52 - sem) + semana_actual) + 1
-                filas_puyero.append({"Color_Cinta": col, "Edad": f"{edad} sem", "Racimos_Disponibles": saldo})
-        if not filas_puyero:
-            st.info(f"No hay fruta registrada pendiente en {lote_rev}.")
-        else:
-            df_puyero = pd.DataFrame(filas_puyero)
-            st.write(f"Saldo actual en {lote_rev}:")
-            st.dataframe(df_puyero, use_container_width=True)
-            st.metric("Total en este lote", f"{int(df_puyero['Racimos_Disponibles'].sum())} racimos")
+        solo_emb["Fecha"] = solo_emb["Fecha"].astype(str)
+        solo_emb["Semana"] = solo_emb["Semana"].astype(int)
+        solo_emb["Edad_Num"] = solo_emb["Semana"].apply(lambda s: (semana_actual - s if semana_actual >= s else (52 - s) + semana_actual) + 1)
+        solo_emb["Edad"] = solo_emb["Edad_Num"].astype(str) + " sem"
+        f1, f2, f3 = st.columns(3)
+        fechas_op = ["Todos"] + sorted(solo_emb["Fecha"].unique().tolist(), reverse=True)
+        semanas_op = ["Todas"] + sorted(solo_emb["Semana"].unique().tolist(), reverse=True)
+        lotes_op = ["Todos"] + sorted(solo_emb["Lote"].unique().tolist())
+        idx_lote = lotes_op.index(lote_qr) if lote_qr in lotes_op else 0
+        sel_fecha = f1.selectbox("Día (Fecha):", fechas_op)
+        sel_sem = f2.selectbox("Semana Embolse:", semanas_op)
+        sel_lote = f3.selectbox("Lote:", lotes_op, index=idx_lote)
+        f4, f5 = st.columns(2)
+        colores_op = ["Todos"] + sorted(solo_emb["Color_Cinta"].unique().tolist())
+        edades_op = ["Todas"] + [f"{e} sem" for e in sorted(solo_emb["Edad_Num"].unique().tolist())]
+        sel_color = f4.selectbox("Color de Cinta:", colores_op)
+        sel_edad = f5.selectbox("Edad:", edades_op)
+        df_res = solo_emb.copy()
+        if sel_fecha != "Todos":
+            df_res = df_res[df_res["Fecha"] == sel_fecha]
+        if sel_sem != "Todas":
+            df_res = df_res[df_res["Semana"] == sel_sem]
+        if sel_lote != "Todos":
+            df_res = df_res[df_res["Lote"] == sel_lote]
+        if sel_color != "Todos":
+            df_res = df_res[df_res["Color_Cinta"] == sel_color]
+        if sel_edad != "Todas":
+            df_res = df_res[df_res["Edad"] == sel_edad]
+        total_filtrado = int(df_res["Racimos"].sum())
+        st.metric("Total Racimos (Según Filtros)", f"{total_filtrado:,} racimos")
+        tabla_ver = df_res[["Fecha", "Semana", "Lote", "Parcelero", "Color_Cinta", "Edad", "Racimos"]].copy()
+        fila_total = pd.DataFrame([{
+            "Fecha": "TOTAL",
+            "Semana": "",
+            "Lote": "",
+            "Parcelero": "",
+            "Color_Cinta": "",
+            "Edad": "",
+            "Racimos": total_filtrado
+        }])
+        tabla_final = pd.concat([tabla_ver, fila_total], ignore_index=True)
+        st.dataframe(tabla_final, use_container_width=True, hide_index=True)
 elif rol == "Administrador":
     clave = st.text_input("Clave de Administrador:", type="password")
     if clave != CLAVE_ADMIN:
@@ -345,4 +373,3 @@ elif rol == "Administrador":
                         st.error(f"Error técnico al descontar: {repr(e)}")
                 else:
                     st.error("No se encontraron registros válidos en el CSV.")
-
