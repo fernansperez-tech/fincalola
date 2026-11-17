@@ -19,28 +19,36 @@ if "cola_offline" not in st.session_state:
     st.session_state.cola_offline = []
 
 def conectar_hoja():
-    creds = dict(st.secrets["connections"]["gsheets"])
-    creds["token_uri"] = "https://googleapis.com"
-    creds["auth_uri"] = "https://google.com"
-    if "private_key" in creds:
-        creds["private_key"] = creds["private_key"].replace("\\n", "\n")
-    gc = gspread.service_account_from_dict(creds)
+    sec = st.secrets["connections"]["gsheets"]
+    llave_privada = sec["private_key"].replace("\\n", "\n")
+    
+    # Construir URLs limpias para evitar errores de copiado
+    url_token = "https://" + "://googleapis.com" + "/token"
+    url_auth = "https://" + "accounts.google.com" + "/o/oauth2/auth"
+    url_certs = "https://" + "://googleapis.com" + "/oauth2/v1/certs"
+    
+    info_credenciales = {
+        "type": "service_account",
+        "project_id": sec["project_id"],
+        "private_key_id": sec["private_key_id"],
+        "private_key": llave_privada,
+        "client_email": sec["client_email"],
+        "client_id": sec["client_id"],
+        "auth_uri": url_auth,
+        "token_uri": url_token,
+        "auth_provider_x509_cert_url": url_certs,
+        "client_x509_cert_url": sec.get("client_x509_cert_url", "")
+    }
+    
+    alcances = [
+        "https://" + "://googleapis.com" + "/auth/spreadsheets",
+        "https://" + "://googleapis.com" + "/auth/drive"
+    ]
+    
+    credenciales = Credentials.from_service_account_info(info_credenciales, scopes=alcances)
+    gc = gspread.authorize(credenciales)
     sh = gc.open_by_key(ID_HOJA)
     return sh.worksheet(NOMBRE_HOJA)
-
-def cargar_datos():
-    try:
-        ws = conectar_hoja()
-        datos = ws.get_all_records()
-        if not datos:
-            return pd.DataFrame(columns=["Fecha", "Hora", "Semana", "Lote", "Parcelero", "Color_Cinta", "Racimos", "Estado"])
-        return pd.DataFrame(datos)
-    except Exception:
-        return pd.DataFrame(columns=["Fecha", "Hora", "Semana", "Lote", "Parcelero", "Color_Cinta", "Racimos", "Estado"])
-
-def agregar_filas(lista_registros):
-    ws = conectar_hoja()
-    filas = []
     for r in lista_registros:
         filas.append([
             r["Fecha"], r["Hora"], int(r["Semana"]), r["Lote"],
