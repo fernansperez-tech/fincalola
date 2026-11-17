@@ -219,55 +219,71 @@ elif rol == "Administrador":
         st.stop()
     tab1, tab2, tab3 = st.tabs(["Inventario y Cajas", "Historial y Filtros de Corte", "Subir CSV de Tableta"])
     df = cargar_datos()
-    with tab1:
-        st.subheader("Proyección y Balance de Cosecha (86.1 Ha)")
+with tab1:
+        st.subheader("Proyección y Balance por Edad (86.1 Ha)")
         col_r1, col_r2 = st.columns(2)
         ratio = col_r1.number_input("Ratio (Cajas / Racimo):", value=1.15, min_value=0.50, max_value=2.50, step=0.05)
         merma = col_r2.slider("Merma estimada (%):", 0, 20, 5)
         if df.empty:
             st.warning("Aún no hay movimientos registrados.")
         else:
-            # Separar entradas (Embolsados) y salidas (Cortados)
-            df["Embolsados"] = df["Racimos"].apply(lambda x: x if x > 0 else 0)
-            df["Cortados"] = df["Racimos"].apply(lambda x: abs(x) if x < 0 else 0)
+            semana_actual = datetime.now().isocalendar().week
             
-            # Agrupar por Lote y Color mostrando la cuenta completa
-            balance = df.groupby(["Lote", "Color_Cinta"]).agg(
-                Embolsados=("Embolsados", "sum"),
-                Cortados=("Cortados", "sum"),
-                Saldo_En_Mata=("Racimos", "sum")
-            ).reset_index()
+            # 1. Separar entradas (Embolses por Semana) y salidas totales (Cortes)
+            entradas = df[df["Racimos"] > 0].groupby(["Lote", "Color_Cinta", "Semana"])["Racimos"].sum().reset_index()
+            entradas = entradas.sort_values(by=["Lote", "Color_Cinta", "Semana"], ascending=[True, True, True])
             
-            # Filtrar solo lo que tiene saldo positivo para los totales de cosecha futura
-            solo_positivos = balance[balance["Saldo_En_Mata"] > 0]
-            total_racimos = int(solo_positivos["Saldo_En_Mata"].sum())
-            cajas_est = total_racimos * (1 - merma / 100.0) * ratio
+            salidas = df[df["Racimos"] < 0].groupby(["Lote", "Color_Cinta"])["Racimos"].sum().abs().to_dict()
             
-            m1, m2 = st.columns(2)
-            m1.metric("Saldo Real en Mata", f"{total_racimos:,} racimos")
-            m2.metric("Cajas Proyectadas (20 kg)", f"{cajas_est:,.0f} cajas")
+            # 2. Aplicar descuento FIFO (Primero a la semana mas vieja)
+            filas_balance = []
+            for _, fila in entradas.iterrows():
+                lote = fila["Lote"]
+                color = fila["Color_Cinta"]
+                sem = int(fila["Semana"])
+                emb = int(fila["Racimos"])
+                
+                cortes_pendientes = salidas.get((lote, color), 0)
+                descontar = min(emb, cortes_pendientes)
+                salidas[(lote, color)] = cortes_pendientes - descontar
+                saldo = emb - descontar
+                
+                # Calcular edad en semanas (ajustando cambio de anio si aplica)
+                edad = semana_actual - sem if semana_actual >= sem else (52 - sem) + semana_actual
+                
+                filas_balance.append({
+                    "Lote": lote,
+                    "Color_Cinta": color,
+                    "Semana_Emb": sem,
+                    "Edad_Semanas": f"{edad} sem",
+                    "Embolsados": emb,
+                    "Cortados": descontar,
+                    "Saldo_En_Mata": saldo
+                })
+                
+            balance = pd.DataFrame(filas_balance)
             
-            st.write("Balance por Color de Cinta (Toda la Finca)")
-            bal_cinta = balance.groupby("Color_Cinta").agg(
-                Embolsados=("Embolsados", "sum"),
-                Cortados=("Cortados", "sum"),
-                Saldo_En_Mata=("Saldo_En_Mata", "sum")
-            ).reset_index()
-            bal_cinta["Cajas_Est"] = bal_cinta["Saldo_En_Mata"].apply(
-                lambda x: int(round(x * (1 - merma / 100.0) * ratio)) if x > 0 else 0
-            )
-            st.dataframe(bal_cinta, use_container_width=True)
-            
-            st.write("Balance Detallado por Lote (Embolsados vs Cortados)")
-            balance["Cajas_Est"] = balance["Saldo_En_Mata"].apply(
-                lambda x: int(round(x * (1 - merma / 100.0) * ratio)) if x > 0 else 0
-            )
-            st.dataframe(balance, use_container_width=True)
-            
-            st.write("Embolse por Trabajador")
-            solo_embolse = df[df["Racimos"] > 0]
-            por_trabajador = solo_embolse.groupby(["Parcelero", "Fecha"])["Racimos"].sum().reset_index()
-            st.dataframe(por_trabajador, use_container_width=True)
+            if not balance.empty:
+                solo_positivos = balance[balance["Saldo_En_Mata"] > 0]
+                total_racimos = int(solo_positivos["Saldo_En_Mata"].sum())
+                cajas_est = total_racimos * (1 - merma / 100.0) * ratio
+                
+                m1, m2 = st.columns(2)
+                m1.metric("Saldo Real en Mata", f"{total_racimos:,} racimos")
+                m2.metric("Cajas Proyectadas (20 kg)", f"{cajas_est:,.0f} cajas")
+                
+                st.write("Balance por Color y Edad (Toda la Finca)")
+                bal_edad = balance.groupby(["Color_Cinta", "Semana_Emb", "Edad_Semanas"]).agg(
+                    Embolsados=("Embolsados", "sum"),
+                    Cortados=("Cortados", "sum"),
+                    Saldo_En_Mata=("Saldo_En_Mata", "sum")
+                ).reset_index()
+                bal_edad["Cajas_Est"] = (bal_edad["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
+                st.dataframe(bal_edad, use_container_width=True)
+                
+                st.write("Balance Detallado por Lote y Edad (FIFO)")
+                balance["Cajas_Est"] = (balance["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
+                st.dataframe(balance, use_container_width=True)
     with tab2:
         st.subheader("Buscador y Totales de Corte")
         solo_cortes = df[df["Racimos"] < 0].copy() if not df.empty else pd.DataFrame()
