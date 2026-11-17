@@ -219,7 +219,7 @@ elif rol == "Administrador":
         st.stop()
     tab1, tab2, tab3 = st.tabs(["Inventario y Cajas", "Historial y Filtros de Corte", "Subir CSV de Tableta"])
     df = cargar_datos()
-        with tab1:
+    with tab1:
         st.subheader("Proyección y Balance de Cosecha (86.1 Ha)")
         col_r1, col_r2 = st.columns(2)
         ratio = col_r1.number_input("Ratio (Cajas / Racimo):", value=1.15, min_value=0.50, max_value=2.50, step=0.05)
