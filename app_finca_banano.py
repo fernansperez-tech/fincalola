@@ -284,23 +284,33 @@ elif rol == "Administrador":
         if df.empty:
             st.warning("Aún no hay movimientos registrados.")
         else:
-            semana_actual = datetime.now().isocalendar().week
-            entradas = df[df["Racimos"] > 0].groupby(["Lote", "Color_Cinta", "Semana"])["Racimos"].sum().reset_index()
-            entradas = entradas.sort_values(by=["Lote", "Color_Cinta", "Semana"])
+            ahora = datetime.now()
+            semana_actual = ahora.isocalendar().week
+            anio_actual = ahora.year
+            df["Fecha"] = df["Fecha"].astype(str)
+            df["Anio"] = df["Fecha"].str[:4]
+            entradas = df[df["Racimos"] > 0].groupby(["Lote", "Color_Cinta", "Anio", "Semana"])["Racimos"].sum().reset_index()
+            entradas = entradas.sort_values(by=["Lote", "Color_Cinta", "Anio", "Semana"])
             salidas = df[df["Racimos"] < 0].groupby(["Lote", "Color_Cinta"])["Racimos"].sum().abs().to_dict()
             filas_balance = []
             for _, fila in entradas.iterrows():
                 lote = fila["Lote"]
                 color = fila["Color_Cinta"]
+                anio_str = str(fila["Anio"])
                 sem = int(fila["Semana"])
                 emb = int(fila["Racimos"])
                 desc = min(emb, salidas.get((lote, color), 0))
                 salidas[(lote, color)] = salidas.get((lote, color), 0) - desc
                 saldo = emb - desc
-                edad = (semana_actual - sem if semana_actual >= sem else (52 - sem) + semana_actual) + 1
+                try:
+                    y = int(anio_str)
+                except Exception:
+                    y = anio_actual
+                edad = max(1, ((anio_actual - y) * 52 + (semana_actual - sem)) + 1)
                 filas_balance.append({
                     "Lote": lote,
                     "Color_Cinta": color,
+                    "Anio": anio_str,
                     "Semana_Emb": sem,
                     "Edad": f"{edad} sem",
                     "Embolsados": emb,
@@ -316,7 +326,7 @@ elif rol == "Administrador":
                 m1.metric("Saldo Real en Mata", f"{total_racimos:,} racimos")
                 m2.metric("Cajas Proyectadas (20 kg)", f"{cajas_est:,.0f} cajas")
                 st.write("Balance por Color y Edad (Toda la Finca)")
-                bal_edad = balance.groupby(["Color_Cinta", "Semana_Emb", "Edad"]).agg(
+                bal_edad = balance.groupby(["Color_Cinta", "Anio", "Semana_Emb", "Edad"]).agg(
                     Embolsados=("Embolsados", "sum"),
                     Cortados=("Cortados", "sum"),
                     Saldo_En_Mata=("Saldo_En_Mata", "sum")
@@ -328,7 +338,7 @@ elif rol == "Administrador":
                 st.dataframe(balance, use_container_width=True)
             st.write("Embolse por Trabajador")
             solo_embolse = df[df["Racimos"] > 0]
-            por_trabajador = solo_embolse.groupby(["Parcelero", "Fecha"])["Racimos"].sum().reset_index()
+            por_trabajador = solo_embolse.groupby(["Parcelero", "Anio", "Fecha"])["Racimos"].sum().reset_index()
             st.dataframe(por_trabajador, use_container_width=True)
     with tab2:
         st.subheader("Buscador y Totales de Corte")
@@ -338,14 +348,19 @@ elif rol == "Administrador":
         else:
             solo_cortes["Racimos_Cortados"] = solo_cortes["Racimos"].abs()
             solo_cortes["Fecha"] = solo_cortes["Fecha"].astype(str)
-            f1, f2, f3 = st.columns(3)
+            solo_cortes["Anio"] = solo_cortes["Fecha"].str[:4]
+            f1, f2, f3, f4 = st.columns(4)
+            anios_disp = ["Todos"] + sorted(solo_cortes["Anio"].unique().tolist(), reverse=True)
             fechas_disp = ["Todas"] + sorted(solo_cortes["Fecha"].unique().tolist(), reverse=True)
             lotes_disp = ["Todos"] + sorted(solo_cortes["Lote"].unique().tolist())
             colores_disp = ["Todos"] + sorted(solo_cortes["Color_Cinta"].unique().tolist())
-            filtro_fecha = f1.selectbox("Filtrar por Fecha:", fechas_disp)
-            filtro_lote = f2.selectbox("Filtrar por Lote:", lotes_disp)
-            filtro_color = f3.selectbox("Filtrar por Color:", colores_disp)
+            filtro_anio = f1.selectbox("Año:", anios_disp)
+            filtro_fecha = f2.selectbox("Fecha:", fechas_disp)
+            filtro_lote = f3.selectbox("Lote:", lotes_disp)
+            filtro_color = f4.selectbox("Color:", colores_disp)
             df_filtrado = solo_cortes.copy()
+            if filtro_anio != "Todos":
+                df_filtrado = df_filtrado[df_filtrado["Anio"] == filtro_anio]
             if filtro_fecha != "Todas":
                 df_filtrado = df_filtrado[df_filtrado["Fecha"] == filtro_fecha]
             if filtro_lote != "Todos":
@@ -357,7 +372,7 @@ elif rol == "Administrador":
             t1, t2 = st.columns(2)
             t1.metric("Total Racimos Cortados (Filtro)", f"{total_cortados:,} racimos")
             t2.metric("Cajas Equivalentes (Según Ratio)", f"{cajas_cortadas:,.0f} cajas")
-            tabla_mostrar = df_filtrado[["Fecha", "Semana", "Lote", "Color_Cinta", "Racimos_Cortados"]].sort_values(by="Fecha", ascending=False)
+            tabla_mostrar = df_filtrado[["Fecha", "Anio", "Semana", "Lote", "Color_Cinta", "Racimos_Cortados"]].sort_values(by="Fecha", ascending=False)
             st.dataframe(tabla_mostrar, use_container_width=True)
             csv_descarga = tabla_mostrar.to_csv(index=False).encode("utf-8")
             st.download_button("Descargar Selección en Excel (CSV)", data=csv_descarga, file_name="reporte_cortes_filtrado.csv", mime="text/csv")
