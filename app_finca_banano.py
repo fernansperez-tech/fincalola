@@ -78,15 +78,23 @@ def agregar_filas(lista_registros):
         ])
     ws.append_rows(filas)
 
-def procesar_csv_tableta(df_tab, col_lote, col_color):
+def procesar_csv_tableta(df_tab, col_lote, col_color, col_fecha=None):
     ahora = datetime.now()
-    # Limpiar filas vacias
-    df_limpio = df_tab[[col_lote, col_color]].dropna().copy()
+    cols_usar = [col_lote, col_color]
+    if col_fecha and col_fecha != "Usar fecha de hoy":
+        cols_usar.append(col_fecha)
+        
+    df_limpio = df_tab[cols_usar].dropna().copy()
     if df_limpio.empty:
         return []
-        
-    # Agrupar por Lote y Color contando cuantas filas (racimos) hay de cada uno
-    conteo = df_limpio.groupby([col_lote, col_color]).size().reset_index(name="Total_Racimos")
+
+    if col_fecha and col_fecha != "Usar fecha de hoy":
+        df_limpio["Fecha_Norm"] = pd.to_datetime(df_limpio[col_fecha], errors="coerce").dt.strftime("%Y-%m-%d")
+        df_limpio["Fecha_Norm"] = df_limpio["Fecha_Norm"].fillna(ahora.strftime("%Y-%m-%d"))
+    else:
+        df_limpio["Fecha_Norm"] = ahora.strftime("%Y-%m-%d")
+
+    conteo = df_limpio.groupby(["Fecha_Norm", col_lote, col_color]).size().reset_index(name="Total_Racimos")
     
     descuentos = []
     for _, fila in conteo.iterrows():
@@ -95,11 +103,16 @@ def procesar_csv_tableta(df_tab, col_lote, col_color):
         lote_norm = f"Lote {int(num_lote):02d}" if num_lote else lote_raw
         color_norm = str(fila[col_color]).strip().capitalize()
         cant = int(fila["Total_Racimos"])
-        
+        fecha_str = str(fila["Fecha_Norm"])
+        try:
+            semana_num = datetime.strptime(fecha_str, "%Y-%m-%d").isocalendar().week
+        except Exception:
+            semana_num = ahora.isocalendar().week
+            
         descuentos.append({
-            "Fecha": ahora.strftime("%Y-%m-%d"),
+            "Fecha": fecha_str,
             "Hora": ahora.strftime("%H:%M"),
-            "Semana": ahora.isocalendar().week,
+            "Semana": semana_num,
             "Lote": lote_norm,
             "Parcelero": "Corte Tableta CSV",
             "Color_Cinta": color_norm,
@@ -141,14 +154,10 @@ if rol == "Parcelero (Embolse)":
         parcelero = sel_p
     st.write("Toca el color de la cinta:")
     VISUAL_CINTAS = {
-        "🟡 Amarilla": "Amarilla",
-        "🟣 Morada": "Morada",
-        "🔴 Roja": "Roja",
-        "🟤 Café": "Café",
-        "⚫ Negra": "Negra",
-        "🟢 Verde": "Verde",
-        "🔵 Azul": "Azul",
-        "⚪ Blanca": "Blanca"
+        "🟡 Amarilla": "Amarilla", "🟣 Morada": "Morada",
+        "🔴 Roja": "Roja", "🟤 Café": "Café",
+        "⚫ Negra": "Negra", "🟢 Verde": "Verde",
+        "🔵 Azul": "Azul", "⚪ Blanca": "Blanca"
     }
     if "cinta_elegida" not in st.session_state:
         st.session_state.cinta_elegida = "Amarilla"
@@ -202,20 +211,19 @@ elif rol == "Puyero (Consulta)":
             st.write(f"Saldo actual en {lote_rev}:")
             st.dataframe(saldo.rename(columns={"Racimos": "Racimos_Disponibles"}), use_container_width=True)
             st.metric("Total en este lote", f"{int(saldo['Racimos'].sum())} racimos")
-
-elif rol == "Administrador":
+            elif rol == "Administrador":
     clave = st.text_input("Clave de Administrador:", type="password")
     if clave != CLAVE_ADMIN:
         if clave != "":
             st.error("Clave incorrecta.")
         st.stop()
-    tab1, tab2 = st.tabs(["Inventario y Cajas", "Subir CSV de Tableta"])
+    tab1, tab2, tab3 = st.tabs(["Inventario y Cajas", "Historial y Filtros de Corte", "Subir CSV de Tableta"])
+    df = cargar_datos()
     with tab1:
         st.subheader("Proyección de Cosecha (86.1 Ha)")
         col_r1, col_r2 = st.columns(2)
         ratio = col_r1.number_input("Ratio (Cajas / Racimo):", value=1.15, min_value=0.50, max_value=2.50, step=0.05)
         merma = col_r2.slider("Merma estimada (%):", 0, 20, 5)
-        df = cargar_datos()
         if df.empty:
             st.warning("Aún no hay movimientos registrados.")
         else:
@@ -237,17 +245,38 @@ elif rol == "Administrador":
             solo_embolse = df[df["Racimos"] > 0]
             por_trabajador = solo_embolse.groupby(["Parcelero", "Fecha"])["Racimos"].sum().reset_index()
             st.dataframe(por_trabajador, use_container_width=True)
-            st.write("Historial de Cortes Procesados (CSV Tableta)")
-            solo_cortes = df[df["Racimos"] < 0].copy()
-            if solo_cortes.empty:
-                st.info("Aún no se han cargado archivos CSV de corte.")
-            else:
-                solo_cortes["Racimos_Cortados"] = solo_cortes["Racimos"].abs()
-                resumen_cortes = solo_cortes[["Fecha", "Semana", "Lote", "Color_Cinta", "Racimos_Cortados"]]
-                st.dataframe(resumen_cortes, use_container_width=True)
-                csv_cortes = resumen_cortes.to_csv(index=False).encode("utf-8")
-                st.download_button("Descargar Reporte de Cortes (CSV)", data=csv_cortes, file_name="historial_cortes_finca.csv", mime="text/csv")
     with tab2:
+        st.subheader("Buscador y Totales de Corte")
+        solo_cortes = df[df["Racimos"] < 0].copy() if not df.empty else pd.DataFrame()
+        if solo_cortes.empty:
+            st.info("Aún no hay cortes registrados desde la tableta.")
+        else:
+            solo_cortes["Racimos_Cortados"] = solo_cortes["Racimos"].abs()
+            solo_cortes["Fecha"] = solo_cortes["Fecha"].astype(str)
+            f1, f2, f3 = st.columns(3)
+            fechas_disp = ["Todas"] + sorted(solo_cortes["Fecha"].unique().tolist(), reverse=True)
+            lotes_disp = ["Todos"] + sorted(solo_cortes["Lote"].unique().tolist())
+            colores_disp = ["Todos"] + sorted(solo_cortes["Color_Cinta"].unique().tolist())
+            filtro_fecha = f1.selectbox("Filtrar por Fecha:", fechas_disp)
+            filtro_lote = f2.selectbox("Filtrar por Lote:", lotes_disp)
+            filtro_color = f3.selectbox("Filtrar por Color:", colores_disp)
+            df_filtrado = solo_cortes.copy()
+            if filtro_fecha != "Todas":
+                df_filtrado = df_filtrado[df_filtrado["Fecha"] == filtro_fecha]
+            if filtro_lote != "Todos":
+                df_filtrado = df_filtrado[df_filtrado["Lote"] == filtro_lote]
+            if filtro_color != "Todos":
+                df_filtrado = df_filtrado[df_filtrado["Color_Cinta"] == filtro_color]
+            total_cortados = int(df_filtrado["Racimos_Cortados"].sum())
+            cajas_cortadas = total_cortados * ratio
+            t1, t2 = st.columns(2)
+            t1.metric("Total Racimos Cortados (Filtro)", f"{total_cortados:,} racimos")
+            t2.metric("Cajas Equivalentes (Según Ratio)", f"{cajas_cortadas:,.0f} cajas")
+            tabla_mostrar = df_filtrado[["Fecha", "Semana", "Lote", "Color_Cinta", "Racimos_Cortados"]].sort_values(by="Fecha", ascending=False)
+            st.dataframe(tabla_mostrar, use_container_width=True)
+            csv_descarga = tabla_mostrar.to_csv(index=False).encode("utf-8")
+            st.download_button("Descargar Selección en Excel (CSV)", data=csv_descarga, file_name="reporte_cortes_filtrado.csv", mime="text/csv")
+    with tab3:
         st.subheader("Descontar Corte con CSV Directo de Tableta")
         st.write("Sube el archivo .csv de la tableta (cada fila cuenta como 1 racimo).")
         archivo_csv = st.file_uploader("Seleccionar archivo .csv de la tableta", type=["csv"])
@@ -260,17 +289,19 @@ elif rol == "Administrador":
             st.write("Vista previa del CSV cargado:")
             st.dataframe(df_tab.head(10), use_container_width=True)
             columnas_archivo = df_tab.columns.tolist()
-            c1, c2 = st.columns(2)
+            c1, c2, c3 = st.columns(3)
             col_lote = c1.selectbox("Columna de Lote:", columnas_archivo)
             col_color = c2.selectbox("Columna de Color:", columnas_archivo)
+            col_fecha = c3.selectbox("Columna de Fecha:", ["Usar fecha de hoy"] + columnas_archivo)
             if st.button("Procesar CSV y Descontar Inventario", type="primary"):
-                descuentos = procesar_csv_tableta(df_tab, col_lote, col_color)
+                descuentos = procesar_csv_tableta(df_tab, col_lote, col_color, col_fecha)
                 if descuentos:
                     try:
                         agregar_filas(descuentos)
                         total_desc = sum(abs(d["Racimos"]) for d in descuentos)
-                        st.success(f"Listo. Se descontaron {total_desc} racimos en total.")
+                        st.success(f"Listo. Se descontaron {total_desc} racimos respetando las fechas del CSV.")
                     except Exception as e:
                         st.error(f"Error técnico al descontar: {repr(e)}")
                 else:
                     st.error("No se encontraron registros válidos en el CSV.")
+
