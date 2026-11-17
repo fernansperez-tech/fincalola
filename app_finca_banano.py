@@ -5,6 +5,7 @@ from PIL import Image
 import pandas as pd
 from datetime import datetime
 import gspread
+from google.oauth2.service_account import Credentials
 
 st.set_page_config(page_title="Finca Lola - 86.1 Ha", page_icon="🍌", layout="centered")
 
@@ -22,9 +23,8 @@ def conectar_hoja():
     sec = st.secrets["connections"]["gsheets"]
     llave_privada = sec["private_key"].replace("\\n", "\n")
     
-    # Construir URLs limpias para evitar errores de copiado
     url_token = "https://" + "://googleapis.com" + "/token"
-    url_auth = "https://" + "accounts.google.com" + "/o/oauth2/auth"
+    url_auth = "https://" + "://google.com" + "/o/oauth2/auth"
     url_certs = "https://" + "://googleapis.com" + "/oauth2/v1/certs"
     
     info_credenciales = {
@@ -49,6 +49,20 @@ def conectar_hoja():
     gc = gspread.authorize(credenciales)
     sh = gc.open_by_key(ID_HOJA)
     return sh.worksheet(NOMBRE_HOJA)
+
+def cargar_datos():
+    try:
+        ws = conectar_hoja()
+        datos = ws.get_all_records()
+        if not datos:
+            return pd.DataFrame(columns=["Fecha", "Hora", "Semana", "Lote", "Parcelero", "Color_Cinta", "Racimos", "Estado"])
+        return pd.DataFrame(datos)
+    except Exception:
+        return pd.DataFrame(columns=["Fecha", "Hora", "Semana", "Lote", "Parcelero", "Color_Cinta", "Racimos", "Estado"])
+
+def agregar_filas(lista_registros):
+    ws = conectar_hoja()
+    filas = []
     for r in lista_registros:
         filas.append([
             r["Fecha"], r["Hora"], int(r["Semana"]), r["Lote"],
@@ -208,35 +222,31 @@ elif rol == "Administrador":
             por_trabajador = solo_embolse.groupby(["Parcelero", "Fecha"])["Racimos"].sum().reset_index()
             st.dataframe(por_trabajador, use_container_width=True)
 
-    with tab2:
+       with tab2:
         st.subheader("Descontar Corte con CSV Directo de Tableta")
-        st.write("Sube el archivo .csv que genera la tableta (sin necesidad de pasarlo a Excel).")
-        
+        st.write("Sube el archivo .csv que genera la tableta.")
         archivo_csv = st.file_uploader("Seleccionar archivo .csv de la tableta", type=["csv"])
-        
         if archivo_csv is not None:
             try:
                 df_tab = pd.read_csv(archivo_csv, sep=None, engine="python")
             except Exception:
                 archivo_csv.seek(0)
                 df_tab = pd.read_csv(archivo_csv)
-            
             st.write("Vista previa del CSV cargado:")
             st.dataframe(df_tab.head(10), use_container_width=True)
-            
             columnas_archivo = df_tab.columns.tolist()
             c1, c2, c3 = st.columns(3)
             col_lote = c1.selectbox("Columna de Lote:", columnas_archivo)
             col_color = c2.selectbox("Columna de Color:", columnas_archivo)
             col_cant = c3.selectbox("Columna de Cantidad:", columnas_archivo)
-            
             if st.button("Procesar CSV y Descontar Inventario", type="primary"):
                 descuentos = procesar_csv_tableta(df_tab, col_lote, col_color, col_cant)
                 if descuentos:
                     try:
                         agregar_filas(descuentos)
-                        st.success(f"Listo. Se descontaron {len(descuentos)} registros del CSV en tu inventario.")
+                        st.success(f"Listo. Se descontaron {len(descuentos)} registros del CSV.")
                     except Exception as e:
                         st.error(f"Error técnico al descontar: {repr(e)}")
                 else:
-                        st.error("No se encontraron cantidades válidas en las columnas seleccionadas.")
+                    st.error("No se encontraron cantidades válidas.")
+
