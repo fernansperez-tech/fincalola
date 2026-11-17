@@ -139,7 +139,7 @@ if rol == "Parcelero (Embolse)":
         parcelero = st.text_input("Nombre del trabajador del día:").strip() or "Trabajador Extra"
     else:
         parcelero = sel_p
-        st.write("Toca el color de la cinta:")
+    st.write("Toca el color de la cinta:")
     VISUAL_CINTAS = {
         "🟡 Amarilla": "Amarilla",
         "🟣 Morada": "Morada",
@@ -152,16 +152,13 @@ if rol == "Parcelero (Embolse)":
     }
     if "cinta_elegida" not in st.session_state:
         st.session_state.cinta_elegida = "Amarilla"
-
     cols_cinta = st.columns(4)
     for idx, (etiqueta, nombre_real) in enumerate(VISUAL_CINTAS.items()):
         with cols_cinta[idx % 4]:
             if st.button(etiqueta, key=f"cinta_{nombre_real}", use_container_width=True):
                 st.session_state.cinta_elegida = nombre_real
-
     cinta = st.session_state.cinta_elegida
     st.info(f"Cinta seleccionada: **{cinta}**")
-
     racimos = st.number_input("Cantidad de racimos embolsados:", min_value=1, max_value=1000, value=35)
     if st.button("Guardar Embolse", type="primary"):
         ahora = datetime.now()
@@ -240,7 +237,7 @@ elif rol == "Administrador":
             solo_embolse = df[df["Racimos"] > 0]
             por_trabajador = solo_embolse.groupby(["Parcelero", "Fecha"])["Racimos"].sum().reset_index()
             st.dataframe(por_trabajador, use_container_width=True)
-        with tab2:
+    with tab2:
         st.subheader("Descontar Corte con CSV Directo de Tableta")
         st.write("Sube el archivo .csv de la tableta (cada fila cuenta como 1 racimo).")
         archivo_csv = st.file_uploader("Seleccionar archivo .csv de la tableta", type=["csv"])
