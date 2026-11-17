@@ -249,7 +249,7 @@ with tab1:
                 saldo = emb - descontar
                 
                 # Calcular edad en semanas (ajustando cambio de anio si aplica)
-                edad = semana_actual - sem if semana_actual >= sem else (52 - sem) + semana_actual
+                edad = semana_actual - sem if semana_actual >= sem else (52 - sem) + semana_actual + 1
                 
                 filas_balance.append({
                     "Lote": lote,
