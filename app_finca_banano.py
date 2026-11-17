@@ -239,16 +239,17 @@ elif rol == "Consulta de Embolse":
         if sel_edad != "Todas":
             df_res = df_res[df_res["Edad"] == sel_edad]
         total_filtrado = int(df_res["Racimos"].sum())
-        st.metric("Total Racimos (Según Filtros)", f"{total_filtrado:,} racimos")
+        st.metric("Total General (Según Filtros)", f"{total_filtrado:,} racimos")
+        st.write("### Resumen General por Lote")
+        resumen_lote = df_res.groupby(["Lote", "Color_Cinta"])["Racimos"].sum().reset_index()
+        fila_total_lote = pd.DataFrame([{"Lote": "TOTAL GENERAL", "Color_Cinta": "", "Racimos": total_filtrado}])
+        resumen_lote_final = pd.concat([resumen_lote, fila_total_lote], ignore_index=True)
+        st.dataframe(resumen_lote_final, use_container_width=True, hide_index=True)
+        st.write("### Detalle por Trabajador y Día")
         tabla_ver = df_res[["Fecha", "Semana", "Lote", "Parcelero", "Color_Cinta", "Edad", "Racimos"]].copy()
         fila_total = pd.DataFrame([{
-            "Fecha": "TOTAL",
-            "Semana": "",
-            "Lote": "",
-            "Parcelero": "",
-            "Color_Cinta": "",
-            "Edad": "",
-            "Racimos": total_filtrado
+            "Fecha": "TOTAL", "Semana": "", "Lote": "", "Parcelero": "",
+            "Color_Cinta": "", "Edad": "", "Racimos": total_filtrado
         }])
         tabla_final = pd.concat([tabla_ver, fila_total], ignore_index=True)
         st.dataframe(tabla_final, use_container_width=True, hide_index=True)
