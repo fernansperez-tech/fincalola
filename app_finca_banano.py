@@ -22,11 +22,9 @@ if "cola_offline" not in st.session_state:
 def conectar_hoja():
     sec = st.secrets["connections"]["gsheets"]
     llave_privada = sec["private_key"].replace("\\n", "\n")
-    
     url_token = "https://" + "://googleapis.com" + "/token"
     url_auth = "https://" + "://google.com" + "/o/oauth2/auth"
     url_certs = "https://" + "://googleapis.com" + "/oauth2/v1/certs"
-    
     info_credenciales = {
         "type": "service_account",
         "project_id": sec["project_id"],
@@ -39,12 +37,10 @@ def conectar_hoja():
         "auth_provider_x509_cert_url": url_certs,
         "client_x509_cert_url": sec.get("client_x509_cert_url", "")
     }
-    
     alcances = [
         "https://" + "://googleapis.com" + "/auth/spreadsheets",
         "https://" + "://googleapis.com" + "/auth/drive"
     ]
-    
     credenciales = Credentials.from_service_account_info(info_credenciales, scopes=alcances)
     gc = gspread.authorize(credenciales)
     sh = gc.open_by_key(ID_HOJA)
@@ -91,7 +87,6 @@ def procesar_csv_tableta(df_tab, col_lote, col_color, col_cant):
                 "Estado": "Cortado"
             })
     return descuentos
-
 st.title("Gestión Finca Lola (86.1 Ha)")
 
 if len(st.session_state.cola_offline) > 0:
@@ -109,7 +104,6 @@ rol = st.radio("Selecciona perfil:", ["Parcelero (Embolse)", "Puyero (Consulta)"
 
 if rol == "Parcelero (Embolse)":
     st.subheader("Registro de Fruta Embolsada")
-    
     lote_detectado = "Lote 01"
     if st.toggle("Activar cámara para escanear QR", key="qr_parcelero"):
         foto_qr = st.camera_input("Apunta al QR del Lote")
@@ -119,18 +113,14 @@ if rol == "Parcelero (Embolse)":
             if dato_qr in LOTES:
                 lote_detectado = dato_qr
                 st.success(f"Lote detectado: {lote_detectado}")
-
     lote_sel = st.selectbox("Lote:", LOTES, index=LOTES.index(lote_detectado))
-    
     sel_p = st.selectbox("Parcelero:", PARCELEROS_BASE)
     if sel_p == "Otro (Escribir nombre)":
         parcelero = st.text_input("Nombre del trabajador del día:").strip() or "Trabajador Extra"
     else:
         parcelero = sel_p
-
     cinta = st.selectbox("Color de Cinta:", COLORES_CINTA)
     racimos = st.number_input("Cantidad de racimos embolsados:", min_value=1, max_value=1000, value=35)
-
     if st.button("Guardar Embolse", type="primary"):
         ahora = datetime.now()
         registro = {
@@ -152,7 +142,6 @@ if rol == "Parcelero (Embolse)":
 elif rol == "Puyero (Consulta)":
     st.subheader("Consulta de Fruta Colgada en el Lote")
     st.caption("Activa la cámara para escanear el QR del lote o selecciónalo en la lista.")
-    
     lote_q = "Lote 01"
     if st.toggle("Activar cámara para escanear QR", key="qr_puyero"):
         foto_qr_p = st.camera_input("Apunta al QR del Lote")
@@ -162,15 +151,12 @@ elif rol == "Puyero (Consulta)":
             if dato_qr in LOTES:
                 lote_q = dato_qr
                 st.success(f"Ubicación: {lote_q}")
-
     lote_rev = st.selectbox("Lote a consultar:", LOTES, index=LOTES.index(lote_q))
     df = cargar_datos()
-    
     if not df.empty:
         df_lote = df[df["Lote"] == lote_rev]
         saldo = df_lote.groupby("Color_Cinta")["Racimos"].sum().reset_index()
         saldo = saldo[saldo["Racimos"] > 0]
-        
         if saldo.empty:
             st.info(f"No hay fruta registrada pendiente en {lote_rev}.")
         else:
@@ -180,49 +166,39 @@ elif rol == "Puyero (Consulta)":
 
 elif rol == "Administrador":
     clave = st.text_input("Clave de Administrador:", type="password")
-    
     if clave != CLAVE_ADMIN:
         if clave != "":
             st.error("Clave incorrecta.")
         st.stop()
-
     tab1, tab2 = st.tabs(["Inventario y Cajas", "Subir CSV de Tableta"])
-    
     with tab1:
         st.subheader("Proyección de Cosecha (86.1 Ha)")
         col_r1, col_r2 = st.columns(2)
         ratio = col_r1.number_input("Ratio (Cajas / Racimo):", value=1.15, min_value=0.50, max_value=2.50, step=0.05)
         merma = col_r2.slider("Merma estimada (%):", 0, 20, 5)
-        
         df = cargar_datos()
         if df.empty:
             st.warning("Aún no hay movimientos registrados.")
         else:
             saldo_general = df.groupby(["Lote", "Color_Cinta"])["Racimos"].sum().reset_index()
             saldo_activo = saldo_general[saldo_general["Racimos"] > 0].copy()
-            
             total_racimos = int(saldo_activo["Racimos"].sum())
             cajas_est = total_racimos * (1 - merma / 100.0) * ratio
-            
             m1, m2 = st.columns(2)
             m1.metric("Saldo Real en Mata", f"{total_racimos:,} racimos")
             m2.metric("Cajas Proyectadas (20 kg)", f"{cajas_est:,.0f} cajas")
-            
             st.write("Saldo por Color de Cinta (Toda la Finca)")
             por_cinta = saldo_activo.groupby("Color_Cinta")["Racimos"].sum().reset_index()
             por_cinta["Cajas_Est"] = (por_cinta["Racimos"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
             st.dataframe(por_cinta, use_container_width=True)
-            
             st.write("Saldo Detallado por Lote (Fruta que quedó en mata)")
             saldo_activo["Cajas_Est"] = (saldo_activo["Racimos"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
             st.dataframe(saldo_activo, use_container_width=True)
-            
             st.write("Embolse por Trabajador")
             solo_embolse = df[df["Racimos"] > 0]
             por_trabajador = solo_embolse.groupby(["Parcelero", "Fecha"])["Racimos"].sum().reset_index()
             st.dataframe(por_trabajador, use_container_width=True)
-
-       with tab2:
+    with tab2:
         st.subheader("Descontar Corte con CSV Directo de Tableta")
         st.write("Sube el archivo .csv que genera la tableta.")
         archivo_csv = st.file_uploader("Seleccionar archivo .csv de la tableta", type=["csv"])
@@ -249,4 +225,3 @@ elif rol == "Administrador":
                         st.error(f"Error técnico al descontar: {repr(e)}")
                 else:
                     st.error("No se encontraron cantidades válidas.")
-
