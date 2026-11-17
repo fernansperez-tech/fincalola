@@ -237,6 +237,16 @@ elif rol == "Administrador":
             solo_embolse = df[df["Racimos"] > 0]
             por_trabajador = solo_embolse.groupby(["Parcelero", "Fecha"])["Racimos"].sum().reset_index()
             st.dataframe(por_trabajador, use_container_width=True)
+            st.write("Historial de Cortes Procesados (CSV Tableta)")
+            solo_cortes = df[df["Racimos"] < 0].copy()
+            if solo_cortes.empty:
+                st.info("Aún no se han cargado archivos CSV de corte.")
+            else:
+                solo_cortes["Racimos_Cortados"] = solo_cortes["Racimos"].abs()
+                resumen_cortes = solo_cortes[["Fecha", "Semana", "Lote", "Color_Cinta", "Racimos_Cortados"]]
+                st.dataframe(resumen_cortes, use_container_width=True)
+                csv_cortes = resumen_cortes.to_csv(index=False).encode("utf-8")
+                st.download_button("Descargar Reporte de Cortes (CSV)", data=csv_cortes, file_name="historial_cortes_finca.csv", mime="text/csv")
     with tab2:
         st.subheader("Descontar Corte con CSV Directo de Tableta")
         st.write("Sube el archivo .csv de la tableta (cada fila cuenta como 1 racimo).")
