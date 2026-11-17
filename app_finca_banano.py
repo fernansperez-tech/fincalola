@@ -20,7 +20,8 @@ if "cola_offline" not in st.session_state:
 
 def conectar_hoja():
     creds = dict(st.secrets["connections"]["gsheets"])
-    # Asegurar saltos de linea reales en la llave privada
+    creds["token_uri"] = "https://googleapis.com"
+    creds["auth_uri"] = "https://google.com"
     if "private_key" in creds:
         creds["private_key"] = creds["private_key"].replace("\\n", "\n")
     gc = gspread.service_account_from_dict(creds)
