@@ -217,7 +217,7 @@ elif rol == "Consulta de Embolse":
         solo_emb["Fecha"] = solo_emb["Fecha"].astype(str)
         solo_emb["Anio"] = solo_emb["Fecha"].str[:4]
         solo_emb["Semana"] = solo_emb["Semana"].astype(int)
-               def calc_edad(fila):
+    def calc_edad(fila):
             try:
                 y = int(fila["Anio"])
             except Exception:
