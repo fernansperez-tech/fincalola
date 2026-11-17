@@ -22,7 +22,7 @@ PARCELEROS_BASE = [
     "Jorge Ramírez",
     "Roberto Castro",
     "Fernando Ruiz",
-    "Evenildo Felipe";
+    "Evenildo Felipe",
     "Otro (Escribir nombre)"
 ]
 CLAVE_ADMIN = "banano2026"
