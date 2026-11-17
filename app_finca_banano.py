@@ -217,13 +217,13 @@ elif rol == "Consulta de Embolse":
         solo_emb["Fecha"] = solo_emb["Fecha"].astype(str)
         solo_emb["Anio"] = solo_emb["Fecha"].str[:4]
         solo_emb["Semana"] = solo_emb["Semana"].astype(int)
-def calc_edad(fila):
-        try:
+        def calc_edad(fila):
+            try:
                 y = int(fila["Anio"])
-        except Exception:
+            except Exception:
                 y = anio_actual
-                s = int(fila["Semana"])
-                diff_semanas = (anio_actual - y) * 52 + (semana_actual - s)
+            s = int(fila["Semana"])
+            diff_semanas = (anio_actual - y) * 52 + (semana_actual - s)
             return max(0, diff_semanas + 1)
         solo_emb["Edad_Num"] = solo_emb.apply(calc_edad, axis=1)
         solo_emb["Edad"] = solo_emb["Edad_Num"].astype(str) + " sem"
