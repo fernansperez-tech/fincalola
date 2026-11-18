@@ -407,48 +407,66 @@ with tab3:
                 else:
                     st.error("No se encontraron registros válidos en el CSV.")
 with tab4:
-        st.subheader("Corregir o Eliminar un Registro")
+        st.subheader("Corregir o Eliminar Registros (Solo Administrador)")
+        if st.button("🔄 Recargar lista desde Google Sheets", key="btn_recargar_edit"):
+            st.rerun()
         if df.empty:
-            st.info("No hay registros disponibles para editar.")
+            st.warning("No se cargaron registros en este intento. Presiona el botón de recargar arriba.")
         else:
             df_edit = df.copy()
             df_edit["Fila_Excel"] = df_edit.index + 2
-            ultimos = df_edit.tail(30).iloc[::-1]
-            st.write("Últimos 30 registros guardados:")
-            st.dataframe(ultimos[["Fila_Excel", "Fecha", "Lote", "Parcelero", "Color_Cinta", "Racimos", "Estado"]], use_container_width=True, hide_index=True)
-            fila_sel = st.selectbox("Selecciona el número de Fila_Excel:", ultimos["Fila_Excel"].tolist())
-            datos_fila = df_edit[df_edit["Fila_Excel"] == fila_sel].iloc[0]
-            st.divider()
-            st.write(f"Editando Fila **{fila_sel}** ({datos_fila['Parcelero']} - {datos_fila['Fecha']}):")
-            e1, e2, e3 = st.columns(3)
-            idx_l = LOTES.index(datos_fila["Lote"]) if datos_fila["Lote"] in LOTES else 0
-            nuevo_lote = e1.selectbox("Corregir Lote:", LOTES, index=idx_l)
-            idx_c = COLORES_CINTA.index(datos_fila["Color_Cinta"]) if datos_fila["Color_Cinta"] in COLORES_CINTA else 0
-            nuevo_color = e2.selectbox("Corregir Color:", COLORES_CINTA, index=idx_c)
-            valor_actual = int(datos_fila["Racimos"])
-            es_corte = valor_actual < 0
-            nueva_cant_abs = e3.number_input("Corregir Cantidad:", min_value=1, max_value=5000, value=abs(valor_actual))
-            nuevo_racimos = -int(nueva_cant_abs) if es_corte else int(nueva_cant_abs)
-            col_btn1, col_btn2 = st.columns(2)
-            if col_btn1.button("💾 Guardar Corrección", type="primary", use_container_width=True):
-                try:
-                    fila_actualizada = [
-                        str(datos_fila["Fecha"]), str(datos_fila["Hora"]), int(datos_fila["Semana"]),
-                        nuevo_lote, str(datos_fila["Parcelero"]), nuevo_color,
-                        nuevo_racimos, str(datos_fila["Estado"])
-                    ]
-                    actualizar_fila_gsheet(int(fila_sel), fila_actualizada)
-                    st.success(f"Fila {fila_sel} actualizada correctamente.")
-                    st.rerun()
-                except Exception as e:
-                    st.error(f"Error al actualizar: {repr(e)}")
-            if col_btn2.button("🗑️ Eliminar Fila", use_container_width=True):
-                try:
-                    borrar_fila_gsheet(int(fila_sel))
-                    st.warning(f"Fila {fila_sel} eliminada permanentemente.")
-                    st.rerun()
-                except Exception as e:
-                    st.error(f"Error al eliminar: {repr(e)}")
+            df_edit["Tipo"] = df_edit["Racimos"].apply(lambda x: "Embolse (+)" if int(x) > 0 else "Corte (-)")
+            c_f1, c_f2 = st.columns(2)
+            lotes_ed = ["Todos"] + sorted(df_edit["Lote"].astype(str).unique().tolist())
+            tipos_ed = ["Todos", "Embolse (+)", "Corte (-)"]
+            f_lote_ed = c_f1.selectbox("Buscar por Lote:", lotes_ed, key="ed_filtro_lote")
+            f_tipo_ed = c_f2.selectbox("Buscar por Tipo:", tipos_ed, key="ed_filtro_tipo")
+            df_filtrado_ed = df_edit.copy()
+            if f_lote_ed != "Todos":
+                df_filtrado_ed = df_filtrado_ed[df_filtrado_ed["Lote"] == f_lote_ed]
+            if f_tipo_ed != "Todos":
+                df_filtrado_ed = df_filtrado_ed[df_filtrado_ed["Tipo"] == f_tipo_ed]
+            todos_ordenados = df_filtrado_ed.iloc[::-1]
+            st.write(f"Mostrando **{len(todos_ordenados)}** registros encontrados (sin límite):")
+            st.dataframe(
+                todos_ordenados[["Fila_Excel", "Fecha", "Semana", "Lote", "Parcelero", "Color_Cinta", "Racimos", "Estado"]],
+                use_container_width=True,
+                hide_index=True
+            )
+            if not todos_ordenados.empty:
+                fila_sel = st.selectbox("Selecciona el número de Fila_Excel a editar o borrar:", todos_ordenados["Fila_Excel"].tolist(), key="sel_fila_ed")
+                datos_fila = df_edit[df_edit["Fila_Excel"] == fila_sel].iloc
+                st.divider()
+                st.write(f"Editando **Fila {fila_sel}** ({datos_fila['Parcelero']} - {datos_fila['Fecha']}):")
+                e1, e2, e3 = st.columns(3)
+                idx_l = LOTES.index(datos_fila["Lote"]) if datos_fila["Lote"] in LOTES else 0
+                nuevo_lote = e1.selectbox("Corregir Lote:", LOTES, index=idx_l, key="ed_nuevo_lote")
+                idx_c = COLORES_CINTA.index(datos_fila["Color_Cinta"]) if datos_fila["Color_Cinta"] in COLORES_CINTA else 0
+                nuevo_color = e2.selectbox("Corregir Color:", COLORES_CINTA, index=idx_c, key="ed_nuevo_color")
+                valor_actual = int(datos_fila["Racimos"])
+                es_corte = valor_actual < 0
+                nueva_cant_abs = e3.number_input("Corregir Cantidad:", min_value=1, max_value=10000, value=abs(valor_actual), key="ed_nueva_cant")
+                nuevo_racimos = -int(nueva_cant_abs) if es_corte else int(nueva_cant_abs)
+                col_btn1, col_btn2 = st.columns(2)
+                if col_btn1.button("💾 Guardar Corrección", type="primary", use_container_width=True, key="btn_guardar_ed"):
+                    try:
+                        fila_actualizada = [
+                            str(datos_fila["Fecha"]), str(datos_fila["Hora"]), int(datos_fila["Semana"]),
+                            nuevo_lote, str(datos_fila["Parcelero"]), nuevo_color,
+                            nuevo_racimos, str(datos_fila["Estado"])
+                        ]
+                        actualizar_fila_gsheet(int(fila_sel), fila_actualizada)
+                        st.success(f"Fila {fila_sel} actualizada correctamente.")
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"Error al actualizar: {repr(e)}")
+                if col_btn2.button("🗑️ Eliminar Fila", use_container_width=True, key="btn_borrar_ed"):
+                    try:
+                        borrar_fila_gsheet(int(fila_sel))
+                        st.warning(f"Fila {fila_sel} eliminada permanentemente.")
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"Error al eliminar: {repr(e)}")
 
 
 
