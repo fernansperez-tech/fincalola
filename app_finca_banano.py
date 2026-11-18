@@ -435,7 +435,7 @@ with tab4:
             )
             if not todos_ordenados.empty:
                 fila_sel = st.selectbox("Selecciona el número de Fila_Excel a editar o borrar:", todos_ordenados["Fila_Excel"].tolist(), key="sel_fila_ed")
-                datos_fila = df_edit[df_edit["Fila_Excel"] == fila_sel].iloc
+                datos_fila = df_edit[df_edit["Fila_Excel"] == fila_sel].iloc[int(0)]
                 st.divider()
                 st.write(f"Editando **Fila {fila_sel}** ({datos_fila['Parcelero']} - {datos_fila['Fecha']}):")
                 e1, e2, e3 = st.columns(3)
