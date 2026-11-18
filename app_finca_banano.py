@@ -287,7 +287,7 @@ elif rol == "Administrador":
         st.stop()
 tab1, tab2, tab3, tab4 = st.tabs(["Inventario y Edad", "Historial de Corte", "Subir CSV Tableta", "Corregir / Borrar"])
 
-    df = cargar_datos()
+df = cargar_datos()
     with tab1:
         st.subheader("Proyección y Balance por Edad (86.1 Ha)")
         col_r1, col_r2 = st.columns(2)
