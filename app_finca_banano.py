@@ -127,7 +127,7 @@ def procesar_csv_tableta(df_tab, col_lote, col_color, col_fecha=None):
             "Estado": "Cortado"
         })
     return descuentos
-st.title("Gestión Finca Lola (86.1 Ha)")
+st.title("BANANERA LA LOLA S.A")
 
 if len(st.session_state.cola_offline) > 0:
     st.warning(f"Tienes {len(st.session_state.cola_offline)} registro(s) guardados en el celular.")
