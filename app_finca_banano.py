@@ -11,20 +11,7 @@ st.set_page_config(page_title="Finca Lola - 86.1 Ha", page_icon="🍌", layout="
 
 COLORES_CINTA = ["Amarilla", "Morada", "Roja", "Café", "Negra", "Verde", "Azul", "Blanca"]
 LOTES = [f"Lote {i:02d}" for i in range(1, 15)]
-PARCELEROS_BASE = [
-    "Carracedo Daison",
-    "Reales Isaac",
-    "Chiquillo Libardo",
-    "Luis Fernandez",
-    "Cantillo Pedro",
-    "Andrés López",
-    "Miguel Torres",
-    "Jorge Ramírez",
-    "Roberto Castro",
-    "Fernando Ruiz",
-    "Evenildo Felipe",
-    "Otro (Escribir nombre)"
-]
+PARCELEROS_BASE = [f"Parcelero {i:02d}" for i in range(1, 11)] + ["Otro (Escribir nombre)"]
 CLAVE_ADMIN = "banano2026"
 ID_HOJA = "1WnHs71IMeuz9X9sAtJkNYJbR9QJE2QqAKq37-PGsr-0"
 NOMBRE_HOJA = "Hoja 1"
@@ -77,6 +64,7 @@ def agregar_filas(lista_registros):
             r["Parcelero"], r["Color_Cinta"], int(r["Racimos"]), r["Estado"]
         ])
     ws.append_rows(filas)
+
 def actualizar_fila_gsheet(num_fila_sheet, nueva_fila_lista):
     ws = conectar_hoja()
     rango = f"A{num_fila_sheet}:H{num_fila_sheet}"
@@ -86,25 +74,20 @@ def borrar_fila_gsheet(num_fila_sheet):
     ws = conectar_hoja()
     ws.delete_rows(int(num_fila_sheet))
 
-
 def procesar_csv_tableta(df_tab, col_lote, col_color, col_fecha=None):
     ahora = datetime.now()
     cols_usar = [col_lote, col_color]
     if col_fecha and col_fecha != "Usar fecha de hoy":
         cols_usar.append(col_fecha)
-        
     df_limpio = df_tab[cols_usar].dropna().copy()
     if df_limpio.empty:
         return []
-
     if col_fecha and col_fecha != "Usar fecha de hoy":
         df_limpio["Fecha_Norm"] = pd.to_datetime(df_limpio[col_fecha], errors="coerce").dt.strftime("%Y-%m-%d")
         df_limpio["Fecha_Norm"] = df_limpio["Fecha_Norm"].fillna(ahora.strftime("%Y-%m-%d"))
     else:
         df_limpio["Fecha_Norm"] = ahora.strftime("%Y-%m-%d")
-
     conteo = df_limpio.groupby(["Fecha_Norm", col_lote, col_color]).size().reset_index(name="Total_Racimos")
-    
     descuentos = []
     for _, fila in conteo.iterrows():
         lote_raw = str(fila[col_lote]).strip()
@@ -117,7 +100,6 @@ def procesar_csv_tableta(df_tab, col_lote, col_color, col_fecha=None):
             semana_num = datetime.strptime(fecha_str, "%Y-%m-%d").isocalendar().week
         except Exception:
             semana_num = ahora.isocalendar().week
-            
         descuentos.append({
             "Fecha": fecha_str,
             "Hora": ahora.strftime("%H:%M"),
@@ -179,7 +161,7 @@ if rol == "Parcelero (Embolse)":
     st.info(f"Cinta seleccionada: **{cinta}**")
     col_cant, col_edad = st.columns(2)
     racimos = col_cant.number_input("Cantidad de racimos:", min_value=1, max_value=1000, value=35)
-    edad_reg = col_edad.number_input("Edad actual (semanas):", min_value=0, max_value=15, value=1, help="Usa 0 para embolse prematuro, 1 para esta semana, o más si es atrasado.")
+    edad_reg = col_edad.number_input("Edad actual (semanas):", min_value=0, max_value=15, value=1)
     if st.button("Guardar Embolse", type="primary"):
         ahora = datetime.now()
         sem_actual = ahora.isocalendar().week
@@ -237,20 +219,15 @@ elif rol == "Consulta de Embolse":
         solo_emb["Edad_Num"] = solo_emb.apply(calc_edad, axis=1)
         solo_emb["Edad"] = solo_emb["Edad_Num"].astype(str) + " sem"
         f1, f2, f3 = st.columns(3)
-        anios_op = ["Todos"] + sorted(solo_emb["Anio"].unique().tolist(), reverse=True)
-        semanas_op = ["Todas"] + sorted(solo_emb["Semana"].unique().tolist(), reverse=True)
-        fechas_op = ["Todos"] + sorted(solo_emb["Fecha"].unique().tolist(), reverse=True)
-        sel_anio = f1.selectbox("Año:", anios_op)
-        sel_sem = f2.selectbox("Semana Embolse:", semanas_op)
-        sel_fecha = f3.selectbox("Día (Fecha):", fechas_op)
+        sel_anio = f1.selectbox("Año:", ["Todos"] + sorted(solo_emb["Anio"].unique().tolist(), reverse=True), key="cons_anio")
+        sel_sem = f2.selectbox("Semana Embolse:", ["Todas"] + sorted(solo_emb["Semana"].unique().tolist(), reverse=True), key="cons_sem")
+        sel_fecha = f3.selectbox("Día (Fecha):", ["Todos"] + sorted(solo_emb["Fecha"].unique().tolist(), reverse=True), key="cons_fecha")
         f4, f5, f6 = st.columns(3)
         lotes_op = ["Todos"] + sorted(solo_emb["Lote"].unique().tolist())
-        colores_op = ["Todos"] + sorted(solo_emb["Color_Cinta"].unique().tolist())
-        edades_op = ["Todas"] + [f"{e} sem" for e in sorted(solo_emb["Edad_Num"].unique().tolist())]
         idx_lote = lotes_op.index(lote_qr) if lote_qr in lotes_op else 0
-        sel_lote = f4.selectbox("Lote:", lotes_op, index=idx_lote)
-        sel_color = f5.selectbox("Color de Cinta:", colores_op)
-        sel_edad = f6.selectbox("Edad:", edades_op)
+        sel_lote = f4.selectbox("Lote:", lotes_op, index=idx_lote, key="cons_lote")
+        sel_color = f5.selectbox("Color de Cinta:", ["Todos"] + sorted(solo_emb["Color_Cinta"].unique().tolist()), key="cons_color")
+        sel_edad = f6.selectbox("Edad:", ["Todas"] + [f"{e} sem" for e in sorted(solo_emb["Edad_Num"].unique().tolist())], key="cons_edad")
         df_res = solo_emb.copy()
         if sel_anio != "Todos":
             df_res = df_res[df_res["Anio"] == sel_anio]
@@ -269,26 +246,20 @@ elif rol == "Consulta de Embolse":
         st.write("### Resumen General por Lote")
         resumen_lote = df_res.groupby(["Lote", "Color_Cinta"])["Racimos"].sum().reset_index()
         fila_total_lote = pd.DataFrame([{"Lote": "TOTAL GENERAL", "Color_Cinta": "", "Racimos": total_filtrado}])
-        resumen_lote_final = pd.concat([resumen_lote, fila_total_lote], ignore_index=True)
-        st.dataframe(resumen_lote_final, use_container_width=True, hide_index=True)
+        st.dataframe(pd.concat([resumen_lote, fila_total_lote], ignore_index=True), use_container_width=True, hide_index=True)
         st.write("### Detalle por Trabajador y Día")
         tabla_ver = df_res[["Fecha", "Anio", "Semana", "Lote", "Parcelero", "Color_Cinta", "Edad", "Racimos"]].copy()
-        fila_total = pd.DataFrame([{
-            "Fecha": "TOTAL", "Anio": "", "Semana": "", "Lote": "",
-            "Parcelero": "", "Color_Cinta": "", "Edad": "", "Racimos": total_filtrado
-        }])
-        tabla_final = pd.concat([tabla_ver, fila_total], ignore_index=True)
-        st.dataframe(tabla_final, use_container_width=True, hide_index=True)
+        fila_total = pd.DataFrame([{"Fecha": "TOTAL", "Anio": "", "Semana": "", "Lote": "", "Parcelero": "", "Color_Cinta": "", "Edad": "", "Racimos": total_filtrado}])
+        st.dataframe(pd.concat([tabla_ver, fila_total], ignore_index=True), use_container_width=True, hide_index=True)
 elif rol == "Administrador":
     clave = st.text_input("Clave de Administrador:", type="password")
     if clave != CLAVE_ADMIN:
         if clave != "":
             st.error("Clave incorrecta.")
         st.stop()
-tab1, tab2, tab3, tab4 = st.tabs(["Inventario y Edad", "Historial de Corte", "Subir CSV Tableta", "Corregir / Borrar"])
-
-df = cargar_datos()
-with tab1:
+    tab1, tab2, tab3, tab4 = st.tabs(["Inventario y Edad", "Historial de Corte", "Subir CSV Tableta", "Corregir / Borrar"])
+    df = cargar_datos()
+    with tab1:
         st.subheader("Proyección y Balance por Edad (86.1 Ha)")
         col_r1, col_r2 = st.columns(2)
         ratio = col_r1.number_input("Ratio (Cajas / Racimo):", value=1.15, min_value=0.50, max_value=2.50, step=0.05)
@@ -345,7 +316,7 @@ with tab1:
             solo_embolse = df[df["Racimos"] > 0]
             por_trabajador = solo_embolse.groupby(["Parcelero", "Anio", "Fecha"])["Racimos"].sum().reset_index()
             st.dataframe(por_trabajador, use_container_width=True)
-with tab2:
+    with tab2:
         st.subheader("Buscador y Totales de Corte")
         solo_cortes = df[df["Racimos"] < 0].copy() if not df.empty else pd.DataFrame()
         if solo_cortes.empty:
@@ -359,7 +330,6 @@ with tab2:
             filtro_fecha = f2.selectbox("Fecha:", ["Todas"] + sorted(solo_cortes["Fecha"].unique().tolist(), reverse=True), key="corte_fecha")
             filtro_lote = f3.selectbox("Lote:", ["Todos"] + sorted(solo_cortes["Lote"].unique().tolist()), key="corte_lote")
             filtro_color = f4.selectbox("Color:", ["Todos"] + sorted(solo_cortes["Color_Cinta"].unique().tolist()), key="corte_color")
-
             df_filtrado = solo_cortes.copy()
             if filtro_anio != "Todos":
                 df_filtrado = df_filtrado[df_filtrado["Anio"] == filtro_anio]
@@ -378,7 +348,7 @@ with tab2:
             st.dataframe(tabla_mostrar, use_container_width=True)
             csv_descarga = tabla_mostrar.to_csv(index=False).encode("utf-8")
             st.download_button("Descargar Selección en Excel (CSV)", data=csv_descarga, file_name="reporte_cortes_filtrado.csv", mime="text/csv")
-with tab3:
+    with tab3:
         st.subheader("Descontar Corte con CSV Directo de Tableta")
         st.write("Sube el archivo .csv de la tableta (cada fila cuenta como 1 racimo).")
         archivo_csv = st.file_uploader("Seleccionar archivo .csv de la tableta", type=["csv"])
@@ -406,7 +376,7 @@ with tab3:
                         st.error(f"Error técnico al descontar: {repr(e)}")
                 else:
                     st.error("No se encontraron registros válidos en el CSV.")
-   with tab4:
+    with tab4:
         st.subheader("Corregir o Eliminar Registros (Solo Administrador)")
         if st.button("🔄 Recargar lista desde Google Sheets", key="btn_recargar_edit"):
             st.rerun()
@@ -417,10 +387,8 @@ with tab3:
             df_edit["Fila_Excel"] = df_edit.index + 2
             df_edit["Tipo"] = df_edit["Racimos"].apply(lambda x: "Embolse (+)" if int(x) > 0 else "Corte (-)")
             c_f1, c_f2 = st.columns(2)
-            lotes_ed = ["Todos"] + sorted(df_edit["Lote"].astype(str).unique().tolist())
-            tipos_ed = ["Todos", "Embolse (+)", "Corte (-)"]
-            f_lote_ed = c_f1.selectbox("Buscar por Lote:", lotes_ed, key="ed_filtro_lote")
-            f_tipo_ed = c_f2.selectbox("Buscar por Tipo:", tipos_ed, key="ed_filtro_tipo")
+            f_lote_ed = c_f1.selectbox("Buscar por Lote:", ["Todos"] + sorted(df_edit["Lote"].astype(str).unique().tolist()), key="ed_filtro_lote")
+            f_tipo_ed = c_f2.selectbox("Buscar por Tipo:", ["Todos", "Embolse (+)", "Corte (-)"], key="ed_filtro_tipo")
             df_filtrado_ed = df_edit.copy()
             if f_lote_ed != "Todos":
                 df_filtrado_ed = df_filtrado_ed[df_filtrado_ed["Lote"] == f_lote_ed]
@@ -428,13 +396,9 @@ with tab3:
                 df_filtrado_ed = df_filtrado_ed[df_filtrado_ed["Tipo"] == f_tipo_ed]
             todos_ordenados = df_filtrado_ed.iloc[::-1]
             st.write(f"Mostrando **{len(todos_ordenados)}** registros encontrados (sin límite):")
-            st.dataframe(
-                todos_ordenados[["Fila_Excel", "Fecha", "Semana", "Lote", "Parcelero", "Color_Cinta", "Racimos", "Estado"]],
-                use_container_width=True,
-                hide_index=True
-            )
+            st.dataframe(todos_ordenados[["Fila_Excel", "Fecha", "Semana", "Lote", "Parcelero", "Color_Cinta", "Racimos", "Estado"]], use_container_width=True, hide_index=True)
             if not todos_ordenados.empty:
-                fila_sel = st.selectbox("Selecciona el número de Fila_Excel a editar o borrar:", todos_ordenados["Fila_Excel"].tolist(), key="sel_fila_ed")
+                fila_sel = st.selectbox("Selecciona el número de Fila_Excel:", todos_ordenados["Fila_Excel"].tolist(), key="sel_fila_ed")
                 datos_fila = df_edit[df_edit["Fila_Excel"] == fila_sel].iloc[int(0)]
                 st.divider()
                 st.write(f"Editando **Fila {fila_sel}** ({datos_fila['Parcelero']} - {datos_fila['Fecha']}):")
@@ -444,9 +408,8 @@ with tab3:
                 idx_c = COLORES_CINTA.index(datos_fila["Color_Cinta"]) if datos_fila["Color_Cinta"] in COLORES_CINTA else 0
                 nuevo_color = e2.selectbox("Corregir Color:", COLORES_CINTA, index=idx_c, key="ed_nuevo_color")
                 valor_actual = int(datos_fila["Racimos"])
-                es_corte = valor_actual < 0
                 nueva_cant_abs = e3.number_input("Corregir Cantidad:", min_value=1, max_value=10000, value=abs(valor_actual), key="ed_nueva_cant")
-                nuevo_racimos = -int(nueva_cant_abs) if es_corte else int(nueva_cant_abs)
+                nuevo_racimos = -int(nueva_cant_abs) if valor_actual < 0 else int(nueva_cant_abs)
                 col_btn1, col_btn2 = st.columns(2)
                 if col_btn1.button("💾 Guardar Corrección", type="primary", use_container_width=True, key="btn_guardar_ed"):
                     try:
@@ -467,13 +430,3 @@ with tab3:
                         st.rerun()
                     except Exception as e:
                         st.error(f"Error al eliminar: {repr(e)}")
-
-
-
-
-
-
-
-
-        
-
