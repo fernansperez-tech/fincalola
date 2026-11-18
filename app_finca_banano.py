@@ -285,7 +285,7 @@ elif rol == "Administrador":
         if clave != "":
             st.error("Clave incorrecta.")
         st.stop()
-   tab1, tab2, tab3, tab4 = st.tabs(["Inventario y Edad", "Historial de Corte", "Subir CSV Tableta", "Corregir / Borrar"])
+tab1, tab2, tab3, tab4 = st.tabs(["Inventario y Edad", "Historial de Corte", "Subir CSV Tableta", "Corregir / Borrar"])
 
     df = cargar_datos()
     with tab1:
