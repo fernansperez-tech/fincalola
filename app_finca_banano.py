@@ -439,13 +439,22 @@ elif rol == "Administrador":
                     actualizar_fila_gsheet(int(fila_sel), fila_actualizada)
                     st.success(f"Fila {fila_sel} actualizada correctamente.")
                     st.rerun()
-except Exception as e:
-st.error(f"Error al actualizar: {repr(e)}")
-if col_btn2.button("🗑️ Eliminar Fila", use_container_width=True):
-try:
-borrar_fila_gsheet(int(fila_sel))
-st.warning(f"Fila {fila_sel} eliminada permanentemente.")
-st.rerun()
-except Exception as e:
-st.error(f"Error al eliminar: {repr(e)}")
+                    except Exception as e:
+                        st.error(f"Error al actualizar: {repr(e)}")
+                        if col_btn2.button("🗑️ Eliminar Fila", use_container_width=True):
+                            try:
+                                borrar_fila_gsheet(int(fila_sel))
+                                st.warning(f"Fila {fila_sel} eliminada permanentemente.")
+                                st.rerun()
+                                except Exception as e:
+                                    st.error(f"Error al eliminar: {repr(e)}")
+
+
+
+
+
+
+
+
+        
 
