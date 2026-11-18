@@ -77,6 +77,15 @@ def agregar_filas(lista_registros):
             r["Parcelero"], r["Color_Cinta"], int(r["Racimos"]), r["Estado"]
         ])
     ws.append_rows(filas)
+def actualizar_fila_gsheet(num_fila_sheet, nueva_fila_lista):
+    ws = conectar_hoja()
+    rango = f"A{num_fila_sheet}:H{num_fila_sheet}"
+    ws.update(values=[nueva_fila_lista], range_name=rango)
+
+def borrar_fila_gsheet(num_fila_sheet):
+    ws = conectar_hoja()
+    ws.delete_rows(int(num_fila_sheet))
+
 
 def procesar_csv_tableta(df_tab, col_lote, col_color, col_fecha=None):
     ahora = datetime.now()
@@ -276,7 +285,7 @@ elif rol == "Administrador":
         if clave != "":
             st.error("Clave incorrecta.")
         st.stop()
-    tab1, tab2, tab3 = st.tabs(["Inventario y Edad", "Historial y Filtros de Corte", "Subir CSV de Tableta"])
+    tab1, tab2, tab3, tab4 = st.tabs(["Inventario y Edad", "Historial de Corte", "Subir CSV Tableta", "Corregir / Borrar"])
     df = cargar_datos()
     with tab1:
         st.subheader("Proyección y Balance por Edad (86.1 Ha)")
@@ -310,14 +319,9 @@ elif rol == "Administrador":
                     y = anio_actual
                 edad = max(0, ((anio_actual - y) * 52 + (semana_actual - sem)) + 1)
                 filas_balance.append({
-                    "Lote": lote,
-                    "Color_Cinta": color,
-                    "Anio": anio_str,
-                    "Semana_Emb": sem,
-                    "Edad": f"{edad} sem",
-                    "Embolsados": emb,
-                    "Cortados": desc,
-                    "Saldo_En_Mata": saldo
+                    "Lote": lote, "Color_Cinta": color, "Anio": anio_str,
+                    "Semana_Emb": sem, "Edad": f"{edad} sem",
+                    "Embolsados": emb, "Cortados": desc, "Saldo_En_Mata": saldo
                 })
             balance = pd.DataFrame(filas_balance)
             if not balance.empty:
@@ -329,9 +333,7 @@ elif rol == "Administrador":
                 m2.metric("Cajas Proyectadas (20 kg)", f"{cajas_est:,.0f} cajas")
                 st.write("Balance por Color y Edad (Toda la Finca)")
                 bal_edad = balance.groupby(["Color_Cinta", "Anio", "Semana_Emb", "Edad"]).agg(
-                    Embolsados=("Embolsados", "sum"),
-                    Cortados=("Cortados", "sum"),
-                    Saldo_En_Mata=("Saldo_En_Mata", "sum")
+                    Embolsados=("Embolsados", "sum"), Cortados=("Cortados", "sum"), Saldo_En_Mata=("Saldo_En_Mata", "sum")
                 ).reset_index()
                 bal_edad["Cajas_Est"] = (bal_edad["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
                 st.dataframe(bal_edad, use_container_width=True)
@@ -352,14 +354,10 @@ elif rol == "Administrador":
             solo_cortes["Fecha"] = solo_cortes["Fecha"].astype(str)
             solo_cortes["Anio"] = solo_cortes["Fecha"].str[:4]
             f1, f2, f3, f4 = st.columns(4)
-            anios_disp = ["Todos"] + sorted(solo_cortes["Anio"].unique().tolist(), reverse=True)
-            fechas_disp = ["Todas"] + sorted(solo_cortes["Fecha"].unique().tolist(), reverse=True)
-            lotes_disp = ["Todos"] + sorted(solo_cortes["Lote"].unique().tolist())
-            colores_disp = ["Todos"] + sorted(solo_cortes["Color_Cinta"].unique().tolist())
-            filtro_anio = f1.selectbox("Año:", anios_disp)
-            filtro_fecha = f2.selectbox("Fecha:", fechas_disp)
-            filtro_lote = f3.selectbox("Lote:", lotes_disp)
-            filtro_color = f4.selectbox("Color:", colores_disp)
+            filtro_anio = f1.selectbox("Año:", ["Todos"] + sorted(solo_cortes["Anio"].unique().tolist(), reverse=True))
+            filtro_fecha = f2.selectbox("Fecha:", ["Todas"] + sorted(solo_cortes["Fecha"].unique().tolist(), reverse=True))
+            filtro_lote = f3.selectbox("Lote:", ["Todos"] + sorted(solo_cortes["Lote"].unique().tolist()))
+            filtro_color = f4.selectbox("Color:", ["Todos"] + sorted(solo_cortes["Color_Cinta"].unique().tolist()))
             df_filtrado = solo_cortes.copy()
             if filtro_anio != "Todos":
                 df_filtrado = df_filtrado[df_filtrado["Anio"] == filtro_anio]
@@ -406,3 +404,47 @@ elif rol == "Administrador":
                         st.error(f"Error técnico al descontar: {repr(e)}")
                 else:
                     st.error("No se encontraron registros válidos en el CSV.")
+    with tab4:
+        st.subheader("Corregir o Eliminar un Registro")
+        if df.empty:
+            st.info("No hay registros disponibles para editar.")
+        else:
+            df_edit = df.copy()
+            # El indice 0 del DataFrame corresponde a la Fila 2 en Google Sheets
+            df_edit["Fila_Excel"] = df_edit.index + 2
+            ultimos = df_edit.tail(30).iloc[::-1]
+            st.write("Últimos 30 registros guardados (mira el número de Fila_Excel):")
+            st.dataframe(ultimos[["Fila_Excel", "Fecha", "Lote", "Parcelero", "Color_Cinta", "Racimos", "Estado"]], use_container_width=True, hide_index=True)
+            fila_sel = st.selectbox("Selecciona el número de Fila_Excel a modificar:", ultimos["Fila_Excel"].tolist())
+            datos_fila = df_edit[df_edit["Fila_Excel"] == fila_sel].iloc
+            st.divider()
+            st.write(f"Editando Fila **{fila_sel}** ({datos_fila['Parcelero']} - {datos_fila['Fecha']}):")
+            e1, e2, e3 = st.columns(3)
+            idx_l = LOTES.index(datos_fila["Lote"]) if datos_fila["Lote"] in LOTES else 0
+            nuevo_lote = e1.selectbox("Corregir Lote:", LOTES, index=idx_l)
+            idx_c = COLORES_CINTA.index(datos_fila["Color_Cinta"]) if datos_fila["Color_Cinta"] in COLORES_CINTA else 0
+            nuevo_color = e2.selectbox("Corregir Color:", COLORES_CINTA, index=idx_c)
+            valor_actual = int(datos_fila["Racimos"])
+            es_corte = valor_actual < 0
+            nueva_cant_abs = e3.number_input("Corregir Cantidad:", min_value=1, max_value=5000, value=abs(valor_actual))
+            nuevo_racimos = -int(nueva_cant_abs) if es_corte else int(nueva_cant_abs)
+            col_btn1, col_btn2 = st.columns(2)
+            if col_btn1.button("💾 Guardar Corrección", type="primary", use_container_width=True):
+                try:
+                    fila_actualizada = [
+                        str(datos_fila["Fecha"]), str(datos_fila["Hora"]), int(datos_fila["Semana"]),
+                        nuevo_lote, str(datos_fila["Parcelero"]), nuevo_color,
+                        nuevo_racimos, str(datos_fila["Estado"])
+                    ]
+                    actualizar_fila_gsheet(int(fila_sel), fila_actualizada)
+                    st.success(f"Fila {fila_sel} actualizada correctamente.")
+st.rerun()
+except Exception as e:
+st.error(f"Error al actualizar: {repr(e)}")
+if col_btn2.button("🗑️ Eliminar Fila", use_container_width=True):
+try:
+borrar_fila_gsheet(int(fila_sel))
+st.warning(f"Fila {fila_sel} eliminada permanentemente.")
+st.rerun()
+except Exception as e:
+st.error(f"Error al eliminar: {repr(e)}")
