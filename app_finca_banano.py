@@ -176,7 +176,7 @@ if rol == "Parcelero (Embolse)":
     cinta = st.session_state.cinta_elegida
     st.info(f"Cinta seleccionada: **{cinta}**")
     col_cant, col_edad = st.columns(2)
-    racimos = col_cant.number_input("Cantidad de racimos:", min_value=1, max_value=1000, value=35)
+    racimos = col_cant.number_input("Cantidad de racimos:", min_value=1, max_value=1000, value=100)
     edad_reg = col_edad.number_input("Edad actual (semanas):", min_value=0, max_value=15, value=1)
     if st.button("Guardar Embolse", type="primary"):
         ahora = datetime.now()
