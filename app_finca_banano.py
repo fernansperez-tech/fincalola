@@ -404,7 +404,7 @@ elif rol == "Administrador":
                         st.error(f"Error técnico al descontar: {repr(e)}")
                 else:
                     st.error("No se encontraron registros válidos en el CSV.")
-        with tab4:
+with tab4:
         st.subheader("Corregir o Eliminar un Registro")
         if df.empty:
             st.info("No hay registros disponibles para editar.")
