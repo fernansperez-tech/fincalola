@@ -4,6 +4,7 @@ import numpy as np
 from PIL import Image
 import pandas as pd
 from datetime import datetime
+import time
 import gspread
 from google.oauth2.service_account import Credentials
 
@@ -394,7 +395,10 @@ elif rol == "Administrador":
     with tab4:
         st.subheader("Corregir o Eliminar Registros (Solo Administrador)")
         if st.button("🔄 Recargar lista desde Google Sheets", key="btn_recargar_edit"):
+            with st.spinner("Sincronizando con Google Sheets..."):
+              time.sleep(1.5)
             st.rerun()
+
         if df.empty:
             st.warning("No se cargaron registros en este intento. Presiona el botón de recargar arriba.")
         else:
@@ -435,6 +439,7 @@ elif rol == "Administrador":
                         ]
                         actualizar_fila_gsheet(int(fila_sel), fila_actualizada)
                         st.success(f"Fila {fila_sel} actualizada correctamente.")
+                        time.sleep(1.5)
                         st.rerun()
                     except Exception as e:
                         st.error(f"Error al actualizar: {repr(e)}")
