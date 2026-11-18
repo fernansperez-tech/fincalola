@@ -345,7 +345,7 @@ with tab1:
             solo_embolse = df[df["Racimos"] > 0]
             por_trabajador = solo_embolse.groupby(["Parcelero", "Anio", "Fecha"])["Racimos"].sum().reset_index()
             st.dataframe(por_trabajador, use_container_width=True)
-    with tab2:
+with tab2:
         st.subheader("Buscador y Totales de Corte")
         solo_cortes = df[df["Racimos"] < 0].copy() if not df.empty else pd.DataFrame()
         if solo_cortes.empty:
