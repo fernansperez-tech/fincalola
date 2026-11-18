@@ -404,19 +404,18 @@ elif rol == "Administrador":
                         st.error(f"Error técnico al descontar: {repr(e)}")
                 else:
                     st.error("No se encontraron registros válidos en el CSV.")
-    with tab4:
+        with tab4:
         st.subheader("Corregir o Eliminar un Registro")
         if df.empty:
             st.info("No hay registros disponibles para editar.")
         else:
             df_edit = df.copy()
-            # El indice 0 del DataFrame corresponde a la Fila 2 en Google Sheets
             df_edit["Fila_Excel"] = df_edit.index + 2
             ultimos = df_edit.tail(30).iloc[::-1]
-            st.write("Últimos 30 registros guardados (mira el número de Fila_Excel):")
+            st.write("Últimos 30 registros guardados:")
             st.dataframe(ultimos[["Fila_Excel", "Fecha", "Lote", "Parcelero", "Color_Cinta", "Racimos", "Estado"]], use_container_width=True, hide_index=True)
-            fila_sel = st.selectbox("Selecciona el número de Fila_Excel a modificar:", ultimos["Fila_Excel"].tolist())
-            datos_fila = df_edit[df_edit["Fila_Excel"] == fila_sel].iloc
+            fila_sel = st.selectbox("Selecciona el número de Fila_Excel:", ultimos["Fila_Excel"].tolist())
+            datos_fila = df_edit[df_edit["Fila_Excel"] == fila_sel].iloc[0]
             st.divider()
             st.write(f"Editando Fila **{fila_sel}** ({datos_fila['Parcelero']} - {datos_fila['Fecha']}):")
             e1, e2, e3 = st.columns(3)
@@ -439,15 +438,15 @@ elif rol == "Administrador":
                     actualizar_fila_gsheet(int(fila_sel), fila_actualizada)
                     st.success(f"Fila {fila_sel} actualizada correctamente.")
                     st.rerun()
-           except Exception as e:
-                        st.error(f"Error al actualizar: {repr(e)}")
-                        if col_btn2.button("🗑️ Eliminar Fila", use_container_width=True):
-                            try:
-                                borrar_fila_gsheet(int(fila_sel))
-                                st.warning(f"Fila {fila_sel} eliminada permanentemente.")
-                                st.rerun()
-                                except Exception as e:
-                                    st.error(f"Error al eliminar: {repr(e)}")
+                except Exception as e:
+                    st.error(f"Error al actualizar: {repr(e)}")
+            if col_btn2.button("🗑️ Eliminar Fila", use_container_width=True):
+                try:
+                    borrar_fila_gsheet(int(fila_sel))
+                    st.warning(f"Fila {fila_sel} eliminada permanentemente.")
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Error al eliminar: {repr(e)}")
 
 
 
