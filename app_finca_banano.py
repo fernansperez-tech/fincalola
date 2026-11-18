@@ -8,7 +8,7 @@ import time
 import gspread
 from google.oauth2.service_account import Credentials
 
-st.set_page_config(page_title="Finca Lola - 86.1 Ha", page_icon="🍌", layout="centered")
+st.set_page_config(page_title="Bananera la Lola S.a", page_icon="🍌", layout="centered")
 
 COLORES_CINTA = ["Amarilla", "Morada", "Roja", "Café", "Negra", "Verde", "Azul", "Blanca"]
 LOTES = [f"Lote {i:02d}" for i in range(1, 15)]
