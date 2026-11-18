@@ -355,10 +355,11 @@ with tab2:
             solo_cortes["Fecha"] = solo_cortes["Fecha"].astype(str)
             solo_cortes["Anio"] = solo_cortes["Fecha"].str[:4]
             f1, f2, f3, f4 = st.columns(4)
-            filtro_anio = f1.selectbox("Año:", ["Todos"] + sorted(solo_cortes["Anio"].unique().tolist(), reverse=True))
-            filtro_fecha = f2.selectbox("Fecha:", ["Todas"] + sorted(solo_cortes["Fecha"].unique().tolist(), reverse=True))
-            filtro_lote = f3.selectbox("Lote:", ["Todos"] + sorted(solo_cortes["Lote"].unique().tolist()))
-            filtro_color = f4.selectbox("Color:", ["Todos"] + sorted(solo_cortes["Color_Cinta"].unique().tolist()))
+            filtro_anio = f1.selectbox("Año:", ["Todos"] + sorted(solo_cortes["Anio"].unique().tolist(), reverse=True), key="corte_anio")
+            filtro_fecha = f2.selectbox("Fecha:", ["Todas"] + sorted(solo_cortes["Fecha"].unique().tolist(), reverse=True), key="corte_fecha")
+            filtro_lote = f3.selectbox("Lote:", ["Todos"] + sorted(solo_cortes["Lote"].unique().tolist()), key="corte_lote")
+            filtro_color = f4.selectbox("Color:", ["Todos"] + sorted(solo_cortes["Color_Cinta"].unique().tolist()), key="corte_color")
+
             df_filtrado = solo_cortes.copy()
             if filtro_anio != "Todos":
                 df_filtrado = df_filtrado[df_filtrado["Anio"] == filtro_anio]
