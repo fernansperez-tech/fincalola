@@ -11,7 +11,22 @@ st.set_page_config(page_title="Finca Lola - 86.1 Ha", page_icon="🍌", layout="
 
 COLORES_CINTA = ["Amarilla", "Morada", "Roja", "Café", "Negra", "Verde", "Azul", "Blanca"]
 LOTES = [f"Lote {i:02d}" for i in range(1, 15)]
-PARCELEROS_BASE = [f"Parcelero {i:02d}" for i in range(1, 11)] + ["Otro (Escribir nombre)"]
+PARCELEROS_BASE = [
+    "Carracedo Daison",
+    "Chiquillo libardo",
+    "Fernanadez Luis",
+    "Cantillo Pedro",
+    "Acosta Yeison",
+    "Reales Isaac",
+    "Gonzales Jose",
+    "Felipe Evenildo",
+    "Narvaez Osvaldo",
+    "Santiago Oscar",
+    "Silva Harold",
+    "Pantoja Cesar",
+    "Otro (Escribir nombre)"
+]
+
 CLAVE_ADMIN = "banano2026"
 ID_HOJA = "1WnHs71IMeuz9X9sAtJkNYJbR9QJE2QqAKq37-PGsr-0"
 NOMBRE_HOJA = "Hoja 1"
