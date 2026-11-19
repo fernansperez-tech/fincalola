@@ -422,7 +422,7 @@ elif rol == "Administrador":
                 fila_sel = st.selectbox("Selecciona el número de Fila_Excel:", todos_ordenados["Fila_Excel"].tolist(), key="sel_fila_ed")
                 datos_fila = df_edit[df_edit["Fila_Excel"] == fila_sel].iloc[int(0)]
                 st.divider()
-                            st.write(f"Editando **Fila {fila_sel}** ({datos_fila['Parcelero']}):")
+                st.write(f"Editando **Fila {fila_sel}** ({datos_fila['Parcelero']}):")
             try:
                 fecha_obj = datetime.strptime(str(datos_fila["Fecha"]), "%Y-%m-%d").date()
             except Exception:
