@@ -175,7 +175,7 @@ if rol == "Parcelero (Embolse)":
                 st.session_state.cinta_elegida = nombre_real
     cinta = st.session_state.cinta_elegida
     st.info(f"Cinta seleccionada: **{cinta}**")
-        col_fecha, col_cant, col_edad = st.columns(3)
+    col_fecha, col_cant, col_edad = st.columns(3)
     fecha_embolse = col_fecha.date_input("Fecha del embolse:", value=datetime.now())
     racimos = col_cant.number_input("Cantidad de racimos:", min_value=1, max_value=1000, value=100)
     edad_reg = col_edad.number_input("Edad al embolsar (sem):", min_value=0, max_value=15, value=1)
