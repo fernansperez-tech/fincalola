@@ -394,7 +394,7 @@ elif rol == "Administrador":
                         st.error(f"Error técnico al descontar: {repr(e)}")
                 else:
                     st.error("No se encontraron registros válidos en el CSV.")
-with tab4:
+    with tab4:
         st.subheader("Corregir o Eliminar Registros (Solo Administrador)")
         if st.button("🔄 Recargar lista desde Google Sheets", key="btn_recargar_edit"):
             with st.spinner("Sincronizando con Google Sheets..."):
@@ -422,6 +422,14 @@ with tab4:
                 datos_fila = df_edit[df_edit["Fila_Excel"] == fila_sel].iloc[int(0)]
                 st.divider()
                 st.write(f"Editando **Fila {fila_sel}** ({datos_fila['Parcelero']}):")
+                parc_actual = str(datos_fila["Parcelero"])
+                opciones_parc = PARCELEROS_BASE[:-1] + ["Otro / Manual"]
+                idx_p = opciones_parc.index(parc_actual) if parc_actual in opciones_parc else len(opciones_parc) - 1
+                sel_parc_ed = st.selectbox("Corregir Parcelero:", opciones_parc, index=idx_p, key=f"ed_parc_{fila_sel}")
+                if sel_parc_ed == "Otro / Manual":
+                    nuevo_parcelero = st.text_input("Nombre del trabajador:", value=parc_actual, key=f"ed_parc_txt_{fila_sel}").strip() or parc_actual
+                else:
+                    nuevo_parcelero = sel_parc_ed
                 try:
                     fecha_obj = datetime.strptime(str(datos_fila["Fecha"]).strip()[:10], "%Y-%m-%d").date()
                 except Exception:
@@ -443,7 +451,7 @@ with tab4:
                         nueva_semana = nueva_fecha.isocalendar().week
                         fila_actualizada = [
                             nueva_fecha.strftime("%Y-%m-%d"), str(datos_fila["Hora"]), int(nueva_semana),
-                            nuevo_lote, str(datos_fila["Parcelero"]), nuevo_color,
+                            nuevo_lote, nuevo_parcelero, nuevo_color,
                             nuevo_racimos, str(datos_fila["Estado"])
                         ]
                         actualizar_fila_gsheet(int(fila_sel), fila_actualizada)
