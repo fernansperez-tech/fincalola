@@ -175,19 +175,20 @@ if rol == "Parcelero (Embolse)":
                 st.session_state.cinta_elegida = nombre_real
     cinta = st.session_state.cinta_elegida
     st.info(f"Cinta seleccionada: **{cinta}**")
-    col_cant, col_edad = st.columns(2)
+        col_fecha, col_cant, col_edad = st.columns(3)
+    fecha_embolse = col_fecha.date_input("Fecha del embolse:", value=datetime.now())
     racimos = col_cant.number_input("Cantidad de racimos:", min_value=1, max_value=1000, value=100)
-    edad_reg = col_edad.number_input("Edad actual (semanas):", min_value=0, max_value=15, value=1)
+    edad_reg = col_edad.number_input("Edad al embolsar (sem):", min_value=0, max_value=15, value=1)
     if st.button("Guardar Embolse", type="primary"):
         ahora = datetime.now()
-        sem_actual = ahora.isocalendar().week
-        sem_real = sem_actual - (int(edad_reg) - 1)
+        sem_embolse = fecha_embolse.isocalendar().week
+        sem_real = sem_embolse - (int(edad_reg) - 1)
         if sem_real <= 0:
             sem_real += 52
         elif sem_real > 52:
             sem_real -= 52
         registro = {
-            "Fecha": ahora.strftime("%Y-%m-%d"),
+            "Fecha": fecha_embolse.strftime("%Y-%m-%d"),
             "Hora": ahora.strftime("%H:%M"),
             "Semana": sem_real,
             "Lote": lote_sel,
@@ -198,9 +199,10 @@ if rol == "Parcelero (Embolse)":
         }
         try:
             agregar_filas([registro])
-            st.success(f"Guardados {racimos} racimos ({cinta}, {edad_reg} sem) en {lote_sel}.")
+            st.success(f"Guardados {racimos} racimos ({cinta}) del {fecha_embolse.strftime('%Y-%m-%d')} en {lote_sel}.")
         except Exception as e:
             st.error(f"Error técnico: {repr(e)}")
+
 
 elif rol == "Consulta de Embolse":
     st.subheader("Consulta de Embolse (Puyas y Supervisores)")
