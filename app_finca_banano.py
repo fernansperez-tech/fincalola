@@ -187,19 +187,30 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     def pintar_cinta(val):
         texto = str(val)
         paleta = {
-            "Amarilla": ("#FFD700", "#000000"),
-            "Morada": ("#800080", "#FFFFFF"),
-            "Roja": ("#D32F2F", "#FFFFFF"),
-            "Café": ("#6D4C41", "#FFFFFF"),
-            "Negra": ("#212121", "#FFFFFF"),
-            "Verde": ("#2E7D32", "#FFFFFF"),
-            "Azul": ("#1565C0", "#FFFFFF"),
-            "Blanca": ("#F5F5F5", "#000000")
+            "Amarilla": "#FFD700",
+            "Morada": "#800080",
+            "Roja": "#D32F2F",
+            "Café": "#6D4C41",
+            "Negra": "#212121",
+            "Verde": "#2E7D32",
+            "Azul": "#1565C0",
+            "Blanca": "#F5F5F5"
         }
-        for nombre, (fondo, letra) in paleta.items():
-            if nombre in texto:
-                return f"background-color: {fondo}; color: {letra}; font-weight: bold;"
-        return ""
+        encontrados = [hex_c for nom, hex_c in paleta.items() if nom in texto]
+        if not encontrados:
+            return ""
+        if len(encontrados) == 1:
+            letra = "#000000" if encontrados[0] in ["#FFD700", "#F5F5F5"] else "#FFFFFF"
+            return f"background-color: {encontrados[0]}; color: {letra}; font-weight: bold;"
+        paso = 100.0 / len(encontrados)
+        paradas = []
+        for idx, hex_c in enumerate(encontrados):
+            ini = round(idx * paso, 1)
+            fin = round((idx + 1) * paso, 1)
+            paradas.append(f"{hex_c} {ini}%, {hex_c} {fin}%")
+        degradado = ", ".join(paradas)
+        return f"background: linear-gradient(90deg, {degradado}); color: #FFFFFF; text-shadow: 1px 1px 2px #000000; font-weight: bold;"
+
 
     num_semanas = max(1, int(df_res["Semana"].nunique())) if not df_res.empty else 1
     st.caption(f"Cálculo de Racimos/Ha promediado sobre **{num_semanas} semana(s)** activas en el filtro.")
