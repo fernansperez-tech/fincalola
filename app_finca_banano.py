@@ -377,7 +377,7 @@ elif rol == "Administrador":
     merma = col_r2.slider("Merma estimada (%):", 0, 20, 5)
     if df.empty:
             st.warning("Aún no hay movimientos registrados.")
-        else:
+    else:
             ahora = datetime.now()
             semana_actual = ahora.isocalendar().week
             anio_actual = ahora.year
