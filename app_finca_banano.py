@@ -10,7 +10,7 @@ from google.oauth2.service_account import Credentials
 
 st.set_page_config(page_title="Bananera la Lola S.a", page_icon="🍌", layout="centered")
 
-COLORES_CINTA = ["Amarilla", "Morada", "Roja", "Café", "Negra", "Verde", "Azul", "Blanca"]
+COLORES_CINTA = ["Amarilla", "Morada", "Roja", "Cafe", "Negra", "Verde", "Azul", "Blanca"]
 LOTES = [f"Lote {i:02d}" for i in range(1, 15)]
 HECTAREAS_LOTE = {
     "Lote 01": 3.9, "Lote 02": 4.6, "Lote 03": 4.8, "Lote 04": 7,
@@ -118,7 +118,8 @@ def procesar_csv_tableta(df_tab, col_lote, col_color, col_fecha=None):
         lote_raw = str(fila[col_lote]).strip()
         num_lote = "".join(filter(str.isdigit, lote_raw))
         lote_norm = f"Lote {int(num_lote):02d}" if num_lote else lote_raw
-        color_norm = str(fila[col_color]).strip().capitalize()
+        color_norm = str(fila[col_color]).strip().replace("é", "e").replace("É", "E").capitalize()
+
         cant = int(fila["Total_Racimos"])
         fecha_str = str(fila["Fecha_Norm"])
         try:
@@ -187,7 +188,7 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     def formatear_cintas_visual(texto_cintas):
         iconos = {
             "Amarilla": "🟡 Amarilla", "Morada": "🟣 Morada",
-            "Roja": "🔴 Roja", "Café": "🟤 Café",
+            "Roja": "🔴 Roja", "Cafe": "🟤 Cafe",
             "Negra": "⚫ Negra", "Verde": "🟢 Verde",
             "Azul": "🔵 Azul", "Blanca": "⚪ Blanca"
         }
@@ -202,7 +203,7 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
             "Amarilla": ("#FFD700", "#000000"),
             "Morada": ("#800080", "#FFFFFF"),
             "Roja": ("#D32F2F", "#FFFFFF"),
-            "Café": ("#6D4C41", "#FFFFFF"),
+            "Cafe": ("#6D4C41", "#FFFFFF"),
             "Negra": ("#212121", "#FFFFFF"),
             "Verde": ("#2E7D32", "#FFFFFF"),
             "Azul": ("#1565C0", "#FFFFFF"),
@@ -329,7 +330,7 @@ if rol == "Parcelero (Embolse)":
     st.write("Toca el color de la cinta:")
     VISUAL_CINTAS = {
         "🟡 Amarilla": "Amarilla", "🟣 Morada": "Morada",
-        "🔴 Roja": "Roja", "🟤 Café": "Café",
+        "🔴 Roja": "Roja", "🟤 Cafe": "Cafe",
         "⚫ Negra": "Negra", "🟢 Verde": "Verde",
         "🔵 Azul": "Azul", "⚪ Blanca": "Blanca"
     }
@@ -345,7 +346,7 @@ if rol == "Parcelero (Embolse)":
         "Amarilla": ("#FFD700", "#000000", "🟡"),
         "Morada": ("#800080", "#FFFFFF", "🟣"),
         "Roja": ("#D32F2F", "#FFFFFF", "🔴"),
-        "Café": ("#6D4C41", "#FFFFFF", "🟤"),
+        "Cafe": ("#6D4C41", "#FFFFFF", "🟤"),
         "Negra": ("#212121", "#FFFFFF", "⚫"),
         "Verde": ("#2E7D32", "#FFFFFF", "🟢"),
         "Azul": ("#1565C0", "#FFFFFF", "🔵"),
@@ -484,7 +485,7 @@ elif rol == "Administrador":
                         "Amarilla": ("#FFD700", "#000000"),
                         "Morada": ("#800080", "#FFFFFF"),
                         "Roja": ("#D32F2F", "#FFFFFF"),
-                        "Café": ("#6D4C41", "#FFFFFF"),
+                        "Cafe": ("#6D4C41", "#FFFFFF"),
                         "Negra": ("#212121", "#FFFFFF"),
                         "Verde": ("#2E7D32", "#FFFFFF"),
                         "Azul": ("#1565C0", "#FFFFFF"),
@@ -632,22 +633,59 @@ with tab3:
                     df_previa_final = pd.concat([df_previa, fila_tot_prev], ignore_index=True)
                     st.dataframe(df_previa_final, use_container_width=True, hide_index=True)
 
-                    st.info(f"Total a descontar en este archivo: **{total_prev:,} racimos**")
+                    fechas_ya_cortadas = set()
+                    if not df.empty:
+                        cortes_existentes = df[df["Racimos"] < 0]
+                        fechas_ya_cortadas = set(cortes_existentes["Fecha"].astype(str).str.strip().str[:10].unique())
 
-                    if st.button("✅ Confirmar y Descontar Inventario", type="primary", key="btn_confirmar_csv"):
-                        try:
-                            agregar_filas(descuentos)
-                            st.success(f"Listo. Se descontaron {total_prev} racimos respetando las fechas del CSV.")
-                            time.sleep(1.5)
-                            st.rerun()
-                        except Exception as e:
-                            st.error(f"Error técnico al descontar: {repr(e)}")
-                else:
-                    st.warning("No se encontraron registros válidos con las columnas seleccionadas.")
+                    fechas_csv = set(d["Fecha"] for d in descuentos)
+                    repetidas = sorted(fechas_csv.intersection(fechas_ya_cortadas))
+                    solo_nuevos = [d for d in descuentos if d["Fecha"] not in fechas_ya_cortadas]
+
+                    if repetidas:
+                        st.warning(f"⚠️ Atención: Los días **{', '.join(repetidas)}** ya tienen cortes guardados en el sistema.")
+                        if solo_nuevos:
+                            cant_nueva = sum(abs(d["Racimos"]) for d in solo_nuevos)
+                            if st.button(f"📥 Guardar SOLO los días nuevos ({cant_nueva:,} racimos)", type="primary", key="btn_csv_nuevos"):
+                                agregar_filas(solo_nuevos)
+                                st.success("Se guardaron únicamente los días nuevos sin duplicar los anteriores.")
+                                time.sleep(1.5)
+                                st.rerun()
+                        else:
+                            st.info("Todos los días de este archivo ya fueron descontados anteriormente.")
+                    else:
+                        if st.button("✅ Confirmar y Descontar Inventario", type="primary", key="btn_confirmar_csv"):
+                            try:
+                                agregar_filas(descuentos)
+                                st.success(f"Listo. Se descontaron {total_prev:,} racimos respetando las fechas del CSV.")
+                                time.sleep(1.5)
+                                st.rerun()
+                            except Exception as e:
+                                st.error(f"Error técnico al descontar: {repr(e)}")
+
 
 
 with tab4:
         st.subheader("Corregir o Eliminar Registros (Solo Administrador)")
+            if not df.empty:
+            cortes_df = df[df["Racimos"] < 0].copy()
+            if not cortes_df.empty:
+                cortes_df["Fila_Excel"] = cortes_df.index + 2
+                cortes_df["Fecha_Limpia"] = cortes_df["Fecha"].astype(str).str.strip().str[:10]
+                fechas_corte_disp = sorted(cortes_df["Fecha_Limpia"].unique().tolist(), reverse=True)
+                with st.expander("🗑️ Borrar cosecha completa de un día (Cargar CSV de nuevo)"):
+                    dia_borrar = st.selectbox("Selecciona la fecha de corte a eliminar:", fechas_corte_disp, key="sel_borrar_dia_corte")
+                    filas_a_borrar = sorted(cortes_df[cortes_df["Fecha_Limpia"] == dia_borrar]["Fila_Excel"].tolist(), reverse=True)
+                    rac_dia_borrar = int(cortes_df[cortes_df["Fecha_Limpia"] == dia_borrar]["Racimos"].abs().sum())
+                    st.write(f"Se eliminarán **{len(filas_a_borrar)} registros** ({rac_dia_borrar:,} racimos cortados) del día **{dia_borrar}**.")
+                    if st.button(f"🚨 Eliminar toda la cosecha del {dia_borrar}", type="primary", key="btn_confirm_del_dia"):
+                        for num_f in filas_a_borrar:
+                            borrar_fila_gsheet(int(num_f))
+                            time.sleep(0.4)
+                        st.success(f"Cosecha del {dia_borrar} eliminada por completo.")
+                        time.sleep(1.5)
+                        st.rerun()
+
         if st.button("🔄 Recargar lista desde Google Sheets", key="btn_recargar_edit"):
             with st.spinner("Sincronizando con Google Sheets..."):
                 time.sleep(1.5)
