@@ -667,7 +667,7 @@ with tab3:
 
 with tab4:
         st.subheader("Corregir o Eliminar Registros (Solo Administrador)")
-            if not df.empty:
+        if not df.empty:
             cortes_df = df[df["Racimos"] < 0].copy()
             if not cortes_df.empty:
                 cortes_df["Fila_Excel"] = cortes_df.index + 2
