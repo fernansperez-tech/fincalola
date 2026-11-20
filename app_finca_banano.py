@@ -468,12 +468,7 @@ elif rol == "Administrador":
                         "Embolsados": 0,
                         "Cortados": int(sobrante),
                         "Saldo_En_Mata": -int(sobrante)
-                    })
-
-
-                    "Lote": lote, "Color_Cinta": color, "Anio": anio_str,
-                    "Semana_Emb": sem, "Edad": f"{edad} sem",
-                    "Embolsados": emb, "Cortados": desc, "Saldo_En_Mata": saldo
+                   
                     })     
             balance = pd.DataFrame(filas_balance)
             if not balance.empty:
