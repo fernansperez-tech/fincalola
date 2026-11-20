@@ -618,7 +618,7 @@ with tab3:
                 st.warning("No se encontraron registros válidos con las columnas seleccionadas.")
 
 
-    with tab4:
+with tab4:
         st.subheader("Corregir o Eliminar Registros (Solo Administrador)")
         if st.button("🔄 Recargar lista desde Google Sheets", key="btn_recargar_edit"):
             with st.spinner("Sincronizando con Google Sheets..."):
