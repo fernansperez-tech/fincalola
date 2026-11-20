@@ -552,35 +552,53 @@ elif rol == "Administrador":
         if solo_cortes.empty:
             st.info("Aún no hay cortes registrados desde la tableta.")
         else:
+            ahora_c = datetime.now()
             solo_cortes["Racimos_Cortados"] = solo_cortes["Racimos"].abs()
-            solo_cortes["Fecha"] = solo_cortes["Fecha"].astype(str)
+            solo_cortes["Fecha"] = solo_cortes["Fecha"].astype(str).str.strip().str[:10]
+            solo_cortes["Fecha_Dt"] = pd.to_datetime(solo_cortes["Fecha"], errors="coerce").dt.date
             solo_cortes["Anio"] = solo_cortes["Fecha"].str[:4]
-            f1, f2, f3, f4 = st.columns(4)
+            solo_cortes["Semana"] = solo_cortes["Semana"].astype(int)
+
+            fechas_c_val = solo_cortes["Fecha_Dt"].dropna()
+            f_min_c = fechas_c_val.min() if not fechas_c_val.empty else ahora_c.date()
+            f_max_c = fechas_c_val.max() if not fechas_c_val.empty else ahora_c.date()
+
+            rc1, rc2 = st.columns(2)
+            c_desde = rc1.date_input("Desde fecha:", value=f_min_c, min_value=f_min_c, max_value=f_max_c, key="corte_desde")
+            c_hasta = rc2.date_input("Hasta fecha:", value=f_max_c, min_value=f_min_c, max_value=f_max_c, key="corte_hasta")
+
+            f1, f2 = st.columns(2)
             filtro_anio = f1.selectbox("Año:", ["Todos"] + sorted(solo_cortes["Anio"].unique().tolist(), reverse=True), key="corte_anio")
-            filtro_fecha = f2.selectbox("Fecha:", ["Todas"] + sorted(solo_cortes["Fecha"].unique().tolist(), reverse=True), key="corte_fecha")
+            semanas_c_disp = sorted(solo_cortes["Semana"].unique().tolist(), reverse=True)
+            filtro_sem = f2.multiselect("Semanas de Corte (vacío = todas):", semanas_c_disp, key="corte_sem")
+
+            f3, f4 = st.columns(2)
             filtro_lote = f3.selectbox("Lote:", ["Todos"] + sorted(solo_cortes["Lote"].unique().tolist()), key="corte_lote")
             filtro_color = f4.selectbox("Color:", ["Todos"] + sorted(solo_cortes["Color_Cinta"].unique().tolist()), key="corte_color")
-            df_filtrado = solo_cortes.copy()
+
+            df_filtrado = solo_cortes[(solo_cortes["Fecha_Dt"] >= c_desde) & (solo_cortes["Fecha_Dt"] <= c_hasta)].copy()
             if filtro_anio != "Todos":
                 df_filtrado = df_filtrado[df_filtrado["Anio"] == filtro_anio]
-            if filtro_fecha != "Todas":
-                df_filtrado = df_filtrado[df_filtrado["Fecha"] == filtro_fecha]
+            if filtro_sem:
+                df_filtrado = df_filtrado[df_filtrado["Semana"].isin(filtro_sem)]
             if filtro_lote != "Todos":
                 df_filtrado = df_filtrado[df_filtrado["Lote"] == filtro_lote]
             if filtro_color != "Todos":
                 df_filtrado = df_filtrado[df_filtrado["Color_Cinta"] == filtro_color]
+
             total_cortados = int(df_filtrado["Racimos_Cortados"].sum())
             cajas_cortadas = total_cortados * ratio
             t1, t2 = st.columns(2)
             t1.metric("Total Racimos Cortados (Filtro)", f"{total_cortados:,} racimos")
             t2.metric("Cajas Equivalentes (Según Ratio)", f"{cajas_cortadas:,.0f} cajas")
-            tabla_mostrar = df_filtrado[["Fecha", "Anio", "Semana", "Lote", "Color_Cinta", "Racimos_Cortados"]].sort_values(by="Fecha", ascending=False)
+
             st.write("### Resumen de Cintas Cortadas (Según Filtros)")
             res_cintas_corte = df_filtrado.groupby("Color_Cinta")["Racimos_Cortados"].sum().reset_index().sort_values(by="Racimos_Cortados", ascending=False)
             fila_tot_cc = pd.DataFrame([{"Color_Cinta": "TOTAL", "Racimos_Cortados": total_cortados}])
             st.dataframe(pd.concat([res_cintas_corte, fila_tot_cc], ignore_index=True), use_container_width=True, hide_index=True)
-            st.write("### Detalle de Cortes por Fecha y Lote")
 
+            st.write("### Detalle de Cortes por Fecha y Lote")
+            tabla_mostrar = df_filtrado[["Fecha", "Anio", "Semana", "Lote", "Color_Cinta", "Racimos_Cortados"]].sort_values(by="Fecha", ascending=False)
             fila_tot_corte = pd.DataFrame([{
                 "Fecha": "TOTAL", "Anio": "", "Semana": "",
                 "Lote": "", "Color_Cinta": "", "Racimos_Cortados": total_cortados
@@ -590,7 +608,7 @@ elif rol == "Administrador":
 
             csv_descarga = tabla_mostrar.to_csv(index=False).encode("utf-8")
             st.download_button("Descargar Selección en Excel (CSV)", data=csv_descarga, file_name="reporte_cortes_filtrado.csv", mime="text/csv")
-      
+
     with tab3:
         st.subheader("Descontar Corte con CSV Directo de Tableta")
         st.write("Sube el archivo .csv de la tableta (cada fila cuenta como 1 racimo).")
