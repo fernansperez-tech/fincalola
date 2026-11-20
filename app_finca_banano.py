@@ -453,6 +453,19 @@ elif rol == "Administrador":
                     y = anio_actual
                 edad = max(0, ((anio_actual - y) * 52 + (semana_actual - sem)) + 1)
                 filas_balance.append({
+                                for (lote_sob, color_sob), sobrante in salidas.items():
+                if sobrante > 0:
+                    filas_balance.append({
+                        "Lote": lote_sob,
+                        "Color_Cinta": color_sob,
+                        "Anio": "-",
+                        "Semana_Emb": 0,
+                        "Edad": "Sin embolse previo",
+                        "Embolsados": 0,
+                        "Cortados": int(sobrante),
+                        "Saldo_En_Mata": -int(sobrante)
+                    })
+
                     "Lote": lote, "Color_Cinta": color, "Anio": anio_str,
                     "Semana_Emb": sem, "Edad": f"{edad} sem",
                     "Embolsados": emb, "Cortados": desc, "Saldo_En_Mata": saldo
@@ -523,7 +536,13 @@ elif rol == "Administrador":
             t1.metric("Total Racimos Cortados (Filtro)", f"{total_cortados:,} racimos")
             t2.metric("Cajas Equivalentes (Según Ratio)", f"{cajas_cortadas:,.0f} cajas")
             tabla_mostrar = df_filtrado[["Fecha", "Anio", "Semana", "Lote", "Color_Cinta", "Racimos_Cortados"]].sort_values(by="Fecha", ascending=False)
-            st.dataframe(tabla_mostrar, use_container_width=True)
+            fila_tot_corte = pd.DataFrame([{
+                "Fecha": "TOTAL", "Anio": "", "Semana": "",
+                "Lote": "", "Color_Cinta": "", "Racimos_Cortados": total_cortados
+            }])
+            tabla_corte_final = pd.concat([tabla_mostrar, fila_tot_corte], ignore_index=True)
+            st.dataframe(tabla_corte_final, use_container_width=True, hide_index=True)
+
             csv_descarga = tabla_mostrar.to_csv(index=False).encode("utf-8")
             st.download_button("Descargar Selección en Excel (CSV)", data=csv_descarga, file_name="reporte_cortes_filtrado.csv", mime="text/csv")
       
@@ -605,8 +624,14 @@ with tab3:
                         })
 
                     df_previa = pd.DataFrame(filas_previa)
-                    st.dataframe(df_previa, use_container_width=True, hide_index=True)
                     total_prev = int(df_previa["Racimos_A_Descontar"].sum())
+                    fila_tot_prev = pd.DataFrame([{
+                        "Fecha_Corte": "TOTAL", "Lote": "", "Color_Cinta": "",
+                        "Racimos_A_Descontar": total_prev, "Edad_Que_Descuenta": "-"
+                    }])
+                    df_previa_final = pd.concat([df_previa, fila_tot_prev], ignore_index=True)
+                    st.dataframe(df_previa_final, use_container_width=True, hide_index=True)
+
                     st.info(f"Total a descontar en este archivo: **{total_prev:,} racimos**")
 
                     if st.button("✅ Confirmar y Descontar Inventario", type="primary", key="btn_confirmar_csv"):
