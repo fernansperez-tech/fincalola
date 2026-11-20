@@ -453,7 +453,7 @@ elif rol == "Administrador":
                     y = anio_actual
                 edad = max(0, ((anio_actual - y) * 52 + (semana_actual - sem)) + 1)
                 filas_balance.append({
-            for (lote_sob, color_sob), sobrante in salidas.items():
+       for (lote_sob, color_sob), sobrante in salidas.items():
                 if sobrante > 0:
                     filas_balance.append({
                         "Lote": lote_sob,
