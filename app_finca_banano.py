@@ -370,7 +370,7 @@ elif rol == "Administrador":
     df = cargar_datos()
     with tab1:
         st.divider()
-            st.subheader("Análisis de Rendimiento por Lote, Empleado y Día")
+        st.subheader("Análisis de Rendimiento por Lote, Empleado y Día")
             mostrar_reportes_embolse(df, prefijo="adm")
         st.subheader("Proyección y Balance por Edad (86.1 Ha)")
         col_r1, col_r2 = st.columns(2)
