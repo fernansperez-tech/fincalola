@@ -372,9 +372,9 @@ elif rol == "Administrador":
         st.subheader("Análisis de Rendimiento por Lote, Empleado y Día")
     mostrar_reportes_embolse(df, prefijo="adm")
     st.subheader("Proyección y Balance por Edad (86.1 Ha)")
-        col_r1, col_r2 = st.columns(2)
-        ratio = col_r1.number_input("Ratio (Cajas / Racimo):", value=1.15, min_value=0.50, max_value=2.50, step=0.05)
-        merma = col_r2.slider("Merma estimada (%):", 0, 20, 5)
+    col_r1, col_r2 = st.columns(2)
+    ratio = col_r1.number_input("Ratio (Cajas / Racimo):", value=1.15, min_value=0.50, max_value=2.50, step=0.05)
+    merma = col_r2.slider("Merma estimada (%):", 0, 20, 5)
         if df.empty:
             st.warning("Aún no hay movimientos registrados.")
         else:
