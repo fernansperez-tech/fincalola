@@ -182,7 +182,7 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     total_filtrado = int(df_res["Racimos"].sum())
     st.metric("Total General (Según Filtros)", f"{total_filtrado:,} racimos")
 
-        def pintar_cinta(val):
+    def pintar_cinta(val):
         texto = str(val)
         paleta = {
             "Amarilla": ("#FFD700", "#000000"),
