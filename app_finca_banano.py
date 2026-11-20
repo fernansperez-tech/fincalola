@@ -182,7 +182,7 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     total_filtrado = int(df_res["Racimos"].sum())
     st.metric("Total General (Según Filtros)", f"{total_filtrado:,} racimos")
 
-        st.write("### 1. Rendimiento por Lote (Racimos / Ha)")
+    st.write("### 1. Rendimiento por Lote (Racimos / Ha)")
     res_lote_ha = pd.DataFrame({"Lote": LOTES})
     res_lote_ha["Hectareas"] = res_lote_ha["Lote"].map(HECTAREAS_LOTE).fillna(0.0)
     emb_lote = df_res.groupby("Lote").agg(
