@@ -444,7 +444,7 @@ elif rol == "Administrador":
                             return f"background-color: {fondo}; color: {letra}; font-weight: bold;"
                     return ""
 
-                st.write("Balance por Color y Edad (Toda la Finca)")
+            st.write("Balance por Color y Edad (Toda la Finca)")
                 bal_edad = balance.groupby(["Color_Cinta", "Anio", "Semana_Emb", "Edad"]).agg(
                     Embolsados=("Embolsados", "sum"), Cortados=("Cortados", "sum"), Saldo_En_Mata=("Saldo_En_Mata", "sum")
                 ).reset_index()
