@@ -331,7 +331,7 @@ elif rol == "Administrador":
         st.stop()
     tab1, tab2, tab3, tab4 = st.tabs(["Inventario y Edad", "Historial de Corte", "Subir CSV Tableta", "Corregir / Borrar"])
     df = cargar_datos()
-    with tab1:
+with tab1:
 
 
         st.subheader("Filtros y Rendimiento por Lote y Empleado")
@@ -389,7 +389,6 @@ elif rol == "Administrador":
                 st.write("Balance Detallado por Lote y Edad (FIFO)")
                 balance["Cajas_Est"] = (balance["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
                 st.dataframe(balance, use_container_width=True, hide_index=True)
-
 
 
 with tab2:
@@ -452,7 +451,7 @@ with tab3:
                         st.error(f"Error técnico al descontar: {repr(e)}")
                 else:
                     st.error("No se encontraron registros válidos en el CSV.")
-     with tab4:
+with tab4:
         st.subheader("Corregir o Eliminar Registros (Solo Administrador)")
         if st.button("🔄 Recargar lista desde Google Sheets", key="btn_recargar_edit"):
             with st.spinner("Sincronizando con Google Sheets..."):
