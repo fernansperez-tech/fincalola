@@ -5,3 +5,4 @@ pillow
 pandas
 gspread
 google-auth
+matplotlib
