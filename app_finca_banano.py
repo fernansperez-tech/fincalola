@@ -32,6 +32,8 @@ PARCELEROS_BASE = [
     "Santiago Oscar",
     "Silva Harold",
     "Pantoja Cesar",
+    "Osvaldo Castro",
+        
     "Otro (Escribir nombre)"
 ]
 
