@@ -522,7 +522,7 @@ elif rol == "Administrador":
                     Embolsados=("Embolsados", "sum"), Cortados=("Cortados", "sum"), Saldo_En_Mata=("Saldo_En_Mata", "sum")
                 ).reset_index()
             bal_edad["Cajas_Est"] = (bal_edad["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
-                tot_be = pd.DataFrame([{
+            tot_be = pd.DataFrame([{
                     "Color_Cinta": "TOTAL", "Anio": "", "Semana_Emb": "", "Edad": "",
                     "Embolsados": int(bal_edad["Embolsados"].sum()),
                     "Cortados": int(bal_edad["Cortados"].sum()),
