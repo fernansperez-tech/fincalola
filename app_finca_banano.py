@@ -12,6 +12,13 @@ st.set_page_config(page_title="Bananera la Lola S.a", page_icon="🍌", layout="
 
 COLORES_CINTA = ["Amarilla", "Morada", "Roja", "Café", "Negra", "Verde", "Azul", "Blanca"]
 LOTES = [f"Lote {i:02d}" for i in range(1, 15)]
+HECTAREAS_LOTE = {
+    "Lote 01": 3.9, "Lote 02": 4.6, "Lote 03": 4.8, "Lote 04": 7,
+    "Lote 05": 7.4, "Lote 06": 7.3, "Lote 07": 5.1, "Lote 08": 6.4,
+    "Lote 09": 8.5, "Lote 10": 7.8, "Lote 11": 7.7, "Lote 12": 6.3,
+    "Lote 13": 6, "Lote 14": 3.3
+}
+
 PARCELEROS_BASE = [
     "Carracedo Daison",
     "Chiquillo libardo",
@@ -153,10 +160,13 @@ if rol == "Parcelero (Embolse)":
             if dato_qr in LOTES:
                 lote_detectado = dato_qr
                 st.success(f"Lote detectado: {lote_detectado}")
-    lote_sel = st.selectbox("Lote:", LOTES, index=LOTES.index(lote_detectado))
-    sel_p = st.selectbox("Parcelero / Responsable:", PARCELEROS_BASE)
+    opciones_lote = ["Selecciona Lote..."] + LOTES
+    idx_lote_ini = opciones_lote.index(lote_detectado) if lote_detectado in opciones_lote else 0
+    lote_sel = st.selectbox("Lote:", opciones_lote, index=idx_lote_ini, key="reg_lote")
+    opciones_parc = ["Selecciona Parcelero..."] + PARCELEROS_BASE
+    sel_p = st.selectbox("Parcelero / Responsable:", opciones_parc, key="reg_parcelero")
     if sel_p == "Otro (Escribir nombre)":
-        parcelero = st.text_input("Nombre del trabajador:").strip() or "Trabajador Extra"
+        parcelero = st.text_input("Nombre del trabajador:", key="reg_parc_otro").strip()
     else:
         parcelero = sel_p
     st.write("Toca el color de la cinta:")
@@ -176,32 +186,41 @@ if rol == "Parcelero (Embolse)":
     cinta = st.session_state.cinta_elegida
     st.info(f"Cinta seleccionada: **{cinta}**")
     col_fecha, col_cant, col_edad = st.columns(3)
-    fecha_embolse = col_fecha.date_input("Fecha del embolse:", value=datetime.now())
-    racimos = col_cant.number_input("Cantidad de racimos:", min_value=1, max_value=1000, value=100)
-    edad_reg = col_edad.number_input("Edad al embolsar (sem):", min_value=0, max_value=15, value=1)
+    fecha_embolse = col_fecha.date_input("Fecha del embolse:", value=datetime.now(), key="reg_fecha")
+    racimos = col_cant.number_input("Cantidad de racimos:", min_value=0, max_value=1000, value=0, key="reg_cant")
+    edad_reg = col_edad.number_input("Edad al embolsar (sem):", min_value=0, max_value=15, value=1, key="reg_edad")
     if st.button("Guardar Embolse", type="primary"):
-        ahora = datetime.now()
-        sem_embolse = fecha_embolse.isocalendar().week
-        sem_real = sem_embolse - (int(edad_reg) - 1)
-        if sem_real <= 0:
-            sem_real += 52
-        elif sem_real > 52:
-            sem_real -= 52
-        registro = {
-            "Fecha": fecha_embolse.strftime("%Y-%m-%d"),
-            "Hora": ahora.strftime("%H:%M"),
-            "Semana": sem_real,
-            "Lote": lote_sel,
-            "Parcelero": parcelero,
-            "Color_Cinta": cinta,
-            "Racimos": int(racimos),
-            "Estado": "En campo"
-        }
-        try:
-            agregar_filas([registro])
-            st.success(f"Guardados {racimos} racimos ({cinta}) del {fecha_embolse.strftime('%Y-%m-%d')} en {lote_sel}.")
-        except Exception as e:
-            st.error(f"Error técnico: {repr(e)}")
+        if lote_sel == "Selecciona Lote..." or parcelero in ["Selecciona Parcelero...", ""] or racimos <= 0:
+            st.warning("⚠️ Selecciona el Lote, el Parcelero y escribe una cantidad mayor a 0.")
+        else:
+            ahora = datetime.now()
+            sem_embolse = fecha_embolse.isocalendar().week
+            sem_real = sem_embolse - (int(edad_reg) - 1)
+            if sem_real <= 0:
+                sem_real += 52
+            elif sem_real > 52:
+                sem_real -= 52
+            registro = {
+                "Fecha": fecha_embolse.strftime("%Y-%m-%d"),
+                "Hora": ahora.strftime("%H:%M"),
+                "Semana": sem_real,
+                "Lote": lote_sel,
+                "Parcelero": parcelero,
+                "Color_Cinta": cinta,
+                "Racimos": int(racimos),
+                "Estado": "En campo"
+            }
+            try:
+                agregar_filas([registro])
+                st.success(f"Guardados {racimos} racimos ({cinta}) en {lote_sel}.")
+                time.sleep(1.5)
+                for k in ["reg_lote", "reg_parcelero", "reg_parc_otro", "reg_cant"]:
+                    if k in st.session_state:
+                        del st.session_state[k]
+                st.rerun()
+            except Exception as e:
+                st.error(f"Error técnico: {repr(e)}")
+
 
 
 elif rol == "Consulta de Embolse":
@@ -330,10 +349,27 @@ elif rol == "Administrador":
                 st.write("Balance Detallado por Lote y Edad (FIFO)")
                 balance["Cajas_Est"] = (balance["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
                 st.dataframe(balance, use_container_width=True)
-            st.write("Embolse por Trabajador")
+            st.write("### Rendimiento General por Lote (Racimos / Ha)")
+            res_lote_ha = pd.DataFrame({"Lote": LOTES})
+            res_lote_ha["Hectareas"] = res_lote_ha["Lote"].map(HECTAREAS_LOTE).fillna(0.0)
+            emb_por_lote = df[df["Racimos"] > 0].groupby("Lote")["Racimos"].sum().reset_index()
+            res_lote_ha = res_lote_ha.merge(emb_por_lote, on="Lote", how="left").fillna({"Racimos": 0})
+            res_lote_ha["Racimos"] = res_lote_ha["Racimos"].astype(int)
+            res_lote_ha["Racimos_Por_Ha"] = (res_lote_ha["Racimos"] / res_lote_ha["Hectareas"]).round(1)
+            estilo_ha = res_lote_ha.style.background_gradient(
+                subset=["Racimos_Por_Ha"], cmap="coolwarm_r"
+            ).format({"Hectareas": "{:.2f}", "Racimos_Por_Ha": "{:.1f}"})
+            st.dataframe(estilo_ha, use_container_width=True, hide_index=True)
+
+            st.write("### Resumen General por Empleado (Total Acumulado)")
             solo_embolse = df[df["Racimos"] > 0]
+            resumen_emp = solo_embolse.groupby("Parcelero")["Racimos"].sum().reset_index().sort_values(by="Racimos", ascending=False)
+            st.dataframe(resumen_emp, use_container_width=True, hide_index=True)
+
+            st.write("### Detalle Diario por Trabajador")
             por_trabajador = solo_embolse.groupby(["Parcelero", "Anio", "Fecha"])["Racimos"].sum().reset_index()
-            st.dataframe(por_trabajador, use_container_width=True)
+            st.dataframe(por_trabajador, use_container_width=True, hide_index=True)
+
     with tab2:
         st.subheader("Buscador y Totales de Corte")
         solo_cortes = df[df["Racimos"] < 0].copy() if not df.empty else pd.DataFrame()
