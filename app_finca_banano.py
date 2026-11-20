@@ -530,7 +530,7 @@ elif rol == "Administrador":
                     "Cajas_Est": int(bal_edad["Cajas_Est"].sum())
                 }])
             bal_edad_tot = pd.concat([bal_edad, tot_be], ignore_index=True)
-                st.dataframe(bal_edad_tot.style.map(pintar_cinta_adm, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
+            st.dataframe(bal_edad_tot.style.map(pintar_cinta_adm, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
 
                 st.write("Balance Detallado por Lote y Edad (FIFO)")
                 balance["Cajas_Est"] = (balance["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
