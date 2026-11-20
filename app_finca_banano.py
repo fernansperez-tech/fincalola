@@ -166,10 +166,10 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     f_desde = r1.date_input("Desde fecha:", value=fecha_min, min_value=fecha_min, max_value=fecha_max, key=f"{prefijo}_desde")
     f_hasta = r2.date_input("Hasta fecha:", value=fecha_max, min_value=fecha_min, max_value=fecha_max, key=f"{prefijo}_hasta")
 
-    f1, f2, f3 = st.columns(3)
+    f1, f2 = st.columns(2)
     sel_anio = f1.selectbox("Año:", ["Todos"] + sorted(solo_emb["Anio"].unique().tolist(), reverse=True), key=f"{prefijo}_anio")
     sel_sem = f2.selectbox("Semana Embolse:", ["Todas"] + sorted(solo_emb["Semana"].unique().tolist(), reverse=True), key=f"{prefijo}_sem")
-    sel_fecha = f3.selectbox("Día puntual:", ["Todos"] + sorted(solo_emb["Fecha"].unique().tolist(), reverse=True), key=f"{prefijo}_fecha")
+
 
     f4, f5, f6 = st.columns(3)
     lotes_op = ["Todos"] + sorted(solo_emb["Lote"].unique().tolist())
@@ -183,8 +183,7 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
         df_res = df_res[df_res["Anio"] == sel_anio]
     if sel_sem != "Todas":
         df_res = df_res[df_res["Semana"] == sel_sem]
-    if sel_fecha != "Todos":
-        df_res = df_res[df_res["Fecha"] == sel_fecha]
+    
     if sel_lote != "Todos":
         df_res = df_res[df_res["Lote"] == sel_lote]
     if sel_color != "Todos":
