@@ -136,6 +136,92 @@ def procesar_csv_tableta(df_tab, col_lote, col_color, col_fecha=None):
             "Estado": "Cortado"
         })
     return descuentos
+
+
+def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
+    solo_emb = df[df["Racimos"] > 0].copy() if not df.empty else pd.DataFrame()
+    if solo_emb.empty:
+        st.info("Aún no hay registros de embolse en el sistema.")
+        return
+    ahora = datetime.now()
+    semana_actual = ahora.isocalendar().week
+    anio_actual = ahora.year
+    solo_emb["Fecha"] = solo_emb["Fecha"].astype(str)
+    solo_emb["Anio"] = solo_emb["Fecha"].str[:4]
+    solo_emb["Semana"] = solo_emb["Semana"].astype(int)
+    def calc_edad(fila):
+        try:
+            y = int(fila["Anio"])
+        except Exception:
+            y = anio_actual
+        s = int(fila["Semana"])
+        return max(0, ((anio_actual - y) * 52 + (semana_actual - s)) + 1)
+    solo_emb["Edad_Num"] = solo_emb.apply(calc_edad, axis=1)
+    solo_emb["Edad"] = solo_emb["Edad_Num"].astype(str) + " sem"
+
+    f1, f2, f3 = st.columns(3)
+    sel_anio = f1.selectbox("Año:", ["Todos"] + sorted(solo_emb["Anio"].unique().tolist(), reverse=True), key=f"{prefijo}_anio")
+    sel_sem = f2.selectbox("Semana Embolse:", ["Todas"] + sorted(solo_emb["Semana"].unique().tolist(), reverse=True), key=f"{prefijo}_sem")
+    sel_fecha = f3.selectbox("Día (Fecha):", ["Todos"] + sorted(solo_emb["Fecha"].unique().tolist(), reverse=True), key=f"{prefijo}_fecha")
+
+    f4, f5, f6 = st.columns(3)
+    lotes_op = ["Todos"] + sorted(solo_emb["Lote"].unique().tolist())
+    idx_lote = lotes_op.index(lote_qr) if lote_qr in lotes_op else 0
+    sel_lote = f4.selectbox("Lote:", lotes_op, index=idx_lote, key=f"{prefijo}_lote")
+    sel_color = f5.selectbox("Color de Cinta:", ["Todos"] + sorted(solo_emb["Color_Cinta"].unique().tolist()), key=f"{prefijo}_color")
+    sel_emp = f6.selectbox("Empleado:", ["Todos"] + sorted(solo_emb["Parcelero"].unique().tolist()), key=f"{prefijo}_emp")
+
+    df_res = solo_emb.copy()
+    if sel_anio != "Todos":
+        df_res = df_res[df_res["Anio"] == sel_anio]
+    if sel_sem != "Todas":
+        df_res = df_res[df_res["Semana"] == sel_sem]
+    if sel_fecha != "Todos":
+        df_res = df_res[df_res["Fecha"] == sel_fecha]
+    if sel_lote != "Todos":
+        df_res = df_res[df_res["Lote"] == sel_lote]
+    if sel_color != "Todos":
+        df_res = df_res[df_res["Color_Cinta"] == sel_color]
+    if sel_emp != "Todos":
+        df_res = df_res[df_res["Parcelero"] == sel_emp]
+
+    total_filtrado = int(df_res["Racimos"].sum())
+    st.metric("Total General (Según Filtros)", f"{total_filtrado:,} racimos")
+
+    st.write("### 1. Rendimiento por Lote (Racimos / Ha)")
+    res_lote_ha = pd.DataFrame({"Lote": LOTES})
+    res_lote_ha["Hectareas"] = res_lote_ha["Lote"].map(HECTAREAS_LOTE).fillna(0.0)
+    emb_lote = df_res.groupby("Lote")["Racimos"].sum().reset_index()
+    res_lote_ha = res_lote_ha.merge(emb_lote, on="Lote", how="left").fillna({"Racimos": 0})
+    res_lote_ha["Racimos"] = res_lote_ha["Racimos"].astype(int)
+    res_lote_ha["Racimos_Por_Ha"] = res_lote_ha.apply(lambda r: round(r["Racimos"] / r["Hectareas"], 1) if r["Hectareas"] > 0 else 0.0, axis=1)
+    st.dataframe(
+        res_lote_ha.style.background_gradient(subset=["Racimos_Por_Ha"], cmap="coolwarm_r").format({"Hectareas": "{:.2f}", "Racimos_Por_Ha": "{:.1f}"}),
+        use_container_width=True, hide_index=True
+    )
+
+    st.write("### 2. Ranking de Empleados (Cantidad Total y Rendimiento por Día)")
+    if not df_res.empty:
+        rank_emp = df_res.groupby("Parcelero").agg(
+            Total_Racimos=("Racimos", "sum"),
+            Dias_Trabajados=("Fecha", "nunique")
+        ).reset_index()
+        rank_emp["Promedio_Por_Dia"] = (rank_emp["Total_Racimos"] / rank_emp["Dias_Trabajados"]).round(1)
+        rank_emp = rank_emp.sort_values(by="Total_Racimos", ascending=False)
+        st.dataframe(
+            rank_emp.style.background_gradient(subset=["Total_Racimos", "Promedio_Por_Dia"], cmap="coolwarm_r").format({"Promedio_Por_Dia": "{:.1f}"}),
+            use_container_width=True, hide_index=True
+        )
+
+    st.write("### 3. Embolse por Día y Empleado (Ordenado de Mayor a Menor)")
+    if not df_res.empty:
+        por_dia = df_res.groupby(["Fecha", "Semana", "Parcelero", "Lote", "Color_Cinta"])["Racimos"].sum().reset_index()
+        por_dia = por_dia.sort_values(by="Racimos", ascending=False)
+        st.dataframe(
+            por_dia.style.background_gradient(subset=["Racimos"], cmap="coolwarm_r"),
+            use_container_width=True, hide_index=True
+        )
+
 st.title("BANANERA LA LOLA S.A")
 
 if len(st.session_state.cola_offline) > 0:
@@ -237,59 +323,8 @@ elif rol == "Consulta de Embolse":
                 lote_qr = dato_qr
                 st.success(f"Lote escaneado: {lote_qr}")
     df = cargar_datos()
-    solo_emb = df[df["Racimos"] > 0].copy() if not df.empty else pd.DataFrame()
-    if solo_emb.empty:
-        st.info("Aún no hay registros de embolse en el sistema.")
-    else:
-        ahora = datetime.now()
-        semana_actual = ahora.isocalendar().week
-        anio_actual = ahora.year
-        solo_emb["Fecha"] = solo_emb["Fecha"].astype(str)
-        solo_emb["Anio"] = solo_emb["Fecha"].str[:4]
-        solo_emb["Semana"] = solo_emb["Semana"].astype(int)
-        def calc_edad(fila):
-            try:
-                y = int(fila["Anio"])
-            except Exception:
-                y = anio_actual
-            s = int(fila["Semana"])
-            diff_semanas = (anio_actual - y) * 52 + (semana_actual - s)
-            return max(0, diff_semanas + 1)
-        solo_emb["Edad_Num"] = solo_emb.apply(calc_edad, axis=1)
-        solo_emb["Edad"] = solo_emb["Edad_Num"].astype(str) + " sem"
-        f1, f2, f3 = st.columns(3)
-        sel_anio = f1.selectbox("Año:", ["Todos"] + sorted(solo_emb["Anio"].unique().tolist(), reverse=True), key="cons_anio")
-        sel_sem = f2.selectbox("Semana Embolse:", ["Todas"] + sorted(solo_emb["Semana"].unique().tolist(), reverse=True), key="cons_sem")
-        sel_fecha = f3.selectbox("Día (Fecha):", ["Todos"] + sorted(solo_emb["Fecha"].unique().tolist(), reverse=True), key="cons_fecha")
-        f4, f5, f6 = st.columns(3)
-        lotes_op = ["Todos"] + sorted(solo_emb["Lote"].unique().tolist())
-        idx_lote = lotes_op.index(lote_qr) if lote_qr in lotes_op else 0
-        sel_lote = f4.selectbox("Lote:", lotes_op, index=idx_lote, key="cons_lote")
-        sel_color = f5.selectbox("Color de Cinta:", ["Todos"] + sorted(solo_emb["Color_Cinta"].unique().tolist()), key="cons_color")
-        sel_edad = f6.selectbox("Edad:", ["Todas"] + [f"{e} sem" for e in sorted(solo_emb["Edad_Num"].unique().tolist())], key="cons_edad")
-        df_res = solo_emb.copy()
-        if sel_anio != "Todos":
-            df_res = df_res[df_res["Anio"] == sel_anio]
-        if sel_sem != "Todas":
-            df_res = df_res[df_res["Semana"] == sel_sem]
-        if sel_fecha != "Todos":
-            df_res = df_res[df_res["Fecha"] == sel_fecha]
-        if sel_lote != "Todos":
-            df_res = df_res[df_res["Lote"] == sel_lote]
-        if sel_color != "Todos":
-            df_res = df_res[df_res["Color_Cinta"] == sel_color]
-        if sel_edad != "Todas":
-            df_res = df_res[df_res["Edad"] == sel_edad]
-        total_filtrado = int(df_res["Racimos"].sum())
-        st.metric("Total General (Según Filtros)", f"{total_filtrado:,} racimos")
-        st.write("### Resumen General por Lote")
-        resumen_lote = df_res.groupby(["Lote", "Color_Cinta"])["Racimos"].sum().reset_index()
-        fila_total_lote = pd.DataFrame([{"Lote": "TOTAL GENERAL", "Color_Cinta": "", "Racimos": total_filtrado}])
-        st.dataframe(pd.concat([resumen_lote, fila_total_lote], ignore_index=True), use_container_width=True, hide_index=True)
-        st.write("### Detalle por Trabajador y Día")
-        tabla_ver = df_res[["Fecha", "Anio", "Semana", "Lote", "Parcelero", "Color_Cinta", "Edad", "Racimos"]].copy()
-        fila_total = pd.DataFrame([{"Fecha": "TOTAL", "Anio": "", "Semana": "", "Lote": "", "Parcelero": "", "Color_Cinta": "", "Edad": "", "Racimos": total_filtrado}])
-        st.dataframe(pd.concat([tabla_ver, fila_total], ignore_index=True), use_container_width=True, hide_index=True)
+    mostrar_reportes_embolse(df, prefijo="cons", lote_qr=lote_qr)
+
 elif rol == "Administrador":
     clave = st.text_input("Clave de Administrador:", type="password")
     if clave != CLAVE_ADMIN:
@@ -368,9 +403,11 @@ elif rol == "Administrador":
             resumen_emp = solo_embolse.groupby("Parcelero")["Racimos"].sum().reset_index().sort_values(by="Racimos", ascending=False)
             st.dataframe(resumen_emp, use_container_width=True, hide_index=True)
 
-            st.write("### Detalle Diario por Trabajador")
-            por_trabajador = solo_embolse.groupby(["Parcelero", "Anio", "Fecha"])["Racimos"].sum().reset_index()
-            st.dataframe(por_trabajador, use_container_width=True, hide_index=True)
+            st.divider()
+            st.subheader("Análisis de Rendimiento por Lote, Empleado y Día")
+            mostrar_reportes_embolse(df, prefijo="adm")
+
+
 
     with tab2:
         st.subheader("Buscador y Totales de Corte")
