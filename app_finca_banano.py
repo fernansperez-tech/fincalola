@@ -543,7 +543,7 @@ with tab3:
             col_color = c2.selectbox("Columna de Color:", columnas_archivo, key="csv_col_color")
             col_fecha = c3.selectbox("Columna de Fecha:", ["Usar fecha de hoy"] + columnas_archivo, key="csv_col_fecha")
 
-                        if col_lote == col_color or (col_fecha != "Usar fecha de hoy" and col_fecha in [col_lote, col_color]):
+            if col_lote == col_color or (col_fecha != "Usar fecha de hoy" and col_fecha in [col_lote, col_color]):
                 st.info("👆 Selecciona columnas diferentes para **Lote**, **Color** y **Fecha** para generar la vista previa.")
             else:
                 descuentos = procesar_csv_tableta(df_tab, col_lote, col_color, col_fecha)
