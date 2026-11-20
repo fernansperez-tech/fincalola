@@ -184,32 +184,37 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     total_filtrado = int(df_res["Racimos"].sum())
     st.metric("Total General (Según Filtros)", f"{total_filtrado:,} racimos")
 
+        def formatear_cintas_visual(texto_cintas):
+        iconos = {
+            "Amarilla": "🟡 Amarilla", "Morada": "🟣 Morada",
+            "Roja": "🔴 Roja", "Café": "🟤 Café",
+            "Negra": "⚫ Negra", "Verde": "🟢 Verde",
+            "Azul": "🔵 Azul", "Blanca": "⚪ Blanca"
+        }
+        partes = [p.strip() for p in str(texto_cintas).split(",") if p.strip() != "-"]
+        if not partes:
+            return "-"
+        return " | ".join([iconos.get(p, p) for p in partes])
+
     def pintar_cinta(val):
         texto = str(val)
         paleta = {
-            "Amarilla": "#FFD700",
-            "Morada": "#800080",
-            "Roja": "#D32F2F",
-            "Café": "#6D4C41",
-            "Negra": "#212121",
-            "Verde": "#2E7D32",
-            "Azul": "#1565C0",
-            "Blanca": "#F5F5F5"
+            "Amarilla": ("#FFD700", "#000000"),
+            "Morada": ("#800080", "#FFFFFF"),
+            "Roja": ("#D32F2F", "#FFFFFF"),
+            "Café": ("#6D4C41", "#FFFFFF"),
+            "Negra": ("#212121", "#FFFFFF"),
+            "Verde": ("#2E7D32", "#FFFFFF"),
+            "Azul": ("#1565C0", "#FFFFFF"),
+            "Blanca": ("#F5F5F5", "#000000")
         }
-        encontrados = [hex_c for nom, hex_c in paleta.items() if nom in texto]
-        if not encontrados:
-            return ""
+        encontrados = [par for nom, par in paleta.items() if nom in texto]
         if len(encontrados) == 1:
-            letra = "#000000" if encontrados[0] in ["#FFD700", "#F5F5F5"] else "#FFFFFF"
-            return f"background-color: {encontrados[0]}; color: {letra}; font-weight: bold;"
-        paso = 100.0 / len(encontrados)
-        paradas = []
-        for idx, hex_c in enumerate(encontrados):
-            ini = round(idx * paso, 1)
-            fin = round((idx + 1) * paso, 1)
-            paradas.append(f"{hex_c} {ini}%, {hex_c} {fin}%")
-        degradado = ", ".join(paradas)
-        return f"background: linear-gradient(90deg, {degradado}); color: #FFFFFF; text-shadow: 1px 1px 2px #000000; font-weight: bold;"
+            fondo, letra = encontrados.pop(0)
+            return f"background-color: {fondo}; color: {letra}; font-weight: bold;"
+        elif len(encontrados) > 1:
+            return "background-color: #263238; color: #FFFFFF; font-weight: bold;"
+        return ""
 
 
     num_semanas = max(1, int(df_res["Semana"].nunique())) if not df_res.empty else 1
@@ -227,6 +232,8 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     res_lote_ha["Racimos_Por_Ha"] = res_lote_ha.apply(
         lambda r: round(r["Racimos"] / (r["Hectareas"] * num_semanas), 1) if r["Hectareas"] > 0 else 0.0, axis=1
     )
+    res_lote_ha["Cintas"] = res_lote_ha["Cintas"].apply(formatear_cintas_visual)
+
     tot_ha = round(res_lote_ha["Hectareas"].sum(), 2)
     tot_rac_lote = int(res_lote_ha["Racimos"].sum())
     prom_ha_total = round(tot_rac_lote / (tot_ha * num_semanas), 1) if tot_ha > 0 else 0.0
@@ -268,6 +275,7 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
             Cintas=("Color_Cinta", lambda x: ", ".join(sorted(set(x))))
         ).reset_index()
         por_dia = por_dia.sort_values(by="Total_Dia", ascending=False).reset_index(drop=True)
+        por_dia["Cintas"] = por_dia["Cintas"].apply(formatear_cintas_visual)
         tot_dia_sum = int(por_dia["Total_Dia"].sum())
         fila_tot_3 = pd.DataFrame([{"Fecha": "TOTAL", "Semana": "", "Parcelero": "", "Total_Dia": tot_dia_sum, "Lotes": "-", "Cintas": "-"}])
         t3_final = pd.concat([por_dia, fila_tot_3], ignore_index=True)
