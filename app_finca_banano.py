@@ -452,8 +452,12 @@ elif rol == "Administrador":
                 except Exception:
                     y = anio_actual
                 edad = max(0, ((anio_actual - y) * 52 + (semana_actual - sem)) + 1)
-                filas_balance.append({
-       for (lote_sob, color_sob), sobrante in salidas.items():
+                               filas_balance.append({
+                    "Lote": lote, "Color_Cinta": color, "Anio": anio_str,
+                    "Semana_Emb": sem, "Edad": f"{edad} sem",
+                    "Embolsados": emb, "Cortados": desc, "Saldo_En_Mata": saldo
+                })
+            for (lote_sob, color_sob), sobrante in salidas.items():
                 if sobrante > 0:
                     filas_balance.append({
                         "Lote": lote_sob,
@@ -465,6 +469,7 @@ elif rol == "Administrador":
                         "Cortados": int(sobrante),
                         "Saldo_En_Mata": -int(sobrante)
                     })
+
 
                     "Lote": lote, "Color_Cinta": color, "Anio": anio_str,
                     "Semana_Emb": sem, "Edad": f"{edad} sem",
