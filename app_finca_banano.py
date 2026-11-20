@@ -143,20 +143,10 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
         st.info("Aún no hay registros de embolse en el sistema.")
         return
     ahora = datetime.now()
-    semana_actual = ahora.isocalendar().week
-    anio_actual = ahora.year
     solo_emb["Fecha"] = solo_emb["Fecha"].astype(str).str.strip().str[:10]
     solo_emb["Fecha_Dt"] = pd.to_datetime(solo_emb["Fecha"], errors="coerce").dt.date
     solo_emb["Anio"] = solo_emb["Fecha"].str[:4]
     solo_emb["Semana"] = solo_emb["Semana"].astype(int)
-    def calc_edad(fila):
-        try:
-            y = int(fila["Anio"])
-        except Exception:
-            y = anio_actual
-        s = int(fila["Semana"])
-        return max(0, ((anio_actual - y) * 52 + (semana_actual - s)) + 1)
-    solo_emb["Edad_Num"] = solo_emb.apply(calc_edad, axis=1)
 
     fechas_validas = solo_emb["Fecha_Dt"].dropna()
     fecha_min = fechas_validas.min() if not fechas_validas.empty else ahora.date()
@@ -170,20 +160,18 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     sel_anio = f1.selectbox("Año:", ["Todos"] + sorted(solo_emb["Anio"].unique().tolist(), reverse=True), key=f"{prefijo}_anio")
     sel_sem = f2.selectbox("Semana Embolse:", ["Todas"] + sorted(solo_emb["Semana"].unique().tolist(), reverse=True), key=f"{prefijo}_sem")
 
-
-    f4, f5, f6 = st.columns(3)
+    f3, f4, f5 = st.columns(3)
     lotes_op = ["Todos"] + sorted(solo_emb["Lote"].unique().tolist())
     idx_lote = lotes_op.index(lote_qr) if lote_qr in lotes_op else 0
-    sel_lote = f4.selectbox("Lote:", lotes_op, index=idx_lote, key=f"{prefijo}_lote")
-    sel_color = f5.selectbox("Color de Cinta:", ["Todos"] + sorted(solo_emb["Color_Cinta"].unique().tolist()), key=f"{prefijo}_color")
-    sel_emp = f6.selectbox("Empleado:", ["Todos"] + sorted(solo_emb["Parcelero"].unique().tolist()), key=f"{prefijo}_emp")
+    sel_lote = f3.selectbox("Lote:", lotes_op, index=idx_lote, key=f"{prefijo}_lote")
+    sel_color = f4.selectbox("Color de Cinta:", ["Todos"] + sorted(solo_emb["Color_Cinta"].unique().tolist()), key=f"{prefijo}_color")
+    sel_emp = f5.selectbox("Empleado:", ["Todos"] + sorted(solo_emb["Parcelero"].unique().tolist()), key=f"{prefijo}_emp")
 
     df_res = solo_emb[(solo_emb["Fecha_Dt"] >= f_desde) & (solo_emb["Fecha_Dt"] <= f_hasta)].copy()
     if sel_anio != "Todos":
         df_res = df_res[df_res["Anio"] == sel_anio]
     if sel_sem != "Todas":
         df_res = df_res[df_res["Semana"] == sel_sem]
-    
     if sel_lote != "Todos":
         df_res = df_res[df_res["Lote"] == sel_lote]
     if sel_color != "Todos":
@@ -219,39 +207,16 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
             use_container_width=True, hide_index=True
         )
 
-    st.write("### 3. Embolse Consolidado por Día y Empleado (Suma de todos sus lotes)")
+    st.write("### 3. Embolse Consolidado por Día y Empleado")
     if not df_res.empty:
         por_dia = df_res.groupby(["Fecha", "Semana", "Parcelero"]).agg(
             Total_Dia=("Racimos", "sum"),
-            Lotes_Trabajados=("Lote", lambda x: ", ".join(sorted(set(x)))),
+            Lotes=("Lote", lambda x: ", ".join(sorted(set(x)))),
             Cintas=("Color_Cinta", lambda x: ", ".join(sorted(set(x))))
         ).reset_index()
         por_dia = por_dia.sort_values(by="Total_Dia", ascending=False)
         st.dataframe(
             por_dia.style.background_gradient(subset=["Total_Dia"], cmap="coolwarm_r"),
-            use_container_width=True, hide_index=True
-        )
-
-
-    st.write("### 2. Ranking de Empleados (Cantidad Total y Rendimiento por Día)")
-    if not df_res.empty:
-        rank_emp = df_res.groupby("Parcelero").agg(
-            Total_Racimos=("Racimos", "sum"),
-            Dias_Trabajados=("Fecha", "nunique")
-        ).reset_index()
-        rank_emp["Promedio_Por_Dia"] = (rank_emp["Total_Racimos"] / rank_emp["Dias_Trabajados"]).round(1)
-        rank_emp = rank_emp.sort_values(by="Total_Racimos", ascending=False)
-        st.dataframe(
-            rank_emp.style.background_gradient(subset=["Total_Racimos", "Promedio_Por_Dia"], cmap="coolwarm_r").format({"Promedio_Por_Dia": "{:.1f}"}),
-            use_container_width=True, hide_index=True
-        )
-
-    st.write("### 3. Embolse por Día y Empleado (Ordenado de Mayor a Menor)")
-    if not df_res.empty:
-        por_dia = df_res.groupby(["Fecha", "Semana", "Parcelero", "Lote", "Color_Cinta"])["Racimos"].sum().reset_index()
-        por_dia = por_dia.sort_values(by="Racimos", ascending=False)
-        st.dataframe(
-            por_dia.style.background_gradient(subset=["Racimos"], cmap="coolwarm_r"),
             use_container_width=True, hide_index=True
         )
 
@@ -366,6 +331,7 @@ elif rol == "Administrador":
         st.stop()
     tab1, tab2, tab3, tab4 = st.tabs(["Inventario y Edad", "Historial de Corte", "Subir CSV Tableta", "Corregir / Borrar"])
     df = cargar_datos()
+
 with tab1:
         st.subheader("Filtros y Rendimiento por Lote y Empleado")
         mostrar_reportes_embolse(df, prefijo="adm")
