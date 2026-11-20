@@ -543,79 +543,82 @@ with tab3:
             col_color = c2.selectbox("Columna de Color:", columnas_archivo, key="csv_col_color")
             col_fecha = c3.selectbox("Columna de Fecha:", ["Usar fecha de hoy"] + columnas_archivo, key="csv_col_fecha")
 
-            descuentos = procesar_csv_tableta(df_tab, col_lote, col_color, col_fecha)
-            if descuentos:
-                st.write("### Vista Previa: Qué va a descontar y de qué Edad (FIFO)")
-                ahora_sim = datetime.now()
-                sem_act_sim = ahora_sim.isocalendar().week
-                anio_act_sim = ahora_sim.year
-
-                stock_fifo = {}
-                if not df.empty:
-                    df_sim = df.copy()
-                    df_sim["Fecha"] = df_sim["Fecha"].astype(str)
-                    df_sim["Anio"] = df_sim["Fecha"].str[:4]
-                    ent_sim = df_sim[df_sim["Racimos"] > 0].groupby(["Lote", "Color_Cinta", "Anio", "Semana"])["Racimos"].sum().reset_index()
-                    ent_sim = ent_sim.sort_values(by=["Lote", "Color_Cinta", "Anio", "Semana"])
-                    sal_sim = df_sim[df_sim["Racimos"] < 0].groupby(["Lote", "Color_Cinta"])["Racimos"].sum().abs().to_dict()
-
-                    for _, r_ent in ent_sim.iterrows():
-                        lt = r_ent["Lote"]
-                        cl = r_ent["Color_Cinta"]
-                        try:
-                            yr = int(r_ent["Anio"])
-                        except Exception:
-                            yr = anio_act_sim
-                        sm = int(r_ent["Semana"])
-                        cant_e = int(r_ent["Racimos"])
-                        ya_cort = min(cant_e, sal_sim.get((lt, cl), 0))
-                        sal_sim[(lt, cl)] = sal_sim.get((lt, cl), 0) - ya_cort
-                        disp = cant_e - ya_cort
-                        if disp > 0:
-                            ed_sim = max(0, ((anio_act_sim - yr) * 52 + (sem_act_sim - sm)) + 1)
-                            stock_fifo.setdefault((lt, cl), []).append({"edad": ed_sim, "disp": disp})
-
-                filas_previa = []
-                for d in descuentos:
-                    lt_d = d["Lote"]
-                    cl_d = d["Color_Cinta"]
-                    por_cortar = abs(int(d["Racimos"]))
-                    bolsas = stock_fifo.get((lt_d, cl_d), [])
-                    detalle_edades = []
-                    restante = por_cortar
-                    for b in bolsas:
-                        if restante <= 0:
-                            break
-                        if b["disp"] > 0:
-                            toma = min(b["disp"], restante)
-                            b["disp"] -= toma
-                            restante -= toma
-                            detalle_edades.append(f"{b['edad']} sem ({toma} rac)")
-                    if restante > 0:
-                        detalle_edades.append(f"⚠️ Sin saldo previo ({restante} rac)")
-                    filas_previa.append({
-                        "Fecha_Corte": d["Fecha"],
-                        "Lote": lt_d,
-                        "Color_Cinta": cl_d,
-                        "Racimos_A_Descontar": por_cortar,
-                        "Edad_Que_Descuenta": " + ".join(detalle_edades)
-                    })
-
-                df_previa = pd.DataFrame(filas_previa)
-                st.dataframe(df_previa, use_container_width=True, hide_index=True)
-                total_prev = int(df_previa["Racimos_A_Descontar"].sum())
-                st.info(f"Total a descontar en este archivo: **{total_prev:,} racimos**")
-
-                if st.button("✅ Confirmar y Descontar Inventario", type="primary", key="btn_confirmar_csv"):
-                    try:
-                        agregar_filas(descuentos)
-                        st.success(f"Listo. Se descontaron {total_prev} racimos respetando las fechas del CSV.")
-                        time.sleep(1.5)
-                        st.rerun()
-                    except Exception as e:
-                        st.error(f"Error técnico al descontar: {repr(e)}")
+                        if col_lote == col_color or (col_fecha != "Usar fecha de hoy" and col_fecha in [col_lote, col_color]):
+                st.info("👆 Selecciona columnas diferentes para **Lote**, **Color** y **Fecha** para generar la vista previa.")
             else:
-                st.warning("No se encontraron registros válidos con las columnas seleccionadas.")
+                descuentos = procesar_csv_tableta(df_tab, col_lote, col_color, col_fecha)
+                if descuentos:
+                    st.write("### Vista Previa: Qué va a descontar y de qué Edad (FIFO)")
+                    ahora_sim = datetime.now()
+                    sem_act_sim = ahora_sim.isocalendar().week
+                    anio_act_sim = ahora_sim.year
+
+                    stock_fifo = {}
+                    if not df.empty:
+                        df_sim = df.copy()
+                        df_sim["Fecha"] = df_sim["Fecha"].astype(str)
+                        df_sim["Anio"] = df_sim["Fecha"].str[:4]
+                        ent_sim = df_sim[df_sim["Racimos"] > 0].groupby(["Lote", "Color_Cinta", "Anio", "Semana"])["Racimos"].sum().reset_index()
+                        ent_sim = ent_sim.sort_values(by=["Lote", "Color_Cinta", "Anio", "Semana"])
+                        sal_sim = df_sim[df_sim["Racimos"] < 0].groupby(["Lote", "Color_Cinta"])["Racimos"].sum().abs().to_dict()
+
+                        for _, r_ent in ent_sim.iterrows():
+                            lt = r_ent["Lote"]
+                            cl = r_ent["Color_Cinta"]
+                            try:
+                                yr = int(r_ent["Anio"])
+                            except Exception:
+                                yr = anio_act_sim
+                            sm = int(r_ent["Semana"])
+                            cant_e = int(r_ent["Racimos"])
+                            ya_cort = min(cant_e, sal_sim.get((lt, cl), 0))
+                            sal_sim[(lt, cl)] = sal_sim.get((lt, cl), 0) - ya_cort
+                            disp = cant_e - ya_cort
+                            if disp > 0:
+                                ed_sim = max(0, ((anio_act_sim - yr) * 52 + (sem_act_sim - sm)) + 1)
+                                stock_fifo.setdefault((lt, cl), []).append({"edad": ed_sim, "disp": disp})
+
+                    filas_previa = []
+                    for d in descuentos:
+                        lt_d = d["Lote"]
+                        cl_d = d["Color_Cinta"]
+                        por_cortar = abs(int(d["Racimos"]))
+                        bolsas = stock_fifo.get((lt_d, cl_d), [])
+                        detalle_edades = []
+                        restante = por_cortar
+                        for b in bolsas:
+                            if restante <= 0:
+                                break
+                            if b["disp"] > 0:
+                                toma = min(b["disp"], restante)
+                                b["disp"] -= toma
+                                restante -= toma
+                                detalle_edades.append(f"{b['edad']} sem ({toma} rac)")
+                        if restante > 0:
+                            detalle_edades.append(f"⚠️ Sin saldo previo ({restante} rac)")
+                        filas_previa.append({
+                            "Fecha_Corte": d["Fecha"],
+                            "Lote": lt_d,
+                            "Color_Cinta": cl_d,
+                            "Racimos_A_Descontar": por_cortar,
+                            "Edad_Que_Descuenta": " + ".join(detalle_edades)
+                        })
+
+                    df_previa = pd.DataFrame(filas_previa)
+                    st.dataframe(df_previa, use_container_width=True, hide_index=True)
+                    total_prev = int(df_previa["Racimos_A_Descontar"].sum())
+                    st.info(f"Total a descontar en este archivo: **{total_prev:,} racimos**")
+
+                    if st.button("✅ Confirmar y Descontar Inventario", type="primary", key="btn_confirmar_csv"):
+                        try:
+                            agregar_filas(descuentos)
+                            st.success(f"Listo. Se descontaron {total_prev} racimos respetando las fechas del CSV.")
+                            time.sleep(1.5)
+                            st.rerun()
+                        except Exception as e:
+                            st.error(f"Error técnico al descontar: {repr(e)}")
+                else:
+                    st.warning("No se encontraron registros válidos con las columnas seleccionadas.")
 
 
 with tab4:
