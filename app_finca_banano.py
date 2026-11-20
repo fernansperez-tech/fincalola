@@ -340,8 +340,25 @@ if rol == "Parcelero (Embolse)":
         with cols_cinta[idx % 4]:
             if st.button(etiqueta, key=f"cinta_{nombre_real}_{fid}", use_container_width=True):
                 st.session_state.cinta_elegida = nombre_real
-    cinta = st.session_state.cinta_elegida
-    st.info(f"Cinta seleccionada: **{cinta}**")
+        cinta = st.session_state.cinta_elegida
+    ESTILOS_BANNER = {
+        "Amarilla": ("#FFD700", "#000000", "🟡"),
+        "Morada": ("#800080", "#FFFFFF", "🟣"),
+        "Roja": ("#D32F2F", "#FFFFFF", "🔴"),
+        "Café": ("#6D4C41", "#FFFFFF", "🟤"),
+        "Negra": ("#212121", "#FFFFFF", "⚫"),
+        "Verde": ("#2E7D32", "#FFFFFF", "🟢"),
+        "Azul": ("#1565C0", "#FFFFFF", "🔵"),
+        "Blanca": ("#F5F5F5", "#000000", "⚪")
+    }
+    bg_c, txt_c, ico_c = ESTILOS_BANNER.get(cinta, ("#E0E0E0", "#000000", "🏷️"))
+    st.markdown(
+        f'<div style="background-color:{bg_c}; color:{txt_c}; padding:14px; border-radius:10px; '
+        f'text-align:center; font-size:20px; font-weight:bold; border:2px solid #999; margin:10px 0;">'
+        f'{ico_c} CINTA SELECCIONADA: {cinta.upper()}</div>',
+        unsafe_allow_html=True
+    )
+
     col_fecha, col_cant, col_edad = st.columns(3)
     fecha_embolse = col_fecha.date_input("Fecha del embolse:", value=datetime.now(), key=f"reg_fecha_{fid}")
     racimos = col_cant.number_input("Cantidad de racimos:", min_value=0, max_value=1000, value=0, key=f"reg_cant_{fid}")
