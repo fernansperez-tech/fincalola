@@ -451,7 +451,7 @@ elif rol == "Administrador":
                 else:
                     st.error("No se encontraron registros válidos en el CSV.")
 
-with tab4:
+   with tab4:
         st.subheader("Corregir o Eliminar Registros (Solo Administrador)")
         if st.button("🔄 Recargar lista desde Google Sheets", key="btn_recargar_edit"):
             with st.spinner("Sincronizando con Google Sheets..."):
