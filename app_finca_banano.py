@@ -158,7 +158,8 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
 
     f1, f2 = st.columns(2)
     sel_anio = f1.selectbox("Año:", ["Todos"] + sorted(solo_emb["Anio"].unique().tolist(), reverse=True), key=f"{prefijo}_anio")
-    sel_sem = f2.selectbox("Semana Embolse:", ["Todas"] + sorted(solo_emb["Semana"].unique().tolist(), reverse=True), key=f"{prefijo}_sem")
+    semanas_disp = sorted(solo_emb["Semana"].unique().tolist(), reverse=True)
+    sel_sem = f2.multiselect("Semanas Embolse (vacío = todas):", semanas_disp, key=f"{prefijo}_sem")
 
     f3, f4, f5 = st.columns(3)
     lotes_op = ["Todos"] + sorted(solo_emb["Lote"].unique().tolist())
@@ -170,8 +171,9 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     df_res = solo_emb[(solo_emb["Fecha_Dt"] >= f_desde) & (solo_emb["Fecha_Dt"] <= f_hasta)].copy()
     if sel_anio != "Todos":
         df_res = df_res[df_res["Anio"] == sel_anio]
-    if sel_sem != "Todas":
-        df_res = df_res[df_res["Semana"] == sel_sem]
+     if sel_sem:
+        df_res = df_res[df_res["Semana"].isin(sel_sem)]
+
     if sel_lote != "Todos":
         df_res = df_res[df_res["Lote"] == sel_lote]
     if sel_color != "Todos":
