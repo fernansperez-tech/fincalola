@@ -137,7 +137,6 @@ def procesar_csv_tableta(df_tab, col_lote, col_color, col_fecha=None):
         })
     return descuentos
 
-
 def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     solo_emb = df[df["Racimos"] > 0].copy() if not df.empty else pd.DataFrame()
     if solo_emb.empty:
@@ -371,7 +370,7 @@ elif rol == "Administrador":
     with tab1:
         st.divider()
         st.subheader("Análisis de Rendimiento por Lote, Empleado y Día")
-            mostrar_reportes_embolse(df, prefijo="adm")
+    mostrar_reportes_embolse(df, prefijo="adm")
         st.subheader("Proyección y Balance por Edad (86.1 Ha)")
         col_r1, col_r2 = st.columns(2)
         ratio = col_r1.number_input("Ratio (Cajas / Racimo):", value=1.15, min_value=0.50, max_value=2.50, step=0.05)
