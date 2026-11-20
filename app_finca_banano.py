@@ -192,18 +192,14 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     res_lote_ha = res_lote_ha.merge(emb_lote, on="Lote", how="left").fillna({"Cintas": "-", "Racimos": 0})
     res_lote_ha["Racimos"] = res_lote_ha["Racimos"].astype(int)
     res_lote_ha["Racimos_Por_Ha"] = res_lote_ha.apply(lambda r: round(r["Racimos"] / r["Hectareas"], 1) if r["Hectareas"] > 0 else 0.0, axis=1)
-    v_min1, v_max1 = float(res_lote_ha["Racimos_Por_Ha"].min()), float(res_lote_ha["Racimos_Por_Ha"].max())
-    if v_max1 == v_min1:
-        v_max1 += 1.0
+    st.dataframe(
+        res_lote_ha.style.background_gradient(subset=["Racimos_Por_Ha"], cmap="coolwarm_r").format({"Hectareas": "{:.2f}", "Racimos_Por_Ha": "{:.1f}"}),
+        use_container_width=True, hide_index=True
+    )
     tot_ha = round(res_lote_ha["Hectareas"].sum(), 2)
     tot_rac_lote = int(res_lote_ha["Racimos"].sum())
     prom_ha_total = round(tot_rac_lote / tot_ha, 1) if tot_ha > 0 else 0.0
-    fila_tot_1 = pd.DataFrame([{"Lote": "TOTAL", "Hectareas": tot_ha, "Cintas": "-", "Racimos": tot_rac_lote, "Racimos_Por_Ha": prom_ha_total}])
-    t1_final = pd.concat([res_lote_ha, fila_tot_1], ignore_index=True)
-    st.dataframe(
-        t1_final.style.background_gradient(subset=pd.IndexSlice[:-1, ["Racimos_Por_Ha"]], cmap="coolwarm_r", vmin=v_min1, vmax=v_max1).format({"Hectareas": "{:.2f}", "Racimos_Por_Ha": "{:.1f}"}),
-        use_container_width=True, hide_index=True
-    )
+    st.info(f"**TOTAL LOTES:** {tot_ha:.2f} Ha | **{tot_rac_lote:,} racimos** | Promedio Finca: **{prom_ha_total:.1f} rac/Ha**")
 
     st.write("### 2. Ranking de Empleados (Cantidad Total y Promedio por Día)")
     if not df_res.empty:
@@ -213,17 +209,12 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
         ).reset_index()
         rank_emp["Promedio_Por_Dia"] = (rank_emp["Total_Racimos"] / rank_emp["Dias_Trabajados"]).round(1)
         rank_emp = rank_emp.sort_values(by="Total_Racimos", ascending=False).reset_index(drop=True)
-        tot_rac_emp = int(rank_emp["Total_Racimos"].sum())
-        tot_dias_emp = int(rank_emp["Dias_Trabajados"].sum())
-        prom_emp_tot = round(tot_rac_emp / tot_dias_emp, 1) if tot_dias_emp > 0 else 0.0
-        fila_tot_2 = pd.DataFrame([{"Parcelero": "TOTAL", "Total_Racimos": tot_rac_emp, "Dias_Trabajados": tot_dias_emp, "Promedio_Por_Dia": prom_emp_tot}])
-        t2_final = pd.concat([rank_emp, fila_tot_2], ignore_index=True)
         st.dataframe(
-            t2_final.style.background_gradient(subset=pd.IndexSlice[:-1, ["Total_Racimos"]], cmap="coolwarm_r", vmin=float(rank_emp["Total_Racimos"].min()), vmax=float(rank_emp["Total_Racimos"].max()) + 0.1)
-                          .background_gradient(subset=pd.IndexSlice[:-1, ["Promedio_Por_Dia"]], cmap="coolwarm_r", vmin=float(rank_emp["Promedio_Por_Dia"].min()), vmax=float(rank_emp["Promedio_Por_Dia"].max()) + 0.1)
-                          .format({"Promedio_Por_Dia": "{:.1f}"}),
+            rank_emp.style.background_gradient(subset=["Total_Racimos", "Promedio_Por_Dia"], cmap="coolwarm_r").format({"Promedio_Por_Dia": "{:.1f}"}),
             use_container_width=True, hide_index=True
         )
+        tot_rac_emp = int(rank_emp["Total_Racimos"].sum())
+        st.info(f"**TOTAL EMPLEADOS:** **{tot_rac_emp:,} racimos** embolsados en el periodo")
 
     st.write("### 3. Embolse Consolidado por Día y Empleado")
     if not df_res.empty:
@@ -233,13 +224,13 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
             Cintas=("Color_Cinta", lambda x: ", ".join(sorted(set(x))))
         ).reset_index()
         por_dia = por_dia.sort_values(by="Total_Dia", ascending=False).reset_index(drop=True)
-        tot_dia_sum = int(por_dia["Total_Dia"].sum())
-        fila_tot_3 = pd.DataFrame([{"Fecha": "TOTAL", "Semana": "", "Parcelero": "", "Total_Dia": tot_dia_sum, "Lotes": "-", "Cintas": "-"}])
-        t3_final = pd.concat([por_dia, fila_tot_3], ignore_index=True)
         st.dataframe(
-            t3_final.style.background_gradient(subset=pd.IndexSlice[:-1, ["Total_Dia"]], cmap="coolwarm_r", vmin=float(por_dia["Total_Dia"].min()), vmax=float(por_dia["Total_Dia"].max()) + 0.1),
+            por_dia.style.background_gradient(subset=["Total_Dia"], cmap="coolwarm_r"),
             use_container_width=True, hide_index=True
         )
+        tot_dia_sum = int(por_dia["Total_Dia"].sum())
+        st.info(f"**TOTAL CONSOLIDADO:** **{tot_dia_sum:,} racimos**")
+
 
 st.title("BANANERA LA LOLA S.A")
 
