@@ -182,7 +182,7 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     total_filtrado = int(df_res["Racimos"].sum())
     st.metric("Total General (Según Filtros)", f"{total_filtrado:,} racimos")
 
-    st.write("### 1. Rendimiento por Lote (Racimos / Ha)")
+        st.write("### 1. Rendimiento por Lote (Racimos / Ha)")
     res_lote_ha = pd.DataFrame({"Lote": LOTES})
     res_lote_ha["Hectareas"] = res_lote_ha["Lote"].map(HECTAREAS_LOTE).fillna(0.0)
     emb_lote = df_res.groupby("Lote").agg(
@@ -192,13 +192,16 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     res_lote_ha = res_lote_ha.merge(emb_lote, on="Lote", how="left").fillna({"Cintas": "-", "Racimos": 0})
     res_lote_ha["Racimos"] = res_lote_ha["Racimos"].astype(int)
     res_lote_ha["Racimos_Por_Ha"] = res_lote_ha.apply(lambda r: round(r["Racimos"] / r["Hectareas"], 1) if r["Hectareas"] > 0 else 0.0, axis=1)
+    v_min1, v_max1 = float(res_lote_ha["Racimos_Por_Ha"].min()), float(res_lote_ha["Racimos_Por_Ha"].max())
+    if v_max1 == v_min1:
+        v_max1 += 1.0
     tot_ha = round(res_lote_ha["Hectareas"].sum(), 2)
     tot_rac_lote = int(res_lote_ha["Racimos"].sum())
     prom_ha_total = round(tot_rac_lote / tot_ha, 1) if tot_ha > 0 else 0.0
     fila_tot_1 = pd.DataFrame([{"Lote": "TOTAL", "Hectareas": tot_ha, "Cintas": "-", "Racimos": tot_rac_lote, "Racimos_Por_Ha": prom_ha_total}])
     t1_final = pd.concat([res_lote_ha, fila_tot_1], ignore_index=True)
     st.dataframe(
-        t1_final.style.background_gradient(subset=pd.IndexSlice[:-1, ["Racimos_Por_Ha"]], cmap="coolwarm_r").format({"Hectareas": "{:.2f}", "Racimos_Por_Ha": "{:.1f}"}),
+        t1_final.style.background_gradient(subset=pd.IndexSlice[:-1, ["Racimos_Por_Ha"]], cmap="coolwarm_r", vmin=v_min1, vmax=v_max1).format({"Hectareas": "{:.2f}", "Racimos_Por_Ha": "{:.1f}"}),
         use_container_width=True, hide_index=True
     )
 
@@ -216,7 +219,9 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
         fila_tot_2 = pd.DataFrame([{"Parcelero": "TOTAL", "Total_Racimos": tot_rac_emp, "Dias_Trabajados": tot_dias_emp, "Promedio_Por_Dia": prom_emp_tot}])
         t2_final = pd.concat([rank_emp, fila_tot_2], ignore_index=True)
         st.dataframe(
-            t2_final.style.background_gradient(subset=pd.IndexSlice[:-1, ["Total_Racimos", "Promedio_Por_Dia"]], cmap="coolwarm_r").format({"Promedio_Por_Dia": "{:.1f}"}),
+            t2_final.style.background_gradient(subset=pd.IndexSlice[:-1, ["Total_Racimos"]], cmap="coolwarm_r", vmin=float(rank_emp["Total_Racimos"].min()), vmax=float(rank_emp["Total_Racimos"].max()) + 0.1)
+                          .background_gradient(subset=pd.IndexSlice[:-1, ["Promedio_Por_Dia"]], cmap="coolwarm_r", vmin=float(rank_emp["Promedio_Por_Dia"].min()), vmax=float(rank_emp["Promedio_Por_Dia"].max()) + 0.1)
+                          .format({"Promedio_Por_Dia": "{:.1f}"}),
             use_container_width=True, hide_index=True
         )
 
@@ -232,10 +237,9 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
         fila_tot_3 = pd.DataFrame([{"Fecha": "TOTAL", "Semana": "", "Parcelero": "", "Total_Dia": tot_dia_sum, "Lotes": "-", "Cintas": "-"}])
         t3_final = pd.concat([por_dia, fila_tot_3], ignore_index=True)
         st.dataframe(
-            t3_final.style.background_gradient(subset=pd.IndexSlice[:-1, ["Total_Dia"]], cmap="coolwarm_r"),
+            t3_final.style.background_gradient(subset=pd.IndexSlice[:-1, ["Total_Dia"]], cmap="coolwarm_r", vmin=float(por_dia["Total_Dia"].min()), vmax=float(por_dia["Total_Dia"].max()) + 0.1),
             use_container_width=True, hide_index=True
         )
-
 
 st.title("BANANERA LA LOLA S.A")
 
@@ -263,13 +267,17 @@ if rol == "Parcelero (Embolse)":
             if dato_qr in LOTES:
                 lote_detectado = dato_qr
                 st.success(f"Lote detectado: {lote_detectado}")
+        if "form_id" not in st.session_state:
+        st.session_state.form_id = 0
+    fid = st.session_state.form_id
+
     opciones_lote = ["Selecciona Lote..."] + LOTES
     idx_lote_ini = opciones_lote.index(lote_detectado) if lote_detectado in opciones_lote else 0
-    lote_sel = st.selectbox("Lote:", opciones_lote, index=idx_lote_ini, key="reg_lote")
+    lote_sel = st.selectbox("Lote:", opciones_lote, index=idx_lote_ini, key=f"reg_lote_{fid}")
     opciones_parc = ["Selecciona Parcelero..."] + PARCELEROS_BASE
-    sel_p = st.selectbox("Parcelero / Responsable:", opciones_parc, key="reg_parcelero")
+    sel_p = st.selectbox("Parcelero / Responsable:", opciones_parc, key=f"reg_parc_{fid}")
     if sel_p == "Otro (Escribir nombre)":
-        parcelero = st.text_input("Nombre del trabajador:", key="reg_parc_otro").strip()
+        parcelero = st.text_input("Nombre del trabajador:", key=f"reg_otro_{fid}").strip()
     else:
         parcelero = sel_p
     st.write("Toca el color de la cinta:")
@@ -284,15 +292,15 @@ if rol == "Parcelero (Embolse)":
     cols_cinta = st.columns(4)
     for idx, (etiqueta, nombre_real) in enumerate(VISUAL_CINTAS.items()):
         with cols_cinta[idx % 4]:
-            if st.button(etiqueta, key=f"cinta_{nombre_real}", use_container_width=True):
+            if st.button(etiqueta, key=f"cinta_{nombre_real}_{fid}", use_container_width=True):
                 st.session_state.cinta_elegida = nombre_real
     cinta = st.session_state.cinta_elegida
     st.info(f"Cinta seleccionada: **{cinta}**")
     col_fecha, col_cant, col_edad = st.columns(3)
-    fecha_embolse = col_fecha.date_input("Fecha del embolse:", value=datetime.now(), key="reg_fecha")
-    racimos = col_cant.number_input("Cantidad de racimos:", min_value=0, max_value=1000, value=0, key="reg_cant")
-    edad_reg = col_edad.number_input("Edad al embolsar (sem):", min_value=0, max_value=15, value=1, key="reg_edad")
-    if st.button("Guardar Embolse", type="primary"):
+    fecha_embolse = col_fecha.date_input("Fecha del embolse:", value=datetime.now(), key=f"reg_fecha_{fid}")
+    racimos = col_cant.number_input("Cantidad de racimos:", min_value=0, max_value=1000, value=0, key=f"reg_cant_{fid}")
+    edad_reg = col_edad.number_input("Edad al embolsar (sem):", min_value=0, max_value=15, value=1, key=f"reg_edad_{fid}")
+    if st.button("Guardar Embolse", type="primary", key=f"btn_save_emb_{fid}"):
         if lote_sel == "Selecciona Lote..." or parcelero in ["Selecciona Parcelero...", ""] or racimos <= 0:
             st.warning("⚠️ Selecciona el Lote, el Parcelero y escribe una cantidad mayor a 0.")
         else:
@@ -317,12 +325,11 @@ if rol == "Parcelero (Embolse)":
                 agregar_filas([registro])
                 st.success(f"Guardados {racimos} racimos ({cinta}) en {lote_sel}.")
                 time.sleep(1.5)
-                for k in ["reg_lote", "reg_parcelero", "reg_parc_otro", "reg_cant"]:
-                    if k in st.session_state:
-                        del st.session_state[k]
+                st.session_state.form_id += 1
                 st.rerun()
             except Exception as e:
                 st.error(f"Error técnico: {repr(e)}")
+
 
 
 
