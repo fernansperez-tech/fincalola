@@ -532,17 +532,17 @@ elif rol == "Administrador":
             bal_edad_tot = pd.concat([bal_edad, tot_be], ignore_index=True)
             st.dataframe(bal_edad_tot.style.map(pintar_cinta_adm, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
 
-                st.write("Balance Detallado por Lote y Edad (FIFO)")
-                balance["Cajas_Est"] = (balance["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
-                tot_bd = pd.DataFrame([{
+            st.write("Balance Detallado por Lote y Edad (FIFO)")
+            balance["Cajas_Est"] = (balance["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
+            tot_bd = pd.DataFrame([{
                     "Lote": "TOTAL", "Color_Cinta": "-", "Anio": "", "Semana_Emb": "", "Edad": "",
                     "Embolsados": int(balance["Embolsados"].sum()),
                     "Cortados": int(balance["Cortados"].sum()),
                     "Saldo_En_Mata": int(balance["Saldo_En_Mata"].sum()),
                     "Cajas_Est": int(balance["Cajas_Est"].sum())
                 }])
-                balance_tot = pd.concat([balance, tot_bd], ignore_index=True)
-                st.dataframe(balance_tot.style.map(pintar_cinta_adm, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
+            balance_tot = pd.concat([balance, tot_bd], ignore_index=True)
+            st.dataframe(balance_tot.style.map(pintar_cinta_adm, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
 
 
 
