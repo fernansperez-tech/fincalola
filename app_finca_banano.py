@@ -366,17 +366,17 @@ elif rol == "Administrador":
         st.stop()
     tab1, tab2, tab3, tab4 = st.tabs(["Inventario y Edad", "Historial de Corte", "Subir CSV Tableta", "Corregir / Borrar"])
     df = cargar_datos()
-    with tab1:
+with tab1:
+        st.subheader("Filtros y Rendimiento por Lote y Empleado")
+        mostrar_reportes_embolse(df, prefijo="adm")
         st.divider()
-        st.subheader("Análisis de Rendimiento por Lote, Empleado y Día")
-    mostrar_reportes_embolse(df, prefijo="adm")
-    st.subheader("Proyección y Balance por Edad (86.1 Ha)")
-    col_r1, col_r2 = st.columns(2)
-    ratio = col_r1.number_input("Ratio (Cajas / Racimo):", value=1.15, min_value=0.50, max_value=2.50, step=0.05)
-    merma = col_r2.slider("Merma estimada (%):", 0, 20, 5)
-    if df.empty:
+        st.subheader("Proyección de Cosecha y Saldo en Mata (FIFO)")
+        col_r1, col_r2 = st.columns(2)
+        ratio = col_r1.number_input("Ratio (Cajas / Racimo):", value=1.15, min_value=0.50, max_value=2.50, step=0.05)
+        merma = col_r2.slider("Merma estimada (%):", 0, 20, 5)
+        if df.empty:
             st.warning("Aún no hay movimientos registrados.")
-    else:
+        else:
             ahora = datetime.now()
             semana_actual = ahora.isocalendar().week
             anio_actual = ahora.year
@@ -418,28 +418,10 @@ elif rol == "Administrador":
                     Embolsados=("Embolsados", "sum"), Cortados=("Cortados", "sum"), Saldo_En_Mata=("Saldo_En_Mata", "sum")
                 ).reset_index()
                 bal_edad["Cajas_Est"] = (bal_edad["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
-                st.dataframe(bal_edad, use_container_width=True)
+                st.dataframe(bal_edad, use_container_width=True, hide_index=True)
                 st.write("Balance Detallado por Lote y Edad (FIFO)")
                 balance["Cajas_Est"] = (balance["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
-                st.dataframe(balance, use_container_width=True)
-            st.write("### Rendimiento General por Lote (Racimos / Ha)")
-            res_lote_ha = pd.DataFrame({"Lote": LOTES})
-            res_lote_ha["Hectareas"] = res_lote_ha["Lote"].map(HECTAREAS_LOTE).fillna(0.0)
-            emb_por_lote = df[df["Racimos"] > 0].groupby("Lote")["Racimos"].sum().reset_index()
-            res_lote_ha = res_lote_ha.merge(emb_por_lote, on="Lote", how="left").fillna({"Racimos": 0})
-            res_lote_ha["Racimos"] = res_lote_ha["Racimos"].astype(int)
-            res_lote_ha["Racimos_Por_Ha"] = (res_lote_ha["Racimos"] / res_lote_ha["Hectareas"]).round(1)
-            estilo_ha = res_lote_ha.style.background_gradient(
-                subset=["Racimos_Por_Ha"], cmap="coolwarm_r"
-            ).format({"Hectareas": "{:.2f}", "Racimos_Por_Ha": "{:.1f}"})
-            st.dataframe(estilo_ha, use_container_width=True, hide_index=True)
-
-            st.write("### Resumen General por Empleado (Total Acumulado)")
-            solo_embolse = df[df["Racimos"] > 0]
-            resumen_emp = solo_embolse.groupby("Parcelero")["Racimos"].sum().reset_index().sort_values(by="Racimos", ascending=False)
-            st.dataframe(resumen_emp, use_container_width=True, hide_index=True)
-
-            
+                st.dataframe(balance, use_container_width=True, hide_index=True)
 
 
 
