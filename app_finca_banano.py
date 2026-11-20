@@ -182,7 +182,27 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     total_filtrado = int(df_res["Racimos"].sum())
     st.metric("Total General (Según Filtros)", f"{total_filtrado:,} racimos")
 
-    st.write("### 1. Rendimiento por Lote (Racimos / Ha)")
+        def pintar_cinta(val):
+        texto = str(val)
+        paleta = {
+            "Amarilla": ("#FFD700", "#000000"),
+            "Morada": ("#800080", "#FFFFFF"),
+            "Roja": ("#D32F2F", "#FFFFFF"),
+            "Café": ("#6D4C41", "#FFFFFF"),
+            "Negra": ("#212121", "#FFFFFF"),
+            "Verde": ("#2E7D32", "#FFFFFF"),
+            "Azul": ("#1565C0", "#FFFFFF"),
+            "Blanca": ("#F5F5F5", "#000000")
+        }
+        for nombre, (fondo, letra) in paleta.items():
+            if nombre in texto:
+                return f"background-color: {fondo}; color: {letra}; font-weight: bold;"
+        return ""
+
+    num_semanas = max(1, int(df_res["Semana"].nunique())) if not df_res.empty else 1
+    st.caption(f"Cálculo de Racimos/Ha promediado sobre **{num_semanas} semana(s)** activas en el filtro.")
+
+    st.write("### 1. Rendimiento por Lote (Racimos / Ha / Semana)")
     res_lote_ha = pd.DataFrame({"Lote": LOTES})
     res_lote_ha["Hectareas"] = res_lote_ha["Lote"].map(HECTAREAS_LOTE).fillna(0.0)
     emb_lote = df_res.groupby("Lote").agg(
@@ -191,15 +211,19 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     ).reset_index()
     res_lote_ha = res_lote_ha.merge(emb_lote, on="Lote", how="left").fillna({"Cintas": "-", "Racimos": 0})
     res_lote_ha["Racimos"] = res_lote_ha["Racimos"].astype(int)
-    res_lote_ha["Racimos_Por_Ha"] = res_lote_ha.apply(lambda r: round(r["Racimos"] / r["Hectareas"], 1) if r["Hectareas"] > 0 else 0.0, axis=1)
+    res_lote_ha["Racimos_Por_Ha"] = res_lote_ha.apply(
+        lambda r: round(r["Racimos"] / (r["Hectareas"] * num_semanas), 1) if r["Hectareas"] > 0 else 0.0, axis=1
+    )
     tot_ha = round(res_lote_ha["Hectareas"].sum(), 2)
     tot_rac_lote = int(res_lote_ha["Racimos"].sum())
-    prom_ha_total = round(tot_rac_lote / tot_ha, 1) if tot_ha > 0 else 0.0
+    prom_ha_total = round(tot_rac_lote / (tot_ha * num_semanas), 1) if tot_ha > 0 else 0.0
     fila_tot_1 = pd.DataFrame([{"Lote": "TOTAL", "Hectareas": tot_ha, "Cintas": "-", "Racimos": tot_rac_lote, "Racimos_Por_Ha": prom_ha_total}])
     t1_final = pd.concat([res_lote_ha, fila_tot_1], ignore_index=True)
     filas_1 = t1_final.index < len(res_lote_ha)
     st.dataframe(
-        t1_final.style.background_gradient(subset=(filas_1, ["Racimos_Por_Ha"]), cmap="coolwarm_r").format({"Hectareas": "{:.2f}", "Racimos_Por_Ha": "{:.1f}"}),
+        t1_final.style.background_gradient(subset=(filas_1, ["Racimos_Por_Ha"]), cmap="coolwarm_r")
+                      .map(pintar_cinta, subset=["Cintas"])
+                      .format({"Hectareas": "{:.2f}", "Racimos_Por_Ha": "{:.1f}"}),
         use_container_width=True, hide_index=True
     )
 
@@ -218,7 +242,8 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
         t2_final = pd.concat([rank_emp, fila_tot_2], ignore_index=True)
         filas_2 = t2_final.index < len(rank_emp)
         st.dataframe(
-            t2_final.style.background_gradient(subset=(filas_2, ["Total_Racimos", "Promedio_Por_Dia"]), cmap="coolwarm_r").format({"Promedio_Por_Dia": "{:.1f}"}),
+            t2_final.style.background_gradient(subset=(filas_2, ["Total_Racimos", "Promedio_Por_Dia"]), cmap="coolwarm_r")
+                          .format({"Promedio_Por_Dia": "{:.1f}"}),
             use_container_width=True, hide_index=True
         )
 
@@ -235,10 +260,10 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
         t3_final = pd.concat([por_dia, fila_tot_3], ignore_index=True)
         filas_3 = t3_final.index < len(por_dia)
         st.dataframe(
-            t3_final.style.background_gradient(subset=(filas_3, ["Total_Dia"]), cmap="coolwarm_r"),
+            t3_final.style.background_gradient(subset=(filas_3, ["Total_Dia"]), cmap="coolwarm_r")
+                          .map(pintar_cinta, subset=["Cintas"]),
             use_container_width=True, hide_index=True
         )
-
 
 
 st.title("BANANERA LA LOLA S.A")
