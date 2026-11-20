@@ -184,7 +184,7 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     total_filtrado = int(df_res["Racimos"].sum())
     st.metric("Total General (Según Filtros)", f"{total_filtrado:,} racimos")
 
-        def formatear_cintas_visual(texto_cintas):
+    def formatear_cintas_visual(texto_cintas):
         iconos = {
             "Amarilla": "🟡 Amarilla", "Morada": "🟣 Morada",
             "Roja": "🔴 Roja", "Café": "🟤 Café",
