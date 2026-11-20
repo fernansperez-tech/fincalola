@@ -285,24 +285,28 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
             use_container_width=True, hide_index=True
         )
 
-    st.write("### 3. Embolse Consolidado por Día y Empleado")
-    if not df_res.empty:
-        por_dia = df_res.groupby(["Fecha", "Semana", "Parcelero"]).agg(
-            Total_Dia=("Racimos", "sum"),
-            Lotes=("Lote", lambda x: ", ".join(sorted(set(x)))),
-            Cintas=("Color_Cinta", lambda x: ", ".join(sorted(set(x))))
-        ).reset_index()
-        por_dia = por_dia.sort_values(by="Total_Dia", ascending=False).reset_index(drop=True)
-        por_dia["Cintas"] = por_dia["Cintas"].apply(formatear_cintas_visual)
-        tot_dia_sum = int(por_dia["Total_Dia"].sum())
-        fila_tot_3 = pd.DataFrame([{"Fecha": "TOTAL", "Semana": "", "Parcelero": "", "Total_Dia": tot_dia_sum, "Lotes": "-", "Cintas": "-"}])
-        t3_final = pd.concat([por_dia, fila_tot_3], ignore_index=True)
-        filas_3 = t3_final.index < len(por_dia)
-        st.dataframe(
-            t3_final.style.background_gradient(subset=(filas_3, ["Total_Dia"]), cmap="coolwarm_r")
-                          .map(pintar_cinta, subset=["Cintas"]),
-            use_container_width=True, hide_index=True
-        )
+        st.write("### 4. Balance de Saldo en Mata por Lote y Cinta (Descontando Cortes)")
+    emb_lc = df_res.groupby(["Lote", "Color_Cinta"])["Racimos"].sum().reset_index().rename(columns={"Racimos": "Embolsados"})
+    if not df.empty:
+        cort_lc = df[df["Racimos"] < 0].groupby(["Lote", "Color_Cinta"])["Racimos"].sum().abs().reset_index().rename(columns={"Racimos": "Cortados"})
+    else:
+        cort_lc = pd.DataFrame(columns=["Lote", "Color_Cinta", "Cortados"])
+    bal_lc = emb_lc.merge(cort_lc, on=["Lote", "Color_Cinta"], how="outer").fillna(0)
+    bal_lc["Embolsados"] = bal_lc["Embolsados"].astype(int)
+    bal_lc["Cortados"] = bal_lc["Cortados"].astype(int)
+    bal_lc["Saldo_En_Mata"] = bal_lc["Embolsados"] - bal_lc["Cortados"]
+    bal_lc = bal_lc.sort_values(by=["Lote", "Color_Cinta"]).reset_index(drop=True)
+    if not bal_lc.empty:
+        fila_tot_4 = pd.DataFrame([{
+            "Lote": "TOTAL",
+            "Color_Cinta": "-",
+            "Embolsados": int(bal_lc["Embolsados"].sum()),
+            "Cortados": int(bal_lc["Cortados"].sum()),
+            "Saldo_En_Mata": int(bal_lc["Saldo_En_Mata"].sum())
+        }])
+        t4_final = pd.concat([bal_lc, fila_tot_4], ignore_index=True)
+        st.dataframe(t4_final.style.map(pintar_cinta, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
+
 
 
 st.title("BANANERA LA LOLA S.A")
@@ -513,16 +517,33 @@ elif rol == "Administrador":
                             return f"background-color: {fondo}; color: {letra}; font-weight: bold;"
                     return ""
 
-            st.write("Balance por Color y Edad (Toda la Finca)")
-            bal_edad = balance.groupby(["Color_Cinta", "Anio", "Semana_Emb", "Edad"]).agg(
-                Embolsados=("Embolsados", "sum"), Cortados=("Cortados", "sum"), Saldo_En_Mata=("Saldo_En_Mata", "sum")
+                st.write("Balance por Color y Edad (Toda la Finca)")
+                bal_edad = balance.groupby(["Color_Cinta", "Anio", "Semana_Emb", "Edad"]).agg(
+                    Embolsados=("Embolsados", "sum"), Cortados=("Cortados", "sum"), Saldo_En_Mata=("Saldo_En_Mata", "sum")
                 ).reset_index()
-            bal_edad["Cajas_Est"] = (bal_edad["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
-            st.dataframe(bal_edad.style.map(pintar_cinta_adm, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
+                bal_edad["Cajas_Est"] = (bal_edad["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
+                tot_be = pd.DataFrame([{
+                    "Color_Cinta": "TOTAL", "Anio": "", "Semana_Emb": "", "Edad": "",
+                    "Embolsados": int(bal_edad["Embolsados"].sum()),
+                    "Cortados": int(bal_edad["Cortados"].sum()),
+                    "Saldo_En_Mata": int(bal_edad["Saldo_En_Mata"].sum()),
+                    "Cajas_Est": int(bal_edad["Cajas_Est"].sum())
+                }])
+                bal_edad_tot = pd.concat([bal_edad, tot_be], ignore_index=True)
+                st.dataframe(bal_edad_tot.style.map(pintar_cinta_adm, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
 
-            st.write("Balance Detallado por Lote y Edad (FIFO)")
-            balance["Cajas_Est"] = (balance["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
-            st.dataframe(balance.style.map(pintar_cinta_adm, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
+                st.write("Balance Detallado por Lote y Edad (FIFO)")
+                balance["Cajas_Est"] = (balance["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
+                tot_bd = pd.DataFrame([{
+                    "Lote": "TOTAL", "Color_Cinta": "-", "Anio": "", "Semana_Emb": "", "Edad": "",
+                    "Embolsados": int(balance["Embolsados"].sum()),
+                    "Cortados": int(balance["Cortados"].sum()),
+                    "Saldo_En_Mata": int(balance["Saldo_En_Mata"].sum()),
+                    "Cajas_Est": int(balance["Cajas_Est"].sum())
+                }])
+                balance_tot = pd.concat([balance, tot_bd], ignore_index=True)
+                st.dataframe(balance_tot.style.map(pintar_cinta_adm, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
+
 
 
     with tab2:
@@ -554,6 +575,12 @@ elif rol == "Administrador":
             t1.metric("Total Racimos Cortados (Filtro)", f"{total_cortados:,} racimos")
             t2.metric("Cajas Equivalentes (Según Ratio)", f"{cajas_cortadas:,.0f} cajas")
             tabla_mostrar = df_filtrado[["Fecha", "Anio", "Semana", "Lote", "Color_Cinta", "Racimos_Cortados"]].sort_values(by="Fecha", ascending=False)
+            st.write("### Resumen de Cintas Cortadas (Según Filtros)")
+            res_cintas_corte = df_filtrado.groupby("Color_Cinta")["Racimos_Cortados"].sum().reset_index().sort_values(by="Racimos_Cortados", ascending=False)
+            fila_tot_cc = pd.DataFrame([{"Color_Cinta": "TOTAL", "Racimos_Cortados": total_cortados}])
+            st.dataframe(pd.concat([res_cintas_corte, fila_tot_cc], ignore_index=True), use_container_width=True, hide_index=True)
+            st.write("### Detalle de Cortes por Fecha y Lote")
+
             fila_tot_corte = pd.DataFrame([{
                 "Fecha": "TOTAL", "Anio": "", "Semana": "",
                 "Lote": "", "Color_Cinta": "", "Racimos_Cortados": total_cortados
