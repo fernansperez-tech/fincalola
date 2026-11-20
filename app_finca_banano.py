@@ -427,15 +427,33 @@ elif rol == "Administrador":
                 m1, m2 = st.columns(2)
                 m1.metric("Saldo Real en Mata", f"{total_racimos:,} racimos")
                 m2.metric("Cajas Proyectadas (20 kg)", f"{cajas_est:,.0f} cajas")
+                                def pintar_cinta_adm(val):
+                    texto = str(val)
+                    paleta = {
+                        "Amarilla": ("#FFD700", "#000000"),
+                        "Morada": ("#800080", "#FFFFFF"),
+                        "Roja": ("#D32F2F", "#FFFFFF"),
+                        "Café": ("#6D4C41", "#FFFFFF"),
+                        "Negra": ("#212121", "#FFFFFF"),
+                        "Verde": ("#2E7D32", "#FFFFFF"),
+                        "Azul": ("#1565C0", "#FFFFFF"),
+                        "Blanca": ("#F5F5F5", "#000000")
+                    }
+                    for nombre, (fondo, letra) in paleta.items():
+                        if nombre in texto:
+                            return f"background-color: {fondo}; color: {letra}; font-weight: bold;"
+                    return ""
+
                 st.write("Balance por Color y Edad (Toda la Finca)")
                 bal_edad = balance.groupby(["Color_Cinta", "Anio", "Semana_Emb", "Edad"]).agg(
                     Embolsados=("Embolsados", "sum"), Cortados=("Cortados", "sum"), Saldo_En_Mata=("Saldo_En_Mata", "sum")
                 ).reset_index()
                 bal_edad["Cajas_Est"] = (bal_edad["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
-                st.dataframe(bal_edad, use_container_width=True, hide_index=True)
+                st.dataframe(bal_edad.style.map(pintar_cinta_adm, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
+
                 st.write("Balance Detallado por Lote y Edad (FIFO)")
                 balance["Cajas_Est"] = (balance["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
-                st.dataframe(balance, use_container_width=True, hide_index=True)
+                st.dataframe(balance.style.map(pintar_cinta_adm, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
 
 
     with tab2:
