@@ -98,6 +98,23 @@ def actualizar_fila_gsheet(num_fila_sheet, nueva_fila_lista):
 def borrar_fila_gsheet(num_fila_sheet):
     ws = conectar_hoja()
     ws.delete_rows(int(num_fila_sheet))
+def borrar_multiples_filas_gsheet(lista_filas_sheet):
+    ws = conectar_hoja()
+    peticiones = []
+    for num_f in sorted(lista_filas_sheet, reverse=True):
+        idx_cero = int(num_f) - 1
+        peticiones.append({
+            "deleteDimension": {
+                "range": {
+                    "sheetId": ws.id,
+                    "dimension": "ROWS",
+                    "startIndex": idx_cero,
+                    "endIndex": idx_cero + 1
+                }
+            }
+        })
+    if peticiones:
+        ws.spreadsheet.batch_update({"requests": peticiones})
 
 def procesar_csv_tableta(df_tab, col_lote, col_color, col_fecha=None):
     ahora = datetime.now()
@@ -679,12 +696,14 @@ with tab4:
                     rac_dia_borrar = int(cortes_df[cortes_df["Fecha_Limpia"] == dia_borrar]["Racimos"].abs().sum())
                     st.write(f"Se eliminarán **{len(filas_a_borrar)} registros** ({rac_dia_borrar:,} racimos cortados) del día **{dia_borrar}**.")
                     if st.button(f"🚨 Eliminar toda la cosecha del {dia_borrar}", type="primary", key="btn_confirm_del_dia"):
-                        for num_f in filas_a_borrar:
-                            borrar_fila_gsheet(int(num_f))
-                            time.sleep(0.4)
-                        st.success(f"Cosecha del {dia_borrar} eliminada por completo.")
-                        time.sleep(1.5)
-                        st.rerun()
+                        try:
+                            borrar_multiples_filas_gsheet(filas_a_borrar)
+                            st.success(f"Cosecha del {dia_borrar} eliminada por completo en 1 segundo.")
+                            time.sleep(1.5)
+                            st.rerun()
+                        except Exception as e:
+                            st.error(f"Error al eliminar cosecha: {repr(e)}")
+
 
         if st.button("🔄 Recargar lista desde Google Sheets", key="btn_recargar_edit"):
             with st.spinner("Sincronizando con Google Sheets..."):
