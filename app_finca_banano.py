@@ -389,7 +389,7 @@ elif rol == "Administrador":
                 st.dataframe(balance, use_container_width=True, hide_index=True)
 
 
-with tab2:
+    with tab2:
         st.subheader("Buscador y Totales de Corte")
         solo_cortes = df[df["Racimos"] < 0].copy() if not df.empty else pd.DataFrame()
         if solo_cortes.empty:
