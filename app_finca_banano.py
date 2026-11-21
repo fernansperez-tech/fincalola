@@ -506,7 +506,7 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
             }])
             bal_edad_tot = pd.concat([bal_edad, tot_be], ignore_index=True)
             st.dataframe(bal_edad_tot.style.map(pintar_cinta_proy, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
-                        st.divider()
+            st.divider()
             st.write("### 📅 Simulador Completo de Cosecha (12 Semanas - Calendario ISO Real)")
             st.caption("Edita los porcentajes de corte directamente en la tabla. Cada cinta envejece y pasa su saldo remanente (detallado por color y edad) a la semana siguiente.")
 
