@@ -630,7 +630,7 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                 "Cajas_Proyectadas": int(df_res_semanal["Cajas_Proyectadas"].sum())
             }])
             tabla_ps_final = pd.concat([df_res_semanal, fila_tot_ps], ignore_index=True)
-            use_container_width=True, hide_index=True
+            
             
 
             if filas_graf_ps:
