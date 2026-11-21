@@ -671,8 +671,15 @@ elif rol == "Administrador":
             m_c3.metric("Prom. Garrucha / Rac", f"{prom_tara_tot:.2f} kg")
             m_c4.metric("Prom. Neto / Rac", f"{prom_neto_tot:.2f} kg")
 
-            st.write("### Matriz de Cosecha por Lote, Cinta (Edad) y Pesos Promedio")
-            df_filtrado["Cinta_Edad"] = df_filtrado["Color_Cinta"] + " (" + df_filtrado["Edad_Texto"] + ")"
+                        st.write("### Matriz de Cosecha por Lote, Cinta (Edad) y Pesos Promedio")
+            ICONOS_CINTA_COL = {
+                "Amarilla": "🟡 Amarilla", "Morada": "🟣 Morada",
+                "Roja": "🔴 Roja", "Cafe": "🟤 Cafe",
+                "Negra": "⚫ Negra", "Verde": "🟢 Verde",
+                "Azul": "🔵 Azul", "Blanca": "⚪ Blanca"
+            }
+            df_filtrado["Cinta_Visual"] = df_filtrado["Color_Cinta"].map(ICONOS_CINTA_COL).fillna(df_filtrado["Color_Cinta"])
+            df_filtrado["Cinta_Edad"] = df_filtrado["Cinta_Visual"] + " (" + df_filtrado["Edad_Texto"] + ")"
             piv_corte = df_filtrado.pivot_table(index="Lote", columns="Cinta_Edad", values="Racimos_Cortados", aggfunc="sum", fill_value=0)
             res_pesos_lote = df_filtrado.groupby("Lote").agg(
                 Total_Racimos=("Racimos_Cortados", "sum"),
@@ -702,36 +709,13 @@ elif rol == "Administrador":
             fila_tot_mc["Prom_Garrucha_kg"] = prom_tara_tot
             fila_tot_mc["Prom_Neto_kg"] = prom_neto_tot
 
-            def estilo_col_cinta_corte(col):
-                nombre_col = str(col.name)
-                paleta_col = {
-                    "Amarilla": ("#FFD700", "#000000"),
-                    "Morada": ("#800080", "#FFFFFF"),
-                    "Roja": ("#D32F2F", "#FFFFFF"),
-                    "Cafe": ("#6D4C41", "#FFFFFF"),
-                    "Negra": ("#212121", "#FFFFFF"),
-                    "Verde": ("#2E7D32", "#FFFFFF"),
-                    "Azul": ("#1565C0", "#FFFFFF"),
-                    "Blanca": ("#F5F5F5", "#000000")
-                }
-                for c_nom, (bg, fg) in paleta_col.items():
-                    if nombre_col.startswith(c_nom):
-                        return [
-                            f"background-color: {bg}; color: {fg}; font-weight: bold;"
-                            if i < len(col) - 1 else "font-weight: bold;"
-                            for i in range(len(col))
-                        ]
-                return ["" for _ in col]
-
             mat_corte_final = pd.concat([mat_corte, pd.DataFrame([fila_tot_mc])], ignore_index=True)
             filas_mc = mat_corte_final.index < len(mat_corte)
             st.dataframe(
-                mat_corte_final.style.apply(estilo_col_cinta_corte, axis=0)
-                                     .background_gradient(subset=(filas_mc, ["Prom_Neto_kg"]), cmap="coolwarm_r")
+                mat_corte_final.style.background_gradient(subset=(filas_mc, ["Prom_Neto_kg"]), cmap="coolwarm_r")
                                      .format({"Prom_Bruto_kg": "{:.2f}", "Prom_Garrucha_kg": "{:.2f}", "Prom_Neto_kg": "{:.2f}"}),
                 use_container_width=True, hide_index=True
             )
-
 
             csv_descarga = mat_corte_final.to_csv(index=False).encode("utf-8")
             st.download_button("Descargar Matriz de Corte en Excel (CSV)", data=csv_descarga, file_name="matriz_cortes_promedios.csv", mime="text/csv")
