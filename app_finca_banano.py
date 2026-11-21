@@ -567,9 +567,9 @@ elif rol == "Administrador":
             st.dataframe(bal_edad_tot.style.map(pintar_cinta_adm, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
 
             st.write("Matriz de Cajas Proyectadas por Lote, Cinta y Edad")
-                balance["Etiqueta"] = balance["Color_Cinta"] + " (" + balance["Edad"] + ")"
-                balance["Cajas_Est"] = (balance["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
-                piv_bal = balance.pivot_table(index="Lote", columns="Etiqueta", values="Saldo_En_Mata", aggfunc="sum", fill_value=0)
+            balance["Etiqueta"] = balance["Color_Cinta"] + " (" + balance["Edad"] + ")"
+            balance["Cajas_Est"] = (balance["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
+            piv_bal = balance.pivot_table(index="Lote", columns="Etiqueta", values="Saldo_En_Mata", aggfunc="sum", fill_value=0)
                 tot_cajas_lote = balance.groupby("Lote")["Cajas_Est"].sum()
                 mat_bal = pd.DataFrame({"Lote": LOTES})
                 for col_b in piv_bal.columns:
