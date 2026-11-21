@@ -399,64 +399,65 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
 
     df_fifo_m = pd.DataFrame(reg_fifo)
 
-    st.subheader("1. Matriz de Saldo en Mata por Lote, Cinta y Edad")
-    solo_pos_m = df_fifo_m[df_fifo_m["Saldo"] > 0].copy() if not df_fifo_m.empty else pd.DataFrame()
-    if solo_pos_m.empty:
-        st.info("No hay saldos positivos en mata actualmente.")
-    else:
-        edades_m_disp = [f"{e} sem" for e in sorted(solo_pos_m["Edad_Num"].unique().tolist(), reverse=True)]
-        sel_edad_mata = st.multiselect("Filtrar Saldo en Mata por Edad (vacío = todas):", edades_m_disp, key=f"{prefijo}_edad_mata")
-        if sel_edad_mata:
-            solo_pos_m = solo_pos_m[solo_pos_m["Edad_Txt"].isin(sel_edad_mata)]
-
-        if not solo_pos_m.empty:
-            cols_ordenadas = solo_pos_m.sort_values(by=["Orden_Ed", "Etiqueta"])["Etiqueta"].unique().tolist()
-            piv_saldo = solo_pos_m.pivot_table(index="Lote", columns="Etiqueta", values="Saldo", aggfunc="sum", fill_value=0)
-
-            matriz_final = pd.DataFrame({"Lote": LOTES})
-            for col_et in cols_ordenadas:
-                matriz_final[col_et] = matriz_final["Lote"].map(piv_saldo[col_et]).fillna(0).astype(int)
-            matriz_final["Saldo_En_Mata"] = matriz_final[cols_ordenadas].sum(axis=1).astype(int)
-
-            fila_tot_m = {"Lote": "TOTAL"}
-            for col_num in cols_ordenadas + ["Saldo_En_Mata"]:
-                fila_tot_m[col_num] = int(matriz_final[col_num].sum())
-            matriz_con_tot = pd.concat([matriz_final, pd.DataFrame([fila_tot_m])], ignore_index=True)
-            st.dataframe(matriz_con_tot, use_container_width=True, hide_index=True)
+        if not es_admin:
+        st.subheader("1. Matriz de Saldo en Mata por Lote, Cinta y Edad")
+        solo_pos_m = df_fifo_m[df_fifo_m["Saldo"] > 0].copy() if not df_fifo_m.empty else pd.DataFrame()
+        if solo_pos_m.empty:
+            st.info("No hay saldos positivos en mata actualmente.")
         else:
-            st.info("No hay saldo en mata para las edades seleccionadas.")
+            edades_m_disp = [f"{e} sem" for e in sorted(solo_pos_m["Edad_Num"].unique().tolist(), reverse=True)]
+            sel_edad_mata = st.multiselect("Filtrar Saldo en Mata por Edad (vacío = todas):", edades_m_disp, key=f"{prefijo}_edad_mata")
+            if sel_edad_mata:
+                solo_pos_m = solo_pos_m[solo_pos_m["Edad_Txt"].isin(sel_edad_mata)]
+
+            if not solo_pos_m.empty:
+                cols_ordenadas = solo_pos_m.sort_values(by=["Orden_Ed", "Etiqueta"])["Etiqueta"].unique().tolist()
+                piv_saldo = solo_pos_m.pivot_table(index="Lote", columns="Etiqueta", values="Saldo", aggfunc="sum", fill_value=0)
+
+                matriz_final = pd.DataFrame({"Lote": LOTES})
+                for col_et in cols_ordenadas:
+                    matriz_final[col_et] = matriz_final["Lote"].map(piv_saldo[col_et]).fillna(0).astype(int)
+                matriz_final["Saldo_En_Mata"] = matriz_final[cols_ordenadas].sum(axis=1).astype(int)
+
+                fila_tot_m = {"Lote": "TOTAL"}
+                for col_num in cols_ordenadas + ["Saldo_En_Mata"]:
+                    fila_tot_m[col_num] = int(matriz_final[col_num].sum())
+                matriz_con_tot = pd.concat([matriz_final, pd.DataFrame([fila_tot_m])], ignore_index=True)
+                st.dataframe(matriz_con_tot, use_container_width=True, hide_index=True)
+            else:
+                st.info("No hay saldo en mata para las edades seleccionadas.")
 
         st.subheader("2. Gráfica de Saldos en Mata por Lote y Color de Cinta")
-    if not solo_pos_m.empty:
-        import altair as alt
-        escala_cintas_m = alt.Scale(
-            domain=["Amarilla", "Morada", "Roja", "Cafe", "Negra", "Verde", "Azul", "Blanca"],
-            range=["#FFD700", "#800080", "#D32F2F", "#6D4C41", "#212121", "#2E7D32", "#1565C0", "#E0E0E0"]
-        )
-        df_sg_plot = solo_pos_m.groupby(["Lote", "Color_Cinta"])["Saldo"].sum().reset_index()
-        bar_s = alt.Chart(df_sg_plot).mark_bar().encode(
-            x=alt.X("Lote:N", sort=LOTES, title="Lote"),
-            y=alt.Y("Saldo:Q", title="Saldo en Mata (Racimos)"),
-            color=alt.Color("Color_Cinta:N", scale=escala_cintas_m, title="Cinta"),
-            tooltip=["Lote", "Color_Cinta", "Saldo"]
-        )
-        txt_s_seg = alt.Chart(df_sg_plot).mark_text(baseline="middle", fontWeight="bold", fontSize=10).encode(
-            x=alt.X("Lote:N", sort=LOTES),
-            y=alt.Y("Saldo:Q", stack="zero", bandPosition=0.5),
-            detail="Color_Cinta:N",
-            color=alt.condition(
-                alt.FieldOneOfPredicate(field="Color_Cinta", oneOf=["Amarilla", "Blanca"]),
-                alt.value("#000000"),
-                alt.value("#FFFFFF")
-            ),
-            text=alt.Text("Saldo:Q", format=",.0f")
-        )
-        txt_s_tot = alt.Chart(df_sg_plot).mark_text(dy=-7, fontWeight="bold", fontSize=11, color="#FFFFFF").encode(
-            x=alt.X("Lote:N", sort=LOTES),
-            y=alt.Y("sum(Saldo):Q"),
-            text=alt.Text("sum(Saldo):Q", format=",.0f")
-        )
-        st.altair_chart((bar_s + txt_s_seg + txt_s_tot).properties(height=360), use_container_width=True)
+        if not solo_pos_m.empty:
+            import altair as alt
+            escala_cintas_m = alt.Scale(
+                domain=["Amarilla", "Morada", "Roja", "Cafe", "Negra", "Verde", "Azul", "Blanca"],
+                range=["#FFD700", "#800080", "#D32F2F", "#6D4C41", "#212121", "#2E7D32", "#1565C0", "#E0E0E0"]
+            )
+            df_sg_plot = solo_pos_m.groupby(["Lote", "Color_Cinta"])["Saldo"].sum().reset_index()
+            bar_s = alt.Chart(df_sg_plot).mark_bar().encode(
+                x=alt.X("Lote:N", sort=LOTES, title="Lote"),
+                y=alt.Y("Saldo:Q", title="Saldo en Mata (Racimos)"),
+                color=alt.Color("Color_Cinta:N", scale=escala_cintas_m, title="Cinta"),
+                tooltip=["Lote", "Color_Cinta", "Saldo"]
+            )
+            txt_s_seg = alt.Chart(df_sg_plot).mark_text(baseline="middle", fontWeight="bold", fontSize=10).encode(
+                x=alt.X("Lote:N", sort=LOTES),
+                y=alt.Y("Saldo:Q", stack="zero", bandPosition=0.5),
+                detail="Color_Cinta:N",
+                color=alt.condition(
+                    alt.FieldOneOfPredicate(field="Color_Cinta", oneOf=["Amarilla", "Blanca"]),
+                    alt.value("#000000"),
+                    alt.value("#FFFFFF")
+                ),
+                text=alt.Text("Saldo:Q", format=",.0f")
+            )
+            txt_s_tot = alt.Chart(df_sg_plot).mark_text(dy=-7, fontWeight="bold", fontSize=11, color="#FFFFFF").encode(
+                x=alt.X("Lote:N", sort=LOTES),
+                y=alt.Y("sum(Saldo):Q"),
+                text=alt.Text("sum(Saldo):Q", format=",.0f")
+            )
+            st.altair_chart((bar_s + txt_s_seg + txt_s_tot).properties(height=360), use_container_width=True)
 
     if es_admin:
         st.divider()
@@ -641,8 +642,9 @@ elif rol == "Administrador":
             st.error("Clave incorrecta.")
         st.stop()
     tab_proy, tab2, tab3, tab4, tab5 = st.tabs([
-        "📦 Saldos y Proyección", "🔪 Historial de Corte",
+        "📈 Proyección de Cosecha", "🔪 Historial de Corte",
         "📥 Subir CSV Tableta", "✏️ Corregir / Borrar", "📊 Gráficos"
+    
     ])
     df = cargar_datos()
     with tab_proy:
