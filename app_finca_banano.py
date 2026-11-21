@@ -557,7 +557,7 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                 inv_sim = solo_positivos.groupby(["Color_Cinta", "Anio", "Semana_Emb", "Edad_Num"])["Saldo"].sum().reset_index()
                 inv_sim["Saldo_Restante"] = inv_sim["Saldo"].astype(float)
 
-                                mapa_guardado = {}
+                mapa_guardado = {}
                 if not df_guardada.empty and "Semana_Proy" in df_guardada.columns:
                     for _, rg in df_guardada.iterrows():
                         mapa_guardado[str(rg["Semana_Proy"])] = {
