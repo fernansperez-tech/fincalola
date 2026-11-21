@@ -779,7 +779,8 @@ with tab3:
             if col_lote == col_color or (col_fecha != "Usar fecha de hoy" and col_fecha in [col_lote, col_color]):
                 st.info("👆 Selecciona columnas diferentes para **Lote**, **Color** y **Fecha** para generar la vista previa.")
             else:
-                descuentos = procesar_csv_tableta(df_tab, col_lote, col_color, col_fecha)
+                descuentos = procesar_csv_tableta(df_tab, col_lote, col_color, col_fecha, col_bruto, col_tara, col_vastago)
+
                 if descuentos:
                     st.write("### Vista Previa: Qué va a descontar y de qué Edad (FIFO)")
                     ahora_sim = datetime.now()
