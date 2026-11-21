@@ -1446,7 +1446,7 @@ elif rol == "Administrador":
 
                 if not emb_g.empty:
                     st.write("#### 2. Racimos Embolsados")
-                                        grp_emb = emb_g.groupby(["Lote", "Color_Cinta"])["Racimos"].sum().reset_index()
+                    grp_emb = emb_g.groupby(["Lote", "Color_Cinta"])["Racimos"].sum().reset_index()
                     escala_emb_exacta = alt.Scale(
                         domain=["Amarilla", "Morada", "Roja", "Cafe", "Café", "Negra", "Verde", "Azul", "Blanca"],
                         range=["#FFD700", "#9C27B0", "#E53935", "#8B4513", "#8B4513", "#111111", "#43A047", "#1E88E5", "#F5F5F5"]
