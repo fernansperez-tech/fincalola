@@ -572,14 +572,14 @@ elif rol == "Administrador":
             piv_bal = balance.pivot_table(index="Lote", columns="Etiqueta", values="Saldo_En_Mata", aggfunc="sum", fill_value=0)
             tot_cajas_lote = balance.groupby("Lote")["Cajas_Est"].sum()
             mat_bal = pd.DataFrame({"Lote": LOTES})
-                for col_b in piv_bal.columns:
+            for col_b in piv_bal.columns:
                     mat_bal[col_b] = mat_bal["Lote"].map(piv_bal[col_b]).fillna(0).astype(int)
                 mat_bal["Cajas_Proy"] = mat_bal["Lote"].map(tot_cajas_lote).fillna(0).astype(int)
                 fila_tot_mb = {"Lote": "TOTAL"}
-                for c_mb in mat_bal.columns:
+            for c_mb in mat_bal.columns:
                     if c_mb != "Lote":
                         fila_tot_mb[c_mb] = int(mat_bal[c_mb].sum())
-                st.dataframe(pd.concat([mat_bal, pd.DataFrame([fila_tot_mb])], ignore_index=True), use_container_width=True, hide_index=True)
+            st.dataframe(pd.concat([mat_bal, pd.DataFrame([fila_tot_mb])], ignore_index=True), use_container_width=True, hide_index=True)
 
 
 
