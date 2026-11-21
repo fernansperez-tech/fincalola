@@ -476,11 +476,9 @@ elif rol == "Administrador":
         if clave != "":
             st.error("Clave incorrecta.")
         st.stop()
-        tab1, tab2, tab3, tab4, tab5 = st.tabs(["Inventario y Edad", "Historial de Corte", "Subir CSV Tableta", "Corregir / Borrar", "Gráficos"])
-
-        df = cargar_datos()
-    
-with tab1:
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["Inventario y Edad", "Historial de Corte", "Subir CSV Tableta", "Corregir / Borrar", "Gráficos"])
+    df = cargar_datos()
+    with tab1:
     
         st.subheader("Filtros y Rendimiento por Lote y Empleado")
         mostrar_reportes_embolse(df, prefijo="adm")
