@@ -305,18 +305,37 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
                           .format({"Promedio_Por_Dia": "{:.1f}"}),
             use_container_width=True, hide_index=True
         )
-        st.write("### 3. Matriz de Embolse por Empleado y Lote (Según Filtros)")
+        st.write("### 3. Matriz de Embolse por Empleado y Lote (Con Fecha en Cada Celda)")
     if not df_res.empty:
-        piv_emp = df_res.pivot_table(index="Parcelero", columns="Lote", values="Racimos", aggfunc="sum", fill_value=0)
-        lotes_activos = [lt for lt in LOTES if lt in piv_emp.columns]
-        mat_emp = piv_emp[lotes_activos].copy()
-        mat_emp["TOTAL"] = mat_emp.sum(axis=1)
-        mat_emp = mat_emp.sort_values(by="TOTAL", ascending=False).reset_index()
+        piv_num = df_res.pivot_table(index="Parcelero", columns="Lote", values="Racimos", aggfunc="sum", fill_value=0)
+        lotes_activos = [lt for lt in LOTES if lt in piv_num.columns]
+        tot_por_emp = piv_num[lotes_activos].sum(axis=1).sort_values(ascending=False)
+        orden_emps = tot_por_emp.index.tolist()
+
+        df_det_celda = df_res.copy()
+        df_det_celda["Dia_Corto"] = pd.to_datetime(df_det_celda["Fecha"], errors="coerce").dt.strftime("%d/%m").fillna(df_det_celda["Fecha"].str[5:])
+        grp_celda = df_det_celda.groupby(["Parcelero", "Lote", "Dia_Corto"])["Racimos"].sum().reset_index()
+
+        celdas_texto = {}
+        for (emp_k, lt_k), sub_g in grp_celda.groupby(["Parcelero", "Lote"]):
+            partes = [f"{int(r['Racimos'])} ({r['Dia_Corto']})" for _, r in sub_g.iterrows()]
+            celdas_texto[(emp_k, lt_k)] = " + ".join(partes)
+
+        filas_mat3 = []
+        for emp_n in orden_emps:
+            fila_d = {"Parcelero": emp_n}
+            for lt_n in lotes_activos:
+                fila_d[lt_n] = celdas_texto.get((emp_n, lt_n), "0")
+            fila_d["TOTAL"] = int(tot_por_emp[emp_n])
+            filas_mat3.append(fila_d)
+
         fila_tot_emp = {"Parcelero": "TOTAL"}
-        for col_e in lotes_activos + ["TOTAL"]:
-            fila_tot_emp[col_e] = int(mat_emp[col_e].sum())
-        mat_emp_final = pd.concat([mat_emp, pd.DataFrame([fila_tot_emp])], ignore_index=True)
-        filas_me = mat_emp_final.index < len(mat_emp)
+        for lt_n in lotes_activos:
+            fila_tot_emp[lt_n] = int(piv_num[lt_n].sum())
+        fila_tot_emp["TOTAL"] = int(tot_por_emp.sum())
+
+        mat_emp_final = pd.concat([pd.DataFrame(filas_mat3), pd.DataFrame([fila_tot_emp])], ignore_index=True)
+        filas_me = mat_emp_final.index < len(filas_mat3)
         st.dataframe(
             mat_emp_final.style.background_gradient(subset=(filas_me, ["TOTAL"]), cmap="coolwarm_r"),
             use_container_width=True, hide_index=True
