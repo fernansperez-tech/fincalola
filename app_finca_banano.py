@@ -500,7 +500,7 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
         st.divider()
         st.subheader("1. Proyección de Cosecha y Cajas (Solo Administrador)")
         df_guardada = cargar_config_proyeccion() if es_admin else pd.DataFrame()
-                try:
+        try:
             raw_r = str(df_guardada["Ratio"].iloc).replace(",", ".").strip()
             ratio_def = min(2.50, max(0.50, float(raw_r)))
         except Exception:
