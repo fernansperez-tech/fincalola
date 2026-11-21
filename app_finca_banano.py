@@ -596,6 +596,17 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                 detalles_sem.sort(key=lambda x: -x[0])
                 texto_detalle = "  |  ".join([d[1] for d in detalles_sem]) if detalles_sem else "Sin corte programado"
 
+                detalles_saldo = []
+                for _, row_rem in inv_sim.iterrows():
+                    rem_v = int(round(row_rem["Saldo_Restante"]))
+                    if rem_v > 0:
+                        ed_rem = int(row_rem["Edad_Num"]) + off
+                        ico_r = ICONOS_SIM.get(row_rem["Color_Cinta"], "")
+                        detalles_saldo.append((ed_rem, f"{ico_r} {row_rem['Color_Cinta']} ({ed_rem} sem): {rem_v:,}"))
+
+                detalles_saldo.sort(key=lambda x: -x[0])
+                texto_saldo_pasa = "  |  ".join([d[1] for d in detalles_saldo]) if detalles_saldo else "0 (Todo cosechado)"
+
                 rac_tot_int = int(round(rac_corte_sem))
                 cajas_tot_int = int(round(rac_tot_int * (1 - merma / 100.0) * ratio))
                 saldo_pasa = int(round(inv_sim["Saldo_Restante"].sum()))
@@ -605,23 +616,20 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                     "Cintas_A_Cortar": texto_detalle,
                     "Racimos_Corte": rac_tot_int,
                     "Saldo_Que_Pasa": saldo_pasa,
+                    "Detalle_Saldo_Que_Pasa": texto_saldo_pasa,
                     "Cajas_Proyectadas": cajas_tot_int
                 })
 
             df_res_semanal = pd.DataFrame(resumen_semanal)
             fila_tot_ps = pd.DataFrame([{
-                "Semana_Cosecha": "TOTAL CICLO (11 SEM)",
+                "Semana_Cosecha": "TOTAL CICLO (12 SEM)",
                 "Cintas_A_Cortar": "-",
                 "Racimos_Corte": int(df_res_semanal["Racimos_Corte"].sum()),
                 "Saldo_Que_Pasa": int(df_res_semanal["Saldo_Que_Pasa"].iloc[-1]),
+                "Detalle_Saldo_Que_Pasa": df_res_semanal["Detalle_Saldo_Que_Pasa"].iloc[-1],
                 "Cajas_Proyectadas": int(df_res_semanal["Cajas_Proyectadas"].sum())
             }])
             tabla_ps_final = pd.concat([df_res_semanal, fila_tot_ps], ignore_index=True)
-            filas_ps_idx = tabla_ps_final.index < len(df_res_semanal)
-
-            st.write("#### Plan Semanal de Embarques (Cintas, Racimos y Cajas)")
-            st.dataframe(
-                tabla_ps_final.style.background_gradient(subset=(filas_ps_idx, ["Cajas_Proyectadas"]), cmap="coolwarm_r"),
                 use_container_width=True, hide_index=True
             )
 
