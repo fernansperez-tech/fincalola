@@ -702,7 +702,7 @@ elif rol == "Administrador":
             fila_tot_mc["Prom_Garrucha_kg"] = prom_tara_tot
             fila_tot_mc["Prom_Neto_kg"] = prom_neto_tot
 
-                        def estilo_col_cinta_corte(col):
+            def estilo_col_cinta_corte(col):
                 nombre_col = str(col.name)
                 paleta_col = {
                     "Amarilla": ("#FFD700", "#000000"),
