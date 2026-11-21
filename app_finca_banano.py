@@ -906,7 +906,7 @@ with tab4:
             st.rerun()
     if df.empty:
             st.warning("No se cargaron registros. Presiona el botón de recargar arriba.")
-        else:
+    else:
             df_edit = df.copy()
             df_edit["Fila_Excel"] = df_edit.index + 2
             df_edit["Tipo"] = df_edit["Racimos"].apply(lambda x: "Embolse (+)" if int(x) > 0 else "Corte (-)")
