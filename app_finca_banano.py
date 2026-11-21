@@ -209,10 +209,9 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     if sel_anio != "Todos":
         df_res = df_res[df_res["Anio"] == sel_anio]
     if sel_sem:
+        df_res = df_res[df_res["Semana"].isin(sel_sem)]
     if sel_edad:
         df_res = df_res[df_res["Edad_Texto"].isin(sel_edad)]
-
-        df_res = df_res[df_res["Semana"].isin(sel_sem)]
 
     if sel_lote != "Todos":
         df_res = df_res[df_res["Lote"] == sel_lote]
