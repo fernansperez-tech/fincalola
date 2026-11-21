@@ -1097,7 +1097,7 @@ with tab5:
                         text=alt.Text("sum(Peso_Neto_kg):Q", format=",.0f")
                     )
                     st.altair_chart((bar_p + txt_p).properties(height=360), use_container_width=True)
-                                st.divider()
+                    st.divider()
             st.markdown("### 🌱 Sección 2: Gráficas de Embolse y Saldo en Mata")
             emb_base = df_g[df_g["Racimos"] > 0].copy()
             if emb_base.empty:
