@@ -973,7 +973,7 @@ elif rol == "Administrador":
                     except Exception as e:
                         st.error(f"Error al eliminar: {repr(e)}")
 
-   with tab5:
+    with tab5:
         st.subheader("Análisis Gráfico de Producción y Pesos")
         if df.empty:
             st.info("Aún no hay datos suficientes para generar gráficas.")
@@ -1024,4 +1024,3 @@ elif rol == "Administrador":
                 st.write("### 2. Racimos Embolsados por Lote")
                 graf_emb = emb_g.groupby("Lote")["Racimos"].sum()
                 st.bar_chart(graf_emb)
-
