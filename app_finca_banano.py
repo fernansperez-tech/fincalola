@@ -570,8 +570,8 @@ elif rol == "Administrador":
             balance["Etiqueta"] = balance["Color_Cinta"] + " (" + balance["Edad"] + ")"
             balance["Cajas_Est"] = (balance["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
             piv_bal = balance.pivot_table(index="Lote", columns="Etiqueta", values="Saldo_En_Mata", aggfunc="sum", fill_value=0)
-                tot_cajas_lote = balance.groupby("Lote")["Cajas_Est"].sum()
-                mat_bal = pd.DataFrame({"Lote": LOTES})
+            tot_cajas_lote = balance.groupby("Lote")["Cajas_Est"].sum()
+            mat_bal = pd.DataFrame({"Lote": LOTES})
                 for col_b in piv_bal.columns:
                     mat_bal[col_b] = mat_bal["Lote"].map(piv_bal[col_b]).fillna(0).astype(int)
                 mat_bal["Cajas_Proy"] = mat_bal["Lote"].map(tot_cajas_lote).fillna(0).astype(int)
