@@ -116,7 +116,7 @@ def borrar_multiples_filas_gsheet(lista_filas_sheet):
     if peticiones:
         ws.spreadsheet.batch_update({"requests": peticiones})
 
-def procesar_csv_tableta(df_tab, col_lote, col_color, col_fecha=None, col_bruto="Ninguna", col_tara="Ninguna"):
+def procesar_csv_tableta(df_tab, col_lote, col_color, col_fecha=None, col_bruto="Ninguna", col_tara="Ninguna", col_vastago="Ninguna"):
     ahora = datetime.now()
     df_work = df_tab.dropna(subset=[col_lote, col_color]).copy()
     if df_work.empty:
@@ -128,11 +128,13 @@ def procesar_csv_tableta(df_tab, col_lote, col_color, col_fecha=None, col_bruto=
 
     df_work["Bruto_Num"] = pd.to_numeric(df_work[col_bruto], errors="coerce").fillna(0.0) if col_bruto != "Ninguna" else 0.0
     df_work["Tara_Num"] = pd.to_numeric(df_work[col_tara], errors="coerce").fillna(0.0) if col_tara != "Ninguna" else 0.0
+    df_work["Vastago_Num"] = pd.to_numeric(df_work[col_vastago], errors="coerce").fillna(0.0) if col_vastago != "Ninguna" else 0.0
 
     conteo = df_work.groupby(["Fecha_Norm", col_lote, col_color]).agg(
         Total_Racimos=(col_lote, "size"),
         Suma_Bruto=("Bruto_Num", "sum"),
-        Suma_Tara=("Tara_Num", "sum")
+        Suma_Tara=("Tara_Num", "sum"),
+        Suma_Vastago=("Vastago_Num", "sum")
     ).reset_index()
 
     descuentos = []
@@ -147,6 +149,8 @@ def procesar_csv_tableta(df_tab, col_lote, col_color, col_fecha=None, col_bruto=
             semana_num = datetime.strptime(fecha_str, "%Y-%m-%d").isocalendar().week
         except Exception:
             semana_num = ahora.isocalendar().week
+        tara_str = str(round(float(fila["Suma_Tara"]), 2))
+        vast_str = str(round(float(fila["Suma_Vastago"]), 2))
         descuentos.append({
             "Fecha": fecha_str,
             "Hora": ahora.strftime("%H:%M"),
@@ -155,9 +159,10 @@ def procesar_csv_tableta(df_tab, col_lote, col_color, col_fecha=None, col_bruto=
             "Parcelero": str(round(float(fila["Suma_Bruto"]), 2)),
             "Color_Cinta": color_norm,
             "Racimos": -cant,
-            "Estado": str(round(float(fila["Suma_Tara"]), 2))
+            "Estado": f"{tara_str}|{vast_str}"
         })
     return descuentos
+
 
 
 def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
@@ -652,24 +657,44 @@ elif rol == "Administrador":
             if filtro_color != "Todos":
                 df_filtrado = df_filtrado[df_filtrado["Color_Cinta"] == filtro_color]
 
+                       def extraer_tara(val):
+                partes = str(val).split("|")
+                try:
+                    return float(partes[0])
+                except Exception:
+                    return 0.0
+
+            def extraer_vastago(val):
+                partes = str(val).split("|")
+                if len(partes) > 1:
+                    try:
+                        return float(partes[1])
+                    except Exception:
+                        return 0.0
+                return 0.0
+
             df_filtrado["Peso_Bruto_kg"] = pd.to_numeric(df_filtrado["Parcelero"], errors="coerce").fillna(0.0)
-            df_filtrado["Peso_Garrucha_kg"] = pd.to_numeric(df_filtrado["Estado"], errors="coerce").fillna(0.0)
-            df_filtrado["Peso_Neto_kg"] = (df_filtrado["Peso_Bruto_kg"] - df_filtrado["Peso_Garrucha_kg"]).clip(lower=0.0)
+            df_filtrado["Peso_Garrucha_kg"] = df_filtrado["Estado"].apply(extraer_tara)
+            df_filtrado["Peso_Vastago_kg"] = df_filtrado["Estado"].apply(extraer_vastago)
+            df_filtrado["Peso_Neto_kg"] = (df_filtrado["Peso_Bruto_kg"] - df_filtrado["Peso_Garrucha_kg"] - df_filtrado["Peso_Vastago_kg"]).clip(lower=0.0)
 
             total_cortados = int(df_filtrado["Racimos_Cortados"].sum())
             tot_bruto = float(df_filtrado["Peso_Bruto_kg"].sum())
             tot_tara = float(df_filtrado["Peso_Garrucha_kg"].sum())
+            tot_vastago = float(df_filtrado["Peso_Vastago_kg"].sum())
             tot_neto = float(df_filtrado["Peso_Neto_kg"].sum())
 
             prom_bruto_tot = round(tot_bruto / total_cortados, 2) if total_cortados > 0 else 0.0
             prom_tara_tot = round(tot_tara / total_cortados, 2) if total_cortados > 0 else 0.0
+            prom_vastago_tot = round(tot_vastago / total_cortados, 2) if total_cortados > 0 else 0.0
             prom_neto_tot = round(tot_neto / total_cortados, 2) if total_cortados > 0 else 0.0
 
-            m_c1, m_c2, m_c3, m_c4 = st.columns(4)
-            m_c1.metric("Racimos Cortados", f"{total_cortados:,}")
-            m_c2.metric("Prom. Bruto / Rac", f"{prom_bruto_tot:.2f} kg")
-            m_c3.metric("Prom. Garrucha / Rac", f"{prom_tara_tot:.2f} kg")
-            m_c4.metric("Prom. Neto / Rac", f"{prom_neto_tot:.2f} kg")
+            m_c1, m_c2, m_c3, m_c4, m_c5 = st.columns(5)
+            m_c1.metric("Racimos", f"{total_cortados:,}")
+            m_c2.metric("Prom. Bruto", f"{prom_bruto_tot:.2f} kg")
+            m_c3.metric("Prom. Garrucha", f"{prom_tara_tot:.2f} kg")
+            m_c4.metric("Prom. Vástago", f"{prom_vastago_tot:.2f} kg")
+            m_c5.metric("Prom. Neto", f"{prom_neto_tot:.2f} kg")
 
             st.write("### Matriz de Cosecha por Lote, Cinta (Edad) y Pesos Promedio")
             ICONOS_CINTA_COL = {
@@ -685,6 +710,7 @@ elif rol == "Administrador":
                 Total_Racimos=("Racimos_Cortados", "sum"),
                 Suma_Bruto=("Peso_Bruto_kg", "sum"),
                 Suma_Tara=("Peso_Garrucha_kg", "sum"),
+                Suma_Vastago=("Peso_Vastago_kg", "sum"),
                 Suma_Neto=("Peso_Neto_kg", "sum")
             )
 
@@ -695,10 +721,12 @@ elif rol == "Administrador":
             mat_corte["Total_Racimos"] = mat_corte["Lote"].map(res_pesos_lote["Total_Racimos"]).fillna(0).astype(int)
             s_bruto_l = mat_corte["Lote"].map(res_pesos_lote["Suma_Bruto"]).fillna(0.0)
             s_tara_l = mat_corte["Lote"].map(res_pesos_lote["Suma_Tara"]).fillna(0.0)
+            s_vast_l = mat_corte["Lote"].map(res_pesos_lote["Suma_Vastago"]).fillna(0.0)
             s_neto_l = mat_corte["Lote"].map(res_pesos_lote["Suma_Neto"]).fillna(0.0)
 
             mat_corte["Prom_Bruto_kg"] = [round(b / r, 2) if r > 0 else 0.0 for b, r in zip(s_bruto_l, mat_corte["Total_Racimos"])]
             mat_corte["Prom_Garrucha_kg"] = [round(t / r, 2) if r > 0 else 0.0 for t, r in zip(s_tara_l, mat_corte["Total_Racimos"])]
+            mat_corte["Prom_Vastago_kg"] = [round(v / r, 2) if r > 0 else 0.0 for v, r in zip(s_vast_l, mat_corte["Total_Racimos"])]
             mat_corte["Prom_Neto_kg"] = [round(n / r, 2) if r > 0 else 0.0 for n, r in zip(s_neto_l, mat_corte["Total_Racimos"])]
 
             fila_tot_mc = {"Lote": "TOTAL"}
@@ -707,13 +735,19 @@ elif rol == "Administrador":
             fila_tot_mc["Total_Racimos"] = total_cortados
             fila_tot_mc["Prom_Bruto_kg"] = prom_bruto_tot
             fila_tot_mc["Prom_Garrucha_kg"] = prom_tara_tot
+            fila_tot_mc["Prom_Vastago_kg"] = prom_vastago_tot
             fila_tot_mc["Prom_Neto_kg"] = prom_neto_tot
 
             mat_corte_final = pd.concat([mat_corte, pd.DataFrame([fila_tot_mc])], ignore_index=True)
             filas_mc = mat_corte_final.index < len(mat_corte)
             st.dataframe(
                 mat_corte_final.style.background_gradient(subset=(filas_mc, ["Prom_Neto_kg"]), cmap="coolwarm_r")
-                                     .format({"Prom_Bruto_kg": "{:.2f}", "Prom_Garrucha_kg": "{:.2f}", "Prom_Neto_kg": "{:.2f}"}),
+                                     .format({
+                                         "Prom_Bruto_kg": "{:.2f}",
+                                         "Prom_Garrucha_kg": "{:.2f}",
+                                         "Prom_Vastago_kg": "{:.2f}",
+                                         "Prom_Neto_kg": "{:.2f}"
+                                     }),
                 use_container_width=True, hide_index=True
             )
 
