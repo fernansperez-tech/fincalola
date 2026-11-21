@@ -604,7 +604,7 @@ elif rol == "Administrador":
         if clave != "":
             st.error("Clave incorrecta.")
         st.stop()
-        tab1, tab_proy, tab2, tab3, tab4, tab5 = st.tabs([
+    tab1, tab_proy, tab2, tab3, tab4, tab5 = st.tabs([
         "🌱 Embolse", "📦 Saldos y Proyección", "🔪 Historial de Corte",
         "📥 Subir CSV Tableta", "✏️ Corregir / Borrar", "📊 Gráficos"
     ])
@@ -616,9 +616,9 @@ elif rol == "Administrador":
     with tab_proy:
         mostrar_saldos_y_proyeccion(df, prefijo="adm_proy")
 
-    
-
     with tab2:
+
+
         st.subheader("Buscador y Matriz de Corte (Promedios de Peso)")
         solo_cortes = df[df["Racimos"] < 0].copy() if not df.empty else pd.DataFrame()
         if solo_cortes.empty:
