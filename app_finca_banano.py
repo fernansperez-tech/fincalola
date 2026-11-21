@@ -754,7 +754,7 @@ elif rol == "Administrador":
             csv_descarga = mat_corte_final.to_csv(index=False).encode("utf-8")
             st.download_button("Descargar Matriz de Corte en Excel (CSV)", data=csv_descarga, file_name="matriz_cortes_promedios.csv", mime="text/csv")
 
- with tab3:
+with tab3:
         st.subheader("Descontar Corte con CSV Directo de Tableta")
         st.write("Sube el archivo .csv de la tableta (cada fila cuenta como 1 racimo).")
         archivo_csv = st.file_uploader("Seleccionar archivo .csv de la tableta", type=["csv"])
