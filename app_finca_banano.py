@@ -640,20 +640,17 @@ elif rol == "Administrador":
         if clave != "":
             st.error("Clave incorrecta.")
         st.stop()
-    tab1, tab_proy, tab2, tab3, tab4, tab5 = st.tabs([
-        "🌱 Embolse", "📦 Saldos y Proyección", "🔪 Historial de Corte",
+    tab_proy, tab2, tab3, tab4, tab5 = st.tabs([
+        "📦 Saldos y Proyección", "🔪 Historial de Corte",
         "📥 Subir CSV Tableta", "✏️ Corregir / Borrar", "📊 Gráficos"
     ])
     df = cargar_datos()
-    with tab1:
-        st.subheader("Filtros y Rendimiento de Embolse")
-        mostrar_reportes_embolse(df, prefijo="adm")
-
     with tab_proy:
-     mostrar_saldos_y_proyeccion(df, prefijo="adm_proy", es_admin=True)
-
+        mostrar_saldos_y_proyeccion(df, prefijo="adm_proy", es_admin=True)
 
     with tab2:
+
+    
 
 
         st.subheader("Buscador y Matriz de Corte (Promedios de Peso)")
