@@ -461,7 +461,7 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
 
     if es_admin:
         st.divider()
-        st.subheader("3. Proyección de Cosecha y Cajas (Solo Administrador)")
+        st.subheader("1. Proyección de Cosecha y Cajas (Solo Administrador)")
         col_r1, col_r2 = st.columns(2)
         ratio = col_r1.number_input("Ratio (Cajas / Racimo):", value=1.15, min_value=0.50, max_value=2.50, step=0.05, key=f"{prefijo}_ratio")
         merma = col_r2.slider("Merma estimada (%):", 0, 20, 5, key=f"{prefijo}_merma")
