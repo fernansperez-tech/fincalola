@@ -469,7 +469,8 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
             import altair as alt
             escala_cintas_m = alt.Scale(
                 domain=["Amarilla", "Morada", "Roja", "Cafe", "Negra", "Verde", "Azul", "Blanca"],
-                range=["#FFD700", "#800080", "#D32F2F", "#6D4C41", "#212121", "#2E7D32", "#1565C0", "#E0E0E0"]
+                range=["#FFD700", "#9C27B0", "#E53935", "#8B4513", "#111111", "#43A047", "#1E88E5", "#F5F5F5"]
+
             )
             df_sg_plot = solo_pos_m.groupby(["Lote", "Color_Cinta"])["Saldo"].sum().reset_index()
             bar_s = alt.Chart(df_sg_plot).mark_bar().encode(
@@ -742,8 +743,9 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                         min_value=1, max_value=12, value=6, key=f"{prefijo}_slider_sems_graf"
                     )
                     escala_ps = alt.Scale(
-                        domain=["Amarilla", "Morada", "Roja", "Cafe", "Negra", "Verde", "Azul", "Blanca"],
-                        range=["#FFD700", "#9C27B0", "#E53935", "#8D6E63", "#424242", "#43A047", "#1E88E5", "#F5F5F5"]
+                    domain=["Amarilla", "Morada", "Roja", "Cafe", "Negra", "Verde", "Azul", "Blanca"],
+                    range=["#FFD700", "#9C27B0", "#E53935", "#8B4513", "#111111", "#43A047", "#1E88E5", "#F5F5F5"]
+
                     )
                     df_gp = pd.DataFrame(filas_graf_ps)
                     df_gp = df_gp[df_gp["Orden"] < num_sems_ver].groupby(["Orden", "Semana_Proy", "Color_Cinta"])["Cajas_Est"].sum().reset_index()
