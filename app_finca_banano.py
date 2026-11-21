@@ -323,6 +323,7 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
         )
 
 
+       st.write("### 4. Matriz de Saldo en Mata por Lote, Cinta y Edad")
     if not df.empty:
         df_mat = df.copy()
         df_mat["Fecha"] = df_mat["Fecha"].astype(str).str.strip().str[:10]
@@ -346,33 +347,25 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
             except Exception:
                 y_v = anio_hoy
             ed_v = max(0, ((anio_hoy - y_v) * 52 + (sem_hoy - sm)) + 1)
-            etiq = f"{cl} ({ed_v} sem)"
-            reg_fifo.append({"Lote": lt, "Etiqueta": etiq, "Orden_Ed": -ed_v, "Embolsados": emb_v, "Cortados": desc_v, "Saldo": sld_v})
-
-        for (lt_s, cl_s), sob_v in sal_m.items():
-            if sob_v > 0:
-                reg_fifo.append({"Lote": lt_s, "Etiqueta": f"{cl_s} (Sin emb)", "Orden_Ed": 999, "Embolsados": 0, "Cortados": int(sob_v), "Saldo": -int(sob_v)})
+            if sld_v > 0:
+                etiq = f"{cl} ({ed_v} sem)"
+                reg_fifo.append({"Lote": lt, "Etiqueta": etiq, "Orden_Ed": -ed_v, "Saldo": sld_v})
 
         df_fifo_m = pd.DataFrame(reg_fifo)
         if not df_fifo_m.empty:
             cols_ordenadas = df_fifo_m.sort_values(by=["Orden_Ed", "Etiqueta"])["Etiqueta"].unique().tolist()
             piv_saldo = df_fifo_m.pivot_table(index="Lote", columns="Etiqueta", values="Saldo", aggfunc="sum", fill_value=0)
-            tot_lote_m = df_fifo_m.groupby("Lote").agg(Embolsados=("Embolsados", "sum"), Cortados=("Cortados", "sum"), Saldo_En_Mata=("Saldo", "sum"))
 
             matriz_final = pd.DataFrame({"Lote": LOTES})
             for col_et in cols_ordenadas:
                 matriz_final[col_et] = matriz_final["Lote"].map(piv_saldo[col_et]).fillna(0).astype(int)
-            matriz_final["Embolsados"] = matriz_final["Lote"].map(tot_lote_m["Embolsados"]).fillna(0).astype(int)
-            matriz_final["Cortados"] = matriz_final["Lote"].map(tot_lote_m["Cortados"]).fillna(0).astype(int)
-            matriz_final["Saldo_En_Mata"] = matriz_final["Lote"].map(tot_lote_m["Saldo_En_Mata"]).fillna(0).astype(int)
+            matriz_final["Saldo_En_Mata"] = matriz_final[cols_ordenadas].sum(axis=1).astype(int)
 
             fila_tot_m = {"Lote": "TOTAL"}
-            for col_num in matriz_final.columns:
-                if col_num != "Lote":
-                    fila_tot_m[col_num] = int(matriz_final[col_num].sum())
+            for col_num in cols_ordenadas + ["Saldo_En_Mata"]:
+                fila_tot_m[col_num] = int(matriz_final[col_num].sum())
             matriz_con_tot = pd.concat([matriz_final, pd.DataFrame([fila_tot_m])], ignore_index=True)
             st.dataframe(matriz_con_tot, use_container_width=True, hide_index=True)
-
 
 
 st.title("BANANERA LA LOLA S.A")
