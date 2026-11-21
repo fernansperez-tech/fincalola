@@ -343,7 +343,7 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
 
 
 def mostrar_saldos_y_proyeccion(df, prefijo):
-     if df.empty:
+    if df.empty:
         st.info("Aún no hay movimientos registrados en el sistema.")
         return
 
@@ -355,6 +355,7 @@ def mostrar_saldos_y_proyeccion(df, prefijo):
     df_mat["Fecha"] = df_mat["Fecha"].astype(str).str.strip().str[:10]
     df_mat["Anio"] = df_mat["Fecha"].str[:4]
     df_mat["Semana"] = df_mat["Semana"].astype(int)
+
 
     ent_m = df_mat[df_mat["Racimos"] > 0].groupby(["Lote", "Color_Cinta", "Anio", "Semana"])["Racimos"].sum().reset_index()
 
