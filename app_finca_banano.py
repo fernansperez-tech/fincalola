@@ -1008,7 +1008,7 @@ with tab4:
                     except Exception as e:
                         st.error(f"Error al eliminar: {repr(e)}")
 
-    with tab5:
+with tab5:
         st.subheader("Análisis Gráfico de Producción y Pesos")
         if df.empty:
             st.info("Aún no hay datos suficientes para generar gráficas.")
