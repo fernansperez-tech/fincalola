@@ -616,7 +616,7 @@ elif rol == "Administrador":
     with tab_proy:
         mostrar_saldos_y_proyeccion(df, prefijo="adm_proy")
 
-    with tab2:
+    
 
     with tab2:
         st.subheader("Buscador y Matriz de Corte (Promedios de Peso)")
