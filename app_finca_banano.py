@@ -1090,7 +1090,7 @@ elif rol == "Administrador":
                         color=alt.Color("Color_Cinta:N", scale=escala_cintas, title="Cinta"),
                         tooltip=["Lote", "Color_Cinta", alt.Tooltip("Peso_Neto_kg:Q", format=",.1f")]
                     )
-                        txt_p = alt.Chart(grp_peso).mark_text(dy=-6, fontWeight="bold", fontSize=11, color="#FFFFFF").encode(
+                    txt_p = alt.Chart(grp_peso).mark_text(dy=-6, fontWeight="bold", fontSize=11, color="#FFFFFF").encode(
 
                         x=alt.X("Lote:N", sort=LOTES),
                         y=alt.Y("sum(Peso_Neto_kg):Q"),
