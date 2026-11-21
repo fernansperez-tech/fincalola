@@ -342,65 +342,132 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
         )
 
 
-    st.write("### 4. Matriz de Saldo en Mata por Lote, Cinta y Edad")
-    if not df.empty:
-        df_mat = df.copy()
-        df_mat["Fecha"] = df_mat["Fecha"].astype(str).str.strip().str[:10]
-        df_mat["Anio"] = df_mat["Fecha"].str[:4]
-        df_mat["Semana"] = df_mat["Semana"].astype(int)
-        sem_hoy = ahora.isocalendar().week
-        anio_hoy = ahora.year
+    def mostrar_saldos_y_proyeccion(df, prefijo):
+    if df.empty:
+        st.info("Aún no hay movimientos registrados en el sistema.")
+        return
 
-        ent_m = df_mat[df_mat["Racimos"] > 0].groupby(["Lote", "Color_Cinta", "Anio", "Semana"])["Racimos"].sum().reset_index()
-        ent_m = ent_m.sort_values(by=["Lote", "Color_Cinta", "Anio", "Semana"])
-        sal_m = df_mat[df_mat["Racimos"] < 0].groupby(["Lote", "Color_Cinta"])["Racimos"].sum().abs().to_dict()
+    ahora = datetime.now()
+    sem_hoy = ahora.isocalendar().week
+    anio_hoy = ahora.year
 
-        ICONOS_MATA = {
-            "Amarilla": "🟡 Amarilla", "Morada": "🟣 Morada",
-            "Roja": "🔴 Roja", "Cafe": "🟤 Cafe",
-            "Negra": "⚫ Negra", "Verde": "🟢 Verde",
-            "Azul": "🔵 Azul", "Blanca": "⚪ Blanca"
-        }
+    df_mat = df.copy()
+    df_mat["Fecha"] = df_mat["Fecha"].astype(str).str.strip().str[:10]
+    df_mat["Anio"] = df_mat["Fecha"].str[:4]
+    df_mat["Semana"] = df_mat["Semana"].astype(int)
 
-        reg_fifo = []
-        for _, r_m in ent_m.iterrows():
-            lt, cl, an_s, sm, emb_v = r_m["Lote"], r_m["Color_Cinta"], str(r_m["Anio"]), int(r_m["Semana"]), int(r_m["Racimos"])
-            desc_v = min(emb_v, sal_m.get((lt, cl), 0))
-            sal_m[(lt, cl)] = sal_m.get((lt, cl), 0) - desc_v
-            sld_v = emb_v - desc_v
-            try:
-                y_v = int(an_s)
-            except Exception:
-                y_v = anio_hoy
-            ed_v = max(0, ((anio_hoy - y_v) * 52 + (sem_hoy - sm)) + 1)
-            if sld_v > 0:
-                cl_vis = ICONOS_MATA.get(cl, cl)
-                etiq = f"{cl_vis} ({ed_v} sem)"
-                reg_fifo.append({"Lote": lt, "Edad_Num": ed_v, "Edad_Txt": f"{ed_v} sem", "Etiqueta": etiq, "Orden_Ed": -ed_v, "Saldo": sld_v})
+    ent_m = df_mat[df_mat["Racimos"] > 0].groupby(["Lote", "Color_Cinta", "Anio", "Semana"])["Racimos"].sum().reset_index()
+    ent_m = ent_m.sort_values(by=["Lote", "Color_Cinta", "Anio", "Semana"])
+    sal_m = df_mat[df_mat["Racimos"] < 0].groupby(["Lote", "Color_Cinta"])["Racimos"].sum().abs().to_dict()
 
-        df_fifo_m = pd.DataFrame(reg_fifo)
-        if not df_fifo_m.empty:
-            edades_m_disp = [f"{e} sem" for e in sorted(df_fifo_m["Edad_Num"].unique().tolist(), reverse=True)]
-            sel_edad_mata = st.multiselect("Filtrar Saldo en Mata por Edad (vacío = todas):", edades_m_disp, key=f"{prefijo}_edad_mata")
-            if sel_edad_mata:
-                df_fifo_m = df_fifo_m[df_fifo_m["Edad_Txt"].isin(sel_edad_mata)]
+    ICONOS_MATA = {
+        "Amarilla": "🟡 Amarilla", "Morada": "🟣 Morada",
+        "Roja": "🔴 Roja", "Cafe": "🟤 Cafe",
+        "Negra": "⚫ Negra", "Verde": "🟢 Verde",
+        "Azul": "🔵 Azul", "Blanca": "⚪ Blanca"
+    }
 
-            if not df_fifo_m.empty:
-                cols_ordenadas = df_fifo_m.sort_values(by=["Orden_Ed", "Etiqueta"])["Etiqueta"].unique().tolist()
-                piv_saldo = df_fifo_m.pivot_table(index="Lote", columns="Etiqueta", values="Saldo", aggfunc="sum", fill_value=0)
+    reg_fifo = []
+    for _, r_m in ent_m.iterrows():
+        lt, cl, an_s, sm, emb_v = r_m["Lote"], r_m["Color_Cinta"], str(r_m["Anio"]), int(r_m["Semana"]), int(r_m["Racimos"])
+        desc_v = min(emb_v, sal_m.get((lt, cl), 0))
+        sal_m[(lt, cl)] = sal_m.get((lt, cl), 0) - desc_v
+        sld_v = emb_v - desc_v
+        try:
+            y_v = int(an_s)
+        except Exception:
+            y_v = anio_hoy
+        ed_v = max(0, ((anio_hoy - y_v) * 52 + (sem_hoy - sm)) + 1)
+        cl_vis = ICONOS_MATA.get(cl, cl)
+        etiq = f"{cl_vis} ({ed_v} sem)"
+        reg_fifo.append({
+            "Lote": lt, "Color_Cinta": cl, "Anio": an_s, "Semana_Emb": sm,
+            "Edad_Num": ed_v, "Edad_Txt": f"{ed_v} sem", "Etiqueta": etiq,
+            "Orden_Ed": -ed_v, "Embolsados": emb_v, "Cortados": desc_v, "Saldo": sld_v
+        })
 
-                matriz_final = pd.DataFrame({"Lote": LOTES})
-                for col_et in cols_ordenadas:
-                    matriz_final[col_et] = matriz_final["Lote"].map(piv_saldo[col_et]).fillna(0).astype(int)
-                matriz_final["Saldo_En_Mata"] = matriz_final[cols_ordenadas].sum(axis=1).astype(int)
+    for (lt_s, cl_s), sob_v in sal_m.items():
+        if sob_v > 0:
+            reg_fifo.append({
+                "Lote": lt_s, "Color_Cinta": cl_s, "Anio": "-", "Semana_Emb": 0,
+                "Edad_Num": 0, "Edad_Txt": "Sin embolse previo", "Etiqueta": f"{cl_s} (Sin emb)",
+                "Orden_Ed": 999, "Embolsados": 0, "Cortados": int(sob_v), "Saldo": -int(sob_v)
+            })
 
-                fila_tot_m = {"Lote": "TOTAL"}
-                for col_num in cols_ordenadas + ["Saldo_En_Mata"]:
-                    fila_tot_m[col_num] = int(matriz_final[col_num].sum())
-                matriz_con_tot = pd.concat([matriz_final, pd.DataFrame([fila_tot_m])], ignore_index=True)
-                st.dataframe(matriz_con_tot, use_container_width=True, hide_index=True)
-            else:
-                st.info("No hay saldo en mata para las edades seleccionadas.")
+    df_fifo_m = pd.DataFrame(reg_fifo)
+
+    st.subheader("1. Matriz de Saldo en Mata por Lote, Cinta y Edad")
+    solo_pos_m = df_fifo_m[df_fifo_m["Saldo"] > 0].copy() if not df_fifo_m.empty else pd.DataFrame()
+    if solo_pos_m.empty:
+        st.info("No hay saldos positivos en mata actualmente.")
+    else:
+        edades_m_disp = [f"{e} sem" for e in sorted(solo_pos_m["Edad_Num"].unique().tolist(), reverse=True)]
+        sel_edad_mata = st.multiselect("Filtrar Saldo en Mata por Edad (vacío = todas):", edades_m_disp, key=f"{prefijo}_edad_mata")
+        if sel_edad_mata:
+            solo_pos_m = solo_pos_m[solo_pos_m["Edad_Txt"].isin(sel_edad_mata)]
+
+        if not solo_pos_m.empty:
+            cols_ordenadas = solo_pos_m.sort_values(by=["Orden_Ed", "Etiqueta"])["Etiqueta"].unique().tolist()
+            piv_saldo = solo_pos_m.pivot_table(index="Lote", columns="Etiqueta", values="Saldo", aggfunc="sum", fill_value=0)
+
+            matriz_final = pd.DataFrame({"Lote": LOTES})
+            for col_et in cols_ordenadas:
+                matriz_final[col_et] = matriz_final["Lote"].map(piv_saldo[col_et]).fillna(0).astype(int)
+            matriz_final["Saldo_En_Mata"] = matriz_final[cols_ordenadas].sum(axis=1).astype(int)
+
+            fila_tot_m = {"Lote": "TOTAL"}
+            for col_num in cols_ordenadas + ["Saldo_En_Mata"]:
+                fila_tot_m[col_num] = int(matriz_final[col_num].sum())
+            matriz_con_tot = pd.concat([matriz_final, pd.DataFrame([fila_tot_m])], ignore_index=True)
+            st.dataframe(matriz_con_tot, use_container_width=True, hide_index=True)
+        else:
+            st.info("No hay saldo en mata para las edades seleccionadas.")
+
+    st.divider()
+    st.subheader("2. Proyección de Cosecha y Saldo en Mata (FIFO)")
+    col_r1, col_r2 = st.columns(2)
+    ratio = col_r1.number_input("Ratio (Cajas / Racimo):", value=1.15, min_value=0.50, max_value=2.50, step=0.05, key=f"{prefijo}_ratio")
+    merma = col_r2.slider("Merma estimada (%):", 0, 20, 5, key=f"{prefijo}_merma")
+
+    if not df_fifo_m.empty:
+        solo_positivos = df_fifo_m[df_fifo_m["Saldo"] > 0]
+        total_racimos = int(solo_positivos["Saldo"].sum())
+        cajas_est = total_racimos * (1 - merma / 100.0) * ratio
+        m1, m2 = st.columns(2)
+        m1.metric("Saldo Real en Mata", f"{total_racimos:,} racimos")
+        m2.metric("Cajas Proyectadas (20 kg)", f"{cajas_est:,.0f} cajas")
+
+        def pintar_cinta_proy(val):
+            texto = str(val)
+            paleta = {
+                "Amarilla": ("#FFD700", "#000000"),
+                "Morada": ("#800080", "#FFFFFF"),
+                "Roja": ("#D32F2F", "#FFFFFF"),
+                "Cafe": ("#6D4C41", "#FFFFFF"),
+                "Negra": ("#212121", "#FFFFFF"),
+                "Verde": ("#2E7D32", "#FFFFFF"),
+                "Azul": ("#1565C0", "#FFFFFF"),
+                "Blanca": ("#F5F5F5", "#000000")
+            }
+            for nombre, (fondo, letra) in paleta.items():
+                if nombre in texto:
+                    return f"background-color: {fondo}; color: {letra}; font-weight: bold;"
+            return ""
+
+        st.write("### Balance Consolidado por Color y Edad (Toda la Finca)")
+        bal_edad = df_fifo_m.groupby(["Color_Cinta", "Anio", "Semana_Emb", "Edad_Txt"]).agg(
+            Embolsados=("Embolsados", "sum"), Cortados=("Cortados", "sum"), Saldo_En_Mata=("Saldo", "sum")
+        ).reset_index().rename(columns={"Edad_Txt": "Edad"})
+        bal_edad["Cajas_Est"] = (bal_edad["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
+        tot_be = pd.DataFrame([{
+            "Color_Cinta": "TOTAL", "Anio": "", "Semana_Emb": "", "Edad": "",
+            "Embolsados": int(bal_edad["Embolsados"].sum()),
+            "Cortados": int(bal_edad["Cortados"].sum()),
+            "Saldo_En_Mata": int(bal_edad["Saldo_En_Mata"].sum()),
+            "Cajas_Est": int(bal_edad["Cajas_Est"].sum())
+        }])
+        bal_edad_tot = pd.concat([bal_edad, tot_be], ignore_index=True)
+        st.dataframe(bal_edad_tot.style.map(pintar_cinta_proy, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
 
 
 st.title("BANANERA LA LOLA S.A")
@@ -524,7 +591,12 @@ elif rol == "Consulta de Embolse":
                 lote_qr = dato_qr
                 st.success(f"Lote escaneado: {lote_qr}")
     df = cargar_datos()
-    mostrar_reportes_embolse(df, prefijo="cons", lote_qr=lote_qr)
+    t_cons1, t_cons2 = st.tabs(["🌱 Reportes de Embolse", "📦 Saldos en Mata y Proyección"])
+    with t_cons1:
+        mostrar_reportes_embolse(df, prefijo="cons", lote_qr=lote_qr)
+    with t_cons2:
+        mostrar_saldos_y_proyeccion(df, prefijo="cons_proy")
+
 
 elif rol == "Administrador":
     clave = st.text_input("Clave de Administrador:", type="password")
@@ -532,99 +604,20 @@ elif rol == "Administrador":
         if clave != "":
             st.error("Clave incorrecta.")
         st.stop()
-    tab1, tab2, tab3, tab4, tab5 = st.tabs(["Inventario y Edad", "Historial de Corte", "Subir CSV Tableta", "Corregir / Borrar", "Gráficos"])
+        tab1, tab_proy, tab2, tab3, tab4, tab5 = st.tabs([
+        "🌱 Embolse", "📦 Saldos y Proyección", "🔪 Historial de Corte",
+        "📥 Subir CSV Tableta", "✏️ Corregir / Borrar", "📊 Gráficos"
+    ])
     df = cargar_datos()
     with tab1:
-        st.subheader("Filtros y Rendimiento por Lote y Empleado")
+        st.subheader("Filtros y Rendimiento de Embolse")
         mostrar_reportes_embolse(df, prefijo="adm")
-        st.divider()
-        st.subheader("Proyección de Cosecha y Saldo en Mata (FIFO)")
-        col_r1, col_r2 = st.columns(2)
-        ratio = col_r1.number_input("Ratio (Cajas / Racimo):", value=1.15, min_value=0.50, max_value=2.50, step=0.05)
-        merma = col_r2.slider("Merma estimada (%):", 0, 20, 5)
-        if df.empty:
-            st.warning("Aún no hay movimientos registrados.")
-        else:
-            ahora = datetime.now()
-            semana_actual = ahora.isocalendar().week
-            anio_actual = ahora.year
-            df["Fecha"] = df["Fecha"].astype(str)
-            df["Anio"] = df["Fecha"].str[:4]
-            entradas = df[df["Racimos"] > 0].groupby(["Lote", "Color_Cinta", "Anio", "Semana"])["Racimos"].sum().reset_index()
-            entradas = entradas.sort_values(by=["Lote", "Color_Cinta", "Anio", "Semana"])
-            salidas = df[df["Racimos"] < 0].groupby(["Lote", "Color_Cinta"])["Racimos"].sum().abs().to_dict()
-            filas_balance = []
-            for _, fila in entradas.iterrows():
-                lote = fila["Lote"]
-                color = fila["Color_Cinta"]
-                anio_str = str(fila["Anio"])
-                sem = int(fila["Semana"])
-                emb = int(fila["Racimos"])
-                desc = min(emb, salidas.get((lote, color), 0))
-                salidas[(lote, color)] = salidas.get((lote, color), 0) - desc
-                saldo = emb - desc
-                try:
-                    y = int(anio_str)
-                except Exception:
-                    y = anio_actual
-                edad = max(0, ((anio_actual - y) * 52 + (semana_actual - sem)) + 1)
-                filas_balance.append({
-                    "Lote": lote, "Color_Cinta": color, "Anio": anio_str,
-                    "Semana_Emb": sem, "Edad": f"{edad} sem",
-                    "Embolsados": emb, "Cortados": desc, "Saldo_En_Mata": saldo
-                })
-            for (lote_sob, color_sob), sobrante in salidas.items():
-                if sobrante > 0:
-                    filas_balance.append({
-                        "Lote": lote_sob,
-                        "Color_Cinta": color_sob,
-                        "Anio": "-",
-                        "Semana_Emb": 0,
-                        "Edad": "Sin embolse previo",
-                        "Embolsados": 0,
-                        "Cortados": int(sobrante),
-                        "Saldo_En_Mata": -int(sobrante)
-                   
-                    })     
-            balance = pd.DataFrame(filas_balance)
-            if not balance.empty:
-                solo_positivos = balance[balance["Saldo_En_Mata"] > 0]
-                total_racimos = int(solo_positivos["Saldo_En_Mata"].sum())
-                cajas_est = total_racimos * (1 - merma / 100.0) * ratio
-                m1, m2 = st.columns(2)
-                m1.metric("Saldo Real en Mata", f"{total_racimos:,} racimos")
-                m2.metric("Cajas Proyectadas (20 kg)", f"{cajas_est:,.0f} cajas")
-                def pintar_cinta_adm(val):
-                    texto = str(val)
-                    paleta = {
-                        "Amarilla": ("#FFD700", "#000000"),
-                        "Morada": ("#800080", "#FFFFFF"),
-                        "Roja": ("#D32F2F", "#FFFFFF"),
-                        "Cafe": ("#6D4C41", "#FFFFFF"),
-                        "Negra": ("#212121", "#FFFFFF"),
-                        "Verde": ("#2E7D32", "#FFFFFF"),
-                        "Azul": ("#1565C0", "#FFFFFF"),
-                        "Blanca": ("#F5F5F5", "#000000")
-                    }
-                    for nombre, (fondo, letra) in paleta.items():
-                        if nombre in texto:
-                            return f"background-color: {fondo}; color: {letra}; font-weight: bold;"
-                    return ""
 
-                st.write("Balance por Color y Edad (Toda la Finca)")
-                bal_edad = balance.groupby(["Color_Cinta", "Anio", "Semana_Emb", "Edad"]).agg(
-                    Embolsados=("Embolsados", "sum"), Cortados=("Cortados", "sum"), Saldo_En_Mata=("Saldo_En_Mata", "sum")
-                ).reset_index()
-                bal_edad["Cajas_Est"] = (bal_edad["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
-                tot_be = pd.DataFrame([{
-                    "Color_Cinta": "TOTAL", "Anio": "", "Semana_Emb": "", "Edad": "",
-                    "Embolsados": int(bal_edad["Embolsados"].sum()),
-                    "Cortados": int(bal_edad["Cortados"].sum()),
-                    "Saldo_En_Mata": int(bal_edad["Saldo_En_Mata"].sum()),
-                    "Cajas_Est": int(bal_edad["Cajas_Est"].sum())
-                }])
-                bal_edad_tot = pd.concat([bal_edad, tot_be], ignore_index=True)
-                st.dataframe(bal_edad_tot.style.map(pintar_cinta_adm, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
+    with tab_proy:
+        mostrar_saldos_y_proyeccion(df, prefijo="adm_proy")
+
+    with tab2:
+
     with tab2:
         st.subheader("Buscador y Matriz de Corte (Promedios de Peso)")
         solo_cortes = df[df["Racimos"] < 0].copy() if not df.empty else pd.DataFrame()
