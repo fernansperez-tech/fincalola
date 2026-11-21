@@ -118,7 +118,7 @@ def borrar_multiples_filas_gsheet(lista_filas_sheet):
         ws.spreadsheet.batch_update({"requests": peticiones})
 def cargar_config_proyeccion():
     try:
-        sh = conectar_gsheet()
+        sh = conectar_hoja().spreadsheet
         try:
             ws_p = sh.worksheet("Proyecciones")
         except Exception:
@@ -131,7 +131,7 @@ def cargar_config_proyeccion():
         return pd.DataFrame()
 
 def guardar_config_proyeccion(df_cfg, ratio_val, merma_val):
-    sh = conectar_gsheet()
+    sh = conectar_hoja().spreadsheet
     try:
         ws_p = sh.worksheet("Proyecciones")
     except Exception:
@@ -151,7 +151,7 @@ def guardar_config_proyeccion(df_cfg, ratio_val, merma_val):
             int(merma_val),
             ahora_str
         ])
-    ws_p.update("A1", filas_ws)
+    ws_p.update(values=filas_ws, range_name="A1")
 
 def procesar_csv_tableta(df_tab, col_lote, col_color, col_fecha=None, col_bruto="Ninguna", col_tara="Ninguna", col_vastago="Ninguna"):
     ahora = datetime.now()
