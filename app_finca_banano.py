@@ -500,12 +500,21 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
         st.divider()
         st.subheader("1. Proyección de Cosecha y Cajas (Solo Administrador)")
         df_guardada = cargar_config_proyeccion() if es_admin else pd.DataFrame()
-        ratio_def = float(df_guardada["Ratio"].iloc[0]) if (not df_guardada.empty and "Ratio" in df_guardada.columns) else 1.15
-        merma_def = int(df_guardada["Merma"].iloc[0]) if (not df_guardada.empty and "Merma" in df_guardada.columns) else 5
+                try:
+            raw_r = str(df_guardada["Ratio"].iloc).replace(",", ".").strip()
+            ratio_def = min(2.50, max(0.50, float(raw_r)))
+        except Exception:
+            ratio_def = 1.15
+
+        try:
+            merma_def = min(20, max(0, int(float(str(df_guardada["Merma"].iloc).replace(",", ".").strip()))))
+        except Exception:
+            merma_def = 5
 
         col_r1, col_r2 = st.columns(2)
-        ratio = col_r1.number_input("Ratio (Cajas / Racimo):", value=ratio_def, min_value=0.50, max_value=2.50, step=0.05, key=f"{prefijo}_ratio")
-        merma = col_r2.slider("Merma estimada (%):", 0, 20, merma_def, key=f"{prefijo}_merma")
+        ratio = col_r1.number_input("Ratio (Cajas / Racimo):", value=float(ratio_def), min_value=0.50, max_value=2.50, step=0.05, key=f"{prefijo}_ratio")
+        merma = col_r2.slider("Merma estimada (%):", min_value=0, max_value=20, value=int(merma_def), key=f"{prefijo}_merma")
+
 
 
         if not df_fifo_m.empty:
