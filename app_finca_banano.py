@@ -534,7 +534,7 @@ elif rol == "Administrador":
         st.stop()
     tab1, tab2, tab3, tab4, tab5 = st.tabs(["Inventario y Edad", "Historial de Corte", "Subir CSV Tableta", "Corregir / Borrar", "Gráficos"])
     df = cargar_datos()
-    with tab1:
+with tab1:
     
         st.subheader("Filtros y Rendimiento por Lote y Empleado")
         mostrar_reportes_embolse(df, prefijo="adm")
@@ -626,8 +626,7 @@ elif rol == "Administrador":
                 }])
                 bal_edad_tot = pd.concat([bal_edad, tot_be], ignore_index=True)
                 st.dataframe(bal_edad_tot.style.map(pintar_cinta_adm, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
-
-    with tab2:
+with tab2:
         st.subheader("Buscador y Matriz de Corte (Promedios de Peso)")
         solo_cortes = df[df["Racimos"] < 0].copy() if not df.empty else pd.DataFrame()
         if solo_cortes.empty:
@@ -914,7 +913,6 @@ with tab3:
                                 st.rerun()
                             except Exception as e:
                                 st.error(f"Error técnico al descontar: {repr(e)}")
-
 with tab4:
         st.subheader("Corregir o Eliminar Registros (Solo Administrador)")
         if not df.empty:
@@ -1010,7 +1008,6 @@ else:
                         st.rerun()
                     except Exception as e:
                         st.error(f"Error al eliminar: {repr(e)}")
-
 with tab5:
         st.subheader("Análisis Gráfico de Producción y Pesos")
         if df.empty:
