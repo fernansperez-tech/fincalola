@@ -645,7 +645,7 @@ with tab1:
 
 
 
-    with tab2:
+with tab2:
         st.subheader("Buscador y Matriz de Corte (Promedios de Peso)")
         solo_cortes = df[df["Racimos"] < 0].copy() if not df.empty else pd.DataFrame()
         if solo_cortes.empty:
