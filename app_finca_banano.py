@@ -1002,9 +1002,10 @@ elif rol == "Administrador":
             def extraer_tara(val):
                 partes = str(val).split("|")
                 try:
-                    return float(partes)
+                    return float(partes[0].replace(",", ".").strip())
                 except Exception:
                     return 0.0
+
 
             df_filtrado["Peso_Bruto_kg"] = pd.to_numeric(df_filtrado["Parcelero"], errors="coerce").fillna(0.0)
             df_filtrado["Peso_Garrucha_kg"] = df_filtrado["Estado"].apply(extraer_tara)
