@@ -904,7 +904,7 @@ with tab4:
             with st.spinner("Sincronizando con Google Sheets..."):
                 time.sleep(1.5)
             st.rerun()
-        if df.empty:
+    if df.empty:
             st.warning("No se cargaron registros. Presiona el botón de recargar arriba.")
         else:
             df_edit = df.copy()
