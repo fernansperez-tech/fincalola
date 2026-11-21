@@ -471,6 +471,8 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                 domain=["Amarilla", "Morada", "Roja", "Cafe", "Negra", "Verde", "Azul", "Blanca"],
                 range=["#FFD700", "#9C27B0", "#E53935", "#8B4513", "#111111", "#43A047", "#1E88E5", "#F5F5F5"]
 
+
+
             )
             df_sg_plot = solo_pos_m.groupby(["Lote", "Color_Cinta"])["Saldo"].sum().reset_index()
             bar_s = alt.Chart(df_sg_plot).mark_bar().encode(
@@ -745,6 +747,8 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                     escala_ps = alt.Scale(
                     domain=["Amarilla", "Morada", "Roja", "Cafe", "Negra", "Verde", "Azul", "Blanca"],
                     range=["#FFD700", "#9C27B0", "#E53935", "#8B4513", "#111111", "#43A047", "#1E88E5", "#F5F5F5"]
+
+
 
                     )
                     df_gp = pd.DataFrame(filas_graf_ps)
@@ -1335,7 +1339,9 @@ elif rol == "Administrador":
 
             escala_cintas = alt.Scale(
                 domain=["Amarilla", "Morada", "Roja", "Cafe", "Negra", "Verde", "Azul", "Blanca"],
-                range=["#FFD700", "#9C27B0", "#E53935", "#8D6E63", "#424242", "#43A047", "#1E88E5", "#F5F5F5"]
+                range=["#FFD700", "#9C27B0", "#E53935", "#8B4513", "#111111", "#43A047", "#1E88E5", "#F5F5F5"]
+
+
             )
 
             def aplicar_tema_tarjeta(chart_obj, alto=380):
