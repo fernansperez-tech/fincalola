@@ -1445,18 +1445,24 @@ elif rol == "Administrador":
                     emb_g = emb_g[emb_g["Edad_Txt"].isin(e_eds_g)]
 
                 if not emb_g.empty:
-                    st.write("#### 2. Racimos Embolsados por Lote y Color de Cinta")
-                    grp_emb = emb_g.groupby(["Lote", "Color_Cinta"])["Racimos"].sum().reset_index()
+                    st.write("#### 2. Racimos Embolsados")
+                                        grp_emb = emb_g.groupby(["Lote", "Color_Cinta"])["Racimos"].sum().reset_index()
+                    escala_emb_exacta = alt.Scale(
+                        domain=["Amarilla", "Morada", "Roja", "Cafe", "Café", "Negra", "Verde", "Azul", "Blanca"],
+                        range=["#FFD700", "#9C27B0", "#E53935", "#8B4513", "#8B4513", "#111111", "#43A047", "#1E88E5", "#F5F5F5"]
+                    )
                     bar_e = alt.Chart(grp_emb).mark_bar(cornerRadiusTopLeft=3, cornerRadiusTopRight=3).encode(
                         x=alt.X("Lote:N", sort=LOTES, title="Lote"),
                         y=alt.Y("Racimos:Q", title="Racimos Embolsados"),
-                        color=alt.Color("Color_Cinta:N", scale=escala_cintas, title="Cinta"),
+                        color=alt.Color("Color_Cinta:N", scale=escala_emb_exacta, title="Cinta"),
+                        order=alt.Order("Color_Cinta:N", sort="ascending"),
                         tooltip=["Lote", "Color_Cinta", "Racimos"]
                     )
                     txt_e_seg = alt.Chart(grp_emb).mark_text(baseline="middle", fontWeight="bold", fontSize=10).encode(
                         x=alt.X("Lote:N", sort=LOTES),
                         y=alt.Y("Racimos:Q", stack="zero", bandPosition=0.5),
                         detail="Color_Cinta:N",
+                        order=alt.Order("Color_Cinta:N", sort="ascending"),
                         color=alt.condition(
                             alt.FieldOneOfPredicate(field="Color_Cinta", oneOf=["Amarilla", "Blanca"]),
                             alt.value("#000000"),
