@@ -290,8 +290,7 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
             use_container_width=True, hide_index=True
         )
 
-    st.write("### 3. Matriz de Saldo en Mata por Lote, Cinta y Edad")
-    if not df.empty:
+        if not df.empty:
         df_mat = df.copy()
         df_mat["Fecha"] = df_mat["Fecha"].astype(str).str.strip().str[:10]
         df_mat["Anio"] = df_mat["Fecha"].str[:4]
@@ -314,27 +313,22 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
             except Exception:
                 y_v = anio_hoy
             ed_v = max(0, ((anio_hoy - y_v) * 52 + (sem_hoy - sm)) + 1)
-            reg_fifo.append({"Lote": lt, "Color_Cinta": cl, "Edad": ed_v, "Embolsados": emb_v, "Cortados": desc_v, "Saldo": sld_v})
+            etiq = f"{cl} ({ed_v} sem)"
+            reg_fifo.append({"Lote": lt, "Etiqueta": etiq, "Orden_Ed": -ed_v, "Embolsados": emb_v, "Cortados": desc_v, "Saldo": sld_v})
 
         for (lt_s, cl_s), sob_v in sal_m.items():
             if sob_v > 0:
-                reg_fifo.append({"Lote": lt_s, "Color_Cinta": cl_s, "Edad": 0, "Embolsados": 0, "Cortados": int(sob_v), "Saldo": -int(sob_v)})
+                reg_fifo.append({"Lote": lt_s, "Etiqueta": f"{cl_s} (Sin emb)", "Orden_Ed": 999, "Embolsados": 0, "Cortados": int(sob_v), "Saldo": -int(sob_v)})
 
         df_fifo_m = pd.DataFrame(reg_fifo)
         if not df_fifo_m.empty:
-            edad_por_color = df_fifo_m[df_fifo_m["Saldo"] > 0].groupby("Color_Cinta")["Edad"].max().to_dict()
-            cols_cintas_map = {}
-            for c_nom in COLORES_CINTA:
-                if c_nom in df_fifo_m["Color_Cinta"].values:
-                    ed_txt = f" ({edad_por_color[c_nom]} sem)" if c_nom in edad_por_color else ""
-                    cols_cintas_map[c_nom] = f"{c_nom}{ed_txt}"
-
-            piv_saldo = df_fifo_m.pivot_table(index="Lote", columns="Color_Cinta", values="Saldo", aggfunc="sum", fill_value=0)
+            cols_ordenadas = df_fifo_m.sort_values(by=["Orden_Ed", "Etiqueta"])["Etiqueta"].unique().tolist()
+            piv_saldo = df_fifo_m.pivot_table(index="Lote", columns="Etiqueta", values="Saldo", aggfunc="sum", fill_value=0)
             tot_lote_m = df_fifo_m.groupby("Lote").agg(Embolsados=("Embolsados", "sum"), Cortados=("Cortados", "sum"), Saldo_En_Mata=("Saldo", "sum"))
 
             matriz_final = pd.DataFrame({"Lote": LOTES})
-            for c_orig, c_etiqueta in cols_cintas_map.items():
-                matriz_final[c_etiqueta] = matriz_final["Lote"].map(piv_saldo[c_orig]).fillna(0).astype(int)
+            for col_et in cols_ordenadas:
+                matriz_final[col_et] = matriz_final["Lote"].map(piv_saldo[col_et]).fillna(0).astype(int)
             matriz_final["Embolsados"] = matriz_final["Lote"].map(tot_lote_m["Embolsados"]).fillna(0).astype(int)
             matriz_final["Cortados"] = matriz_final["Lote"].map(tot_lote_m["Cortados"]).fillna(0).astype(int)
             matriz_final["Saldo_En_Mata"] = matriz_final["Lote"].map(tot_lote_m["Saldo_En_Mata"]).fillna(0).astype(int)
@@ -345,6 +339,7 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
                     fila_tot_m[col_num] = int(matriz_final[col_num].sum())
             matriz_con_tot = pd.concat([matriz_final, pd.DataFrame([fila_tot_m])], ignore_index=True)
             st.dataframe(matriz_con_tot, use_container_width=True, hide_index=True)
+
 
 
 st.title("BANANERA LA LOLA S.A")
@@ -571,17 +566,20 @@ elif rol == "Administrador":
             bal_edad_tot = pd.concat([bal_edad, tot_be], ignore_index=True)
             st.dataframe(bal_edad_tot.style.map(pintar_cinta_adm, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
 
-            st.write("Balance Detallado por Lote y Edad (FIFO)")
-            balance["Cajas_Est"] = (balance["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
-            tot_bd = pd.DataFrame([{
-                    "Lote": "TOTAL", "Color_Cinta": "-", "Anio": "", "Semana_Emb": "", "Edad": "",
-                    "Embolsados": int(balance["Embolsados"].sum()),
-                    "Cortados": int(balance["Cortados"].sum()),
-                    "Saldo_En_Mata": int(balance["Saldo_En_Mata"].sum()),
-                    "Cajas_Est": int(balance["Cajas_Est"].sum())
-                }])
-            balance_tot = pd.concat([balance, tot_bd], ignore_index=True)
-            st.dataframe(balance_tot.style.map(pintar_cinta_adm, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
+                st.write("Matriz de Cajas Proyectadas por Lote, Cinta y Edad")
+                balance["Etiqueta"] = balance["Color_Cinta"] + " (" + balance["Edad"] + ")"
+                balance["Cajas_Est"] = (balance["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
+                piv_bal = balance.pivot_table(index="Lote", columns="Etiqueta", values="Saldo_En_Mata", aggfunc="sum", fill_value=0)
+                tot_cajas_lote = balance.groupby("Lote")["Cajas_Est"].sum()
+                mat_bal = pd.DataFrame({"Lote": LOTES})
+                for col_b in piv_bal.columns:
+                    mat_bal[col_b] = mat_bal["Lote"].map(piv_bal[col_b]).fillna(0).astype(int)
+                mat_bal["Cajas_Proy"] = mat_bal["Lote"].map(tot_cajas_lote).fillna(0).astype(int)
+                fila_tot_mb = {"Lote": "TOTAL"}
+                for c_mb in mat_bal.columns:
+                    if c_mb != "Lote":
+                        fila_tot_mb[c_mb] = int(mat_bal[c_mb].sum())
+                st.dataframe(pd.concat([mat_bal, pd.DataFrame([fila_tot_mb])], ignore_index=True), use_container_width=True, hide_index=True)
 
 
 
@@ -641,32 +639,50 @@ with tab2:
             m_c3.metric("Garrucha (kg)", f"{tot_tara:,.1f}")
             m_c4.metric("Peso Neto (kg)", f"{tot_neto:,.1f}")
 
-            st.write("### Resumen de Cosecha y Pesos por Lote y Cinta")
-            res_lote_corte = df_filtrado.groupby(["Lote", "Color_Cinta"]).agg(
-                Racimos=("Racimos_Cortados", "sum"),
-                Peso_Bruto_kg=("Peso_Bruto_kg", "sum"),
-                Peso_Garrucha_kg=("Peso_Garrucha_kg", "sum"),
-                Peso_Neto_kg=("Peso_Neto_kg", "sum")
-            ).reset_index()
-            res_lote_corte["Prom_Neto_Rac_kg"] = res_lote_corte.apply(lambda r: round(r["Peso_Neto_kg"] / r["Racimos"], 2) if r["Racimos"] > 0 else 0.0, axis=1)
-            prom_tot_rac = round(tot_neto / total_cortados, 2) if total_cortados > 0 else 0.0
-            fila_tot_lc = pd.DataFrame([{
-                "Lote": "TOTAL", "Color_Cinta": "-", "Racimos": total_cortados,
-                "Peso_Bruto_kg": tot_bruto, "Peso_Garrucha_kg": tot_tara,
-                "Peso_Neto_kg": tot_neto, "Prom_Neto_Rac_kg": prom_tot_rac
-            }])
-            st.dataframe(pd.concat([res_lote_corte, fila_tot_lc], ignore_index=True), use_container_width=True, hide_index=True)
+                        st.write("### Matriz de Cosecha por Lote, Cinta (Edad) y Pesos")
+            edad_ref = {}
+            if not df.empty:
+                ent_ref = df[df["Racimos"] > 0].groupby("Color_Cinta")["Semana"].min().to_dict()
+                sem_act_c = ahora_c.isocalendar().week
+                for c_k, sm_v in ent_ref.items():
+                    ed_c = max(0, (sem_act_c - int(sm_v)) + 1)
+                    edad_ref[c_k] = f"{c_k} ({ed_c} sem)"
 
-            st.write("### Detalle Diario de Cortes")
-            tabla_mostrar = df_filtrado[["Fecha", "Semana", "Lote", "Color_Cinta", "Racimos_Cortados", "Peso_Bruto_kg", "Peso_Garrucha_kg", "Peso_Neto_kg"]].sort_values(by="Fecha", ascending=False)
-            fila_tot_corte = pd.DataFrame([{
-                "Fecha": "TOTAL", "Semana": "", "Lote": "", "Color_Cinta": "",
-                "Racimos_Cortados": total_cortados, "Peso_Bruto_kg": tot_bruto,
-                "Peso_Garrucha_kg": tot_tara, "Peso_Neto_kg": tot_neto
-            }])
-            st.dataframe(pd.concat([tabla_mostrar, fila_tot_corte], ignore_index=True), use_container_width=True, hide_index=True)
-            csv_descarga = tabla_mostrar.to_csv(index=False).encode("utf-8")
-            st.download_button("Descargar Selección en Excel (CSV)", data=csv_descarga, file_name="reporte_cortes_pesos.csv", mime="text/csv")
+            df_filtrado["Cinta_Edad"] = df_filtrado["Color_Cinta"].apply(lambda x: edad_ref.get(x, x))
+            piv_corte = df_filtrado.pivot_table(index="Lote", columns="Cinta_Edad", values="Racimos_Cortados", aggfunc="sum", fill_value=0)
+            res_pesos_lote = df_filtrado.groupby("Lote").agg(
+                Total_Racimos=("Racimos_Cortados", "sum"),
+                Peso_Bruto_kg=("Peso_Bruto_kg", "sum"),
+                Garrucha_kg=("Peso_Garrucha_kg", "sum"),
+                Peso_Neto_kg=("Peso_Neto_kg", "sum")
+            )
+
+            mat_corte = pd.DataFrame({"Lote": LOTES})
+            for col_ce in piv_corte.columns:
+                mat_corte[col_ce] = mat_corte["Lote"].map(piv_corte[col_ce]).fillna(0).astype(int)
+
+            mat_corte["Total_Racimos"] = mat_corte["Lote"].map(res_pesos_lote["Total_Racimos"]).fillna(0).astype(int)
+            mat_corte["Peso_Bruto_kg"] = mat_corte["Lote"].map(res_pesos_lote["Peso_Bruto_kg"]).fillna(0.0).round(1)
+            mat_corte["Garrucha_kg"] = mat_corte["Lote"].map(res_pesos_lote["Garrucha_kg"]).fillna(0.0).round(1)
+            mat_corte["Peso_Neto_kg"] = mat_corte["Lote"].map(res_pesos_lote["Peso_Neto_kg"]).fillna(0.0).round(1)
+            mat_corte["Prom_Neto_Rac_kg"] = mat_corte.apply(
+                lambda r: round(r["Peso_Neto_kg"] / r["Total_Racimos"], 2) if r["Total_Racimos"] > 0 else 0.0, axis=1
+            )
+
+            fila_tot_mc = {"Lote": "TOTAL"}
+            for col_c in piv_corte.columns:
+                fila_tot_mc[col_c] = int(mat_corte[col_c].sum())
+            fila_tot_mc["Total_Racimos"] = total_cortados
+            fila_tot_mc["Peso_Bruto_kg"] = tot_bruto
+            fila_tot_mc["Garrucha_kg"] = tot_tara
+            fila_tot_mc["Peso_Neto_kg"] = tot_neto
+            fila_tot_mc["Prom_Neto_Rac_kg"] = round(tot_neto / total_cortados, 2) if total_cortados > 0 else 0.0
+
+            mat_corte_final = pd.concat([mat_corte, pd.DataFrame([fila_tot_mc])], ignore_index=True)
+            st.dataframe(mat_corte_final, use_container_width=True, hide_index=True)
+
+            csv_descarga = mat_corte_final.to_csv(index=False).encode("utf-8")
+            st.download_button("Descargar Matriz de Corte en Excel (CSV)", data=csv_descarga, file_name="matriz_cortes_pesos.csv", mime="text/csv")
 
 
 with tab3:
