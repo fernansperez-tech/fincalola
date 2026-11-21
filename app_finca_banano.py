@@ -595,7 +595,7 @@ elif rol == "Administrador":
                 m1, m2 = st.columns(2)
                 m1.metric("Saldo Real en Mata", f"{total_racimos:,} racimos")
                 m2.metric("Cajas Proyectadas (20 kg)", f"{cajas_est:,.0f} cajas")
-            def pintar_cinta_adm(val):
+                            def pintar_cinta_adm(val):
                     texto = str(val)
                     paleta = {
                         "Amarilla": ("#FFD700", "#000000"),
@@ -612,20 +612,20 @@ elif rol == "Administrador":
                             return f"background-color: {fondo}; color: {letra}; font-weight: bold;"
                     return ""
 
-            st.write("Balance por Color y Edad (Toda la Finca)")
-            bal_edad = balance.groupby(["Color_Cinta", "Anio", "Semana_Emb", "Edad"]).agg(
+                st.write("Balance por Color y Edad (Toda la Finca)")
+                bal_edad = balance.groupby(["Color_Cinta", "Anio", "Semana_Emb", "Edad"]).agg(
                     Embolsados=("Embolsados", "sum"), Cortados=("Cortados", "sum"), Saldo_En_Mata=("Saldo_En_Mata", "sum")
                 ).reset_index()
-            bal_edad["Cajas_Est"] = (bal_edad["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
-            tot_be = pd.DataFrame([{
+                bal_edad["Cajas_Est"] = (bal_edad["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
+                tot_be = pd.DataFrame([{
                     "Color_Cinta": "TOTAL", "Anio": "", "Semana_Emb": "", "Edad": "",
                     "Embolsados": int(bal_edad["Embolsados"].sum()),
                     "Cortados": int(bal_edad["Cortados"].sum()),
                     "Saldo_En_Mata": int(bal_edad["Saldo_En_Mata"].sum()),
                     "Cajas_Est": int(bal_edad["Cajas_Est"].sum())
-            }])
-            bal_edad_tot = pd.concat([bal_edad, tot_be], ignore_index=True)
-            st.dataframe(bal_edad_tot.style.map(pintar_cinta_adm, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
+                }])
+                bal_edad_tot = pd.concat([bal_edad, tot_be], ignore_index=True)
+                st.dataframe(bal_edad_tot.style.map(pintar_cinta_adm, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
 
     with tab2:
         st.subheader("Buscador y Matriz de Corte (Promedios de Peso)")
