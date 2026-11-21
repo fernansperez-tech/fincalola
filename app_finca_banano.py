@@ -1008,26 +1008,62 @@ with tab4:
                     except Exception as e:
                         st.error(f"Error al eliminar: {repr(e)}")
 
-with tab5:
-        st.subheader("Análisis Gráfico de Producción y Pesos")
+    with tab5:
+        st.subheader("Análisis Gráfico de Producción, Saldos y Pesos")
         if df.empty:
             st.info("Aún no hay datos suficientes para generar gráficas.")
         else:
+            import altair as alt
+
+            ahora_g = datetime.now()
+            sem_act_g = ahora_g.isocalendar().week
+            anio_act_g = ahora_g.year
+
             df_g = df.copy()
             df_g["Fecha"] = df_g["Fecha"].astype(str).str.strip().str[:10]
             df_g["Fecha_Dt"] = pd.to_datetime(df_g["Fecha"], errors="coerce").dt.date
+            df_g["Anio"] = df_g["Fecha"].str[:4]
+            df_g["Semana"] = df_g["Semana"].astype(int)
+
+            def calc_ed_g(r):
+                try:
+                    y_g = int(r["Anio"])
+                except Exception:
+                    y_g = anio_act_g
+                return max(0, ((anio_act_g - y_g) * 52 + (sem_act_g - int(r["Semana"]))) + 1)
+
+            df_g["Edad_Num"] = df_g.apply(calc_ed_g, axis=1)
+            df_g["Edad_Txt"] = df_g["Edad_Num"].astype(str) + " sem"
+
             f_val_g = df_g["Fecha_Dt"].dropna()
-            min_g = f_val_g.min() if not f_val_g.empty else datetime.now().date()
-            max_g = f_val_g.max() if not f_val_g.empty else datetime.now().date()
+            min_g = f_val_g.min() if not f_val_g.empty else ahora_g.date()
+            max_g = f_val_g.max() if not f_val_g.empty else ahora_g.date()
 
             g1, g2, g3 = st.columns(3)
-            g_desde = g1.date_input("Desde:", value=min_g, min_value=min_g, max_value=max_g, key="graf_desde")
-            g_hasta = g2.date_input("Hasta:", value=max_g, min_value=min_g, max_value=max_g, key="graf_hasta")
-            g_lote = g3.selectbox("Filtrar Lote:", ["Todos"] + LOTES, key="graf_lote")
+            g_desde = g1.date_input("Desde fecha:", value=min_g, min_value=min_g, max_value=max_g, key="graf_desde")
+            g_hasta = g2.date_input("Hasta fecha:", value=max_g, min_value=min_g, max_value=max_g, key="graf_hasta")
+            g_lote = g3.selectbox("Lote:", ["Todos"] + LOTES, key="graf_lote")
+
+            g4, g5, g6 = st.columns(3)
+            parcs_emb = sorted(df_g[df_g["Racimos"] > 0]["Parcelero"].astype(str).unique().tolist())
+            g_parc = g4.selectbox("Parcelero (Embolse):", ["Todos"] + parcs_emb, key="graf_parc")
+            sems_g_disp = sorted(df_g["Semana"].unique().tolist(), reverse=True)
+            g_sems = g5.multiselect("Semanas (vacío = todas):", sems_g_disp, key="graf_sems")
+            eds_g_disp = [f"{e} sem" for e in sorted(df_g["Edad_Num"].unique().tolist(), reverse=True)]
+            g_eds = g6.multiselect("Edades (vacío = todas):", eds_g_disp, key="graf_eds")
 
             df_gf = df_g[(df_g["Fecha_Dt"] >= g_desde) & (df_g["Fecha_Dt"] <= g_hasta)].copy()
             if g_lote != "Todos":
                 df_gf = df_gf[df_gf["Lote"] == g_lote]
+            if g_sems:
+                df_gf = df_gf[df_gf["Semana"].isin(g_sems)]
+            if g_eds:
+                df_gf = df_gf[df_gf["Edad_Txt"].isin(g_eds)]
+
+            escala_cintas = alt.Scale(
+                domain=["Amarilla", "Morada", "Roja", "Cafe", "Negra", "Verde", "Azul", "Blanca"],
+                range=["#FFD700", "#800080", "#D32F2F", "#6D4C41", "#212121", "#2E7D32", "#1565C0", "#E0E0E0"]
+            )
 
             cortes_g = df_gf[df_gf["Racimos"] < 0].copy()
             if not cortes_g.empty:
@@ -1050,13 +1086,62 @@ with tab5:
                 cortes_g["Tara"] = cortes_g["Estado"].apply(ext_tara_g)
                 cortes_g["Vastago"] = cortes_g["Estado"].apply(ext_vast_g)
                 cortes_g["Peso_Neto_kg"] = (cortes_g["Bruto"] - cortes_g["Tara"] - cortes_g["Vastago"]).clip(lower=0.0)
-                st.write("### 1. Peso Neto Cortado por Lote (kg)")
-                graf_peso = cortes_g.groupby("Lote")["Peso_Neto_kg"].sum()
-                st.bar_chart(graf_peso)
+
+                st.write("### 1. Peso Neto Cortado por Lote (kg) y Color de Cinta")
+                grp_peso = cortes_g.groupby(["Lote", "Color_Cinta"])["Peso_Neto_kg"].sum().reset_index()
+                chart_peso = alt.Chart(grp_peso).mark_bar().encode(
+                    x=alt.X("Lote:N", sort=LOTES, title="Lote"),
+                    y=alt.Y("Peso_Neto_kg:Q", title="Peso Neto (kg)"),
+                    color=alt.Color("Color_Cinta:N", scale=escala_cintas, title="Cinta"),
+                    tooltip=["Lote", "Color_Cinta", alt.Tooltip("Peso_Neto_kg:Q", format=",.1f")]
+                ).properties(height=340)
+                st.altair_chart(chart_peso, use_container_width=True)
 
             emb_g = df_gf[df_gf["Racimos"] > 0].copy()
+            if g_parc != "Todos":
+                emb_g = emb_g[emb_g["Parcelero"] == g_parc]
             if not emb_g.empty:
-                st.write("### 2. Racimos Embolsados por Lote")
-                graf_emb = emb_g.groupby("Lote")["Racimos"].sum()
-                st.bar_chart(graf_emb)
+                st.write("### 2. Racimos Embolsados por Lote y Color de Cinta")
+                grp_emb = emb_g.groupby(["Lote", "Color_Cinta"])["Racimos"].sum().reset_index()
+                chart_emb = alt.Chart(grp_emb).mark_bar().encode(
+                    x=alt.X("Lote:N", sort=LOTES, title="Lote"),
+                    y=alt.Y("Racimos:Q", title="Racimos Embolsados"),
+                    color=alt.Color("Color_Cinta:N", scale=escala_cintas, title="Cinta"),
+                    tooltip=["Lote", "Color_Cinta", "Racimos"]
+                ).properties(height=340)
+                st.altair_chart(chart_emb, use_container_width=True)
 
+            st.write("### 3. Saldos en Mata por Lote y Color de Cinta")
+            df_saldo_g = df_g.copy()
+            if g_lote != "Todos":
+                df_saldo_g = df_saldo_g[df_saldo_g["Lote"] == g_lote]
+
+            ent_sg = df_saldo_g[df_saldo_g["Racimos"] > 0]
+            if g_parc != "Todos":
+                ent_sg = ent_sg[ent_sg["Parcelero"] == g_parc]
+            ent_sg = ent_sg.groupby(["Lote", "Color_Cinta", "Anio", "Semana", "Edad_Txt"])["Racimos"].sum().reset_index()
+            ent_sg = ent_sg.sort_values(by=["Lote", "Color_Cinta", "Anio", "Semana"])
+            sal_sg = df_saldo_g[df_saldo_g["Racimos"] < 0].groupby(["Lote", "Color_Cinta"])["Racimos"].sum().abs().to_dict()
+
+            filas_sg = []
+            for _, r_sg in ent_sg.iterrows():
+                lt_s, cl_s, ed_t, emb_s = r_sg["Lote"], r_sg["Color_Cinta"], r_sg["Edad_Txt"], int(r_sg["Racimos"])
+                desc_s = min(emb_s, sal_sg.get((lt_s, cl_s), 0))
+                sal_sg[(lt_s, cl_s)] = sal_sg.get((lt_s, cl_s), 0) - desc_s
+                sld_s = emb_s - desc_s
+                if sld_s > 0:
+                    if not g_eds or ed_t in g_eds:
+                        if not g_sems or int(r_sg["Semana"]) in g_sems:
+                            filas_sg.append({"Lote": lt_s, "Color_Cinta": cl_s, "Saldo_En_Mata": sld_s})
+
+            if filas_sg:
+                df_sg_plot = pd.DataFrame(filas_sg).groupby(["Lote", "Color_Cinta"])["Saldo_En_Mata"].sum().reset_index()
+                chart_saldo = alt.Chart(df_sg_plot).mark_bar().encode(
+                    x=alt.X("Lote:N", sort=LOTES, title="Lote"),
+                    y=alt.Y("Saldo_En_Mata:Q", title="Saldo en Mata (Racimos)"),
+                    color=alt.Color("Color_Cinta:N", scale=escala_cintas, title="Cinta"),
+                    tooltip=["Lote", "Color_Cinta", "Saldo_En_Mata"]
+                ).properties(height=340)
+                st.altair_chart(chart_saldo, use_container_width=True)
+            else:
+                st.info("No hay saldos en mata disponibles para los filtros seleccionados.")
