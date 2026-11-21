@@ -744,12 +744,9 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                         "Cantidad de semanas futuras a mostrar en la gráfica:",
                         min_value=1, max_value=12, value=6, key=f"{prefijo}_slider_sems_graf"
                     )
-                    escala_ps = alt.Scale(
-                    domain=["Amarilla", "Morada", "Roja", "Cafe", "Negra", "Verde", "Azul", "Blanca"],
-                    range=["#FFD700", "#9C27B0", "#E53935", "#8B4513", "#111111", "#43A047", "#1E88E5", "#F5F5F5"]
-
-
-
+                        escala_ps = alt.Scale(
+                        domain=["Amarilla", "Morada", "Roja", "Cafe", "Café", "Negra", "Verde", "Azul", "Blanca"],
+                        range=["#FFD700", "#9C27B0", "#E53935", "#8B4513", "#8B4513", "#111111", "#43A047", "#1E88E5", "#F5F5F5"]
                     )
                     df_gp = pd.DataFrame(filas_graf_ps)
                     df_gp = df_gp[df_gp["Orden"] < num_sems_ver].groupby(["Orden", "Semana_Proy", "Color_Cinta"])["Cajas_Est"].sum().reset_index()
@@ -759,12 +756,14 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                         x=alt.X("Semana_Proy:N", sort=orden_sems_lbl, title="Semana de Cosecha", axis=alt.Axis(labelAngle=-20)),
                         y=alt.Y("Cajas_Est:Q", title="Cajas Proyectadas (20 kg)"),
                         color=alt.Color("Color_Cinta:N", scale=escala_ps, title="Cinta"),
+                        order=alt.Order("Color_Cinta:N", sort="ascending"),
                         tooltip=["Semana_Proy", "Color_Cinta", alt.Tooltip("Cajas_Est:Q", format=",.0f")]
                     )
                     txt_ps_seg = alt.Chart(df_gp).mark_text(baseline="middle", fontWeight="bold", fontSize=11).encode(
                         x=alt.X("Semana_Proy:N", sort=orden_sems_lbl),
                         y=alt.Y("Cajas_Est:Q", stack="zero", bandPosition=0.5),
                         detail="Color_Cinta:N",
+                        order=alt.Order("Color_Cinta:N", sort="ascending"),
                         color=alt.condition(
                             alt.FieldOneOfPredicate(field="Color_Cinta", oneOf=["Amarilla", "Blanca"]),
                             alt.value("#000000"),
