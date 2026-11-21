@@ -343,20 +343,21 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
 
 
     def mostrar_saldos_y_proyeccion(df, prefijo):
-        if df.empty:
-         st.info("Aún no hay movimientos registrados en el sistema.")
+    if df.empty:
+        st.info("Aún no hay movimientos registrados en el sistema.")
         return
 
-        ahora = datetime.now()
-        sem_hoy = ahora.isocalendar().week
-        anio_hoy = ahora.year
+    ahora = datetime.now()
+    sem_hoy = ahora.isocalendar().week
+    anio_hoy = ahora.year
 
-        df_mat = df.copy()
-        df_mat["Fecha"] = df_mat["Fecha"].astype(str).str.strip().str[:10]
-        df_mat["Anio"] = df_mat["Fecha"].str[:4]
-        df_mat["Semana"] = df_mat["Semana"].astype(int)
+    df_mat = df.copy()
+    df_mat["Fecha"] = df_mat["Fecha"].astype(str).str.strip().str[:10]
+    df_mat["Anio"] = df_mat["Fecha"].str[:4]
+    df_mat["Semana"] = df_mat["Semana"].astype(int)
 
     ent_m = df_mat[df_mat["Racimos"] > 0].groupby(["Lote", "Color_Cinta", "Anio", "Semana"])["Racimos"].sum().reset_index()
+
     ent_m = ent_m.sort_values(by=["Lote", "Color_Cinta", "Anio", "Semana"])
     sal_m = df_mat[df_mat["Racimos"] < 0].groupby(["Lote", "Color_Cinta"])["Racimos"].sum().abs().to_dict()
 
