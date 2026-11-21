@@ -505,16 +505,17 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
             }])
             bal_edad_tot = pd.concat([bal_edad, tot_be], ignore_index=True)
             st.dataframe(bal_edad_tot.style.map(pintar_cinta_proy, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
-            st.divider()
-            st.write("### 📅 Simulador Completo de Cosecha (Ciclo 2 a 12 Semanas - 11 Semanas Futuras)")
-            st.caption("Edita los porcentajes de corte directamente en la tabla según clima y llenado. Cada cinta envejece y pasa su saldo remanente a la semana siguiente.")
+                        st.divider()
+            st.write("### 📅 Simulador Completo de Cosecha (Calendario ISO Real 52/53 Semanas)")
+            st.caption("Edita los porcentajes de corte directamente en la tabla. Cada cinta envejece y pasa su saldo remanente a la semana siguiente.")
 
             inv_sim = solo_positivos.groupby(["Color_Cinta", "Anio", "Semana_Emb", "Edad_Num"])["Saldo"].sum().reset_index()
             inv_sim["Saldo_Restante"] = inv_sim["Saldo"].astype(float)
 
             filas_cfg_default = []
             for offset in range(11):
-                num_sem_fut = ((sem_hoy - 1 + offset) % 52) + 1
+                fecha_fut = ahora + timedelta(weeks=offset)
+                num_sem_fut = fecha_fut.isocalendar().week
                 etiqueta_sem = f"Sem {num_sem_fut} (Actual)" if offset == 0 else f"Sem {num_sem_fut} (+{offset} sem)"
                 filas_cfg_default.append({
                     "Orden": offset,
@@ -530,7 +531,7 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                 df_cfg_init,
                 column_config={
                     "Orden": None,
-                    "Semana_Proy": st.column_config.TextColumn("Semana Futura", disabled=True),
+                    "Semana_Proy": st.column_config.TextColumn("Semana de Cosecha", disabled=True),
                     "% 12+ sem": st.column_config.NumberColumn("% 12+ sem", min_value=0, max_value=100, step=5, format="%d%%"),
                     "% 11 sem": st.column_config.NumberColumn("% 11 sem", min_value=0, max_value=100, step=5, format="%d%%"),
                     "% 10 sem": st.column_config.NumberColumn("% 10 sem", min_value=0, max_value=100, step=5, format="%d%%"),
@@ -538,10 +539,17 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                 },
                 use_container_width=True,
                 hide_index=True,
-                key=f"{prefijo}_editor_pct_11sem"
+                key=f"{prefijo}_editor_pct_iso"
             )
 
-            filas_proy_sem = []
+            ICONOS_SIM = {
+                "Amarilla": "🟡", "Morada": "🟣", "Roja": "🔴", "Cafe": "🟤",
+                "Negra": "⚫", "Verde": "🟢", "Azul": "🔵", "Blanca": "⚪"
+            }
+
+            resumen_semanal = []
+            filas_graf_ps = []
+
             for _, cfg_row in df_cfg_edit.iterrows():
                 off = int(cfg_row["Orden"])
                 et_sem = str(cfg_row["Semana_Proy"])
@@ -549,6 +557,9 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                 p11 = float(cfg_row["% 11 sem"]) / 100.0
                 p10 = float(cfg_row["% 10 sem"]) / 100.0
                 p9 = float(cfg_row["% 9 sem"]) / 100.0
+
+                detalles_sem = []
+                rac_corte_sem = 0.0
 
                 for idx_r, row_s in inv_sim.iterrows():
                     rem = row_s["Saldo_Restante"]
@@ -568,61 +579,71 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
 
                     rac_cortar = rem * pct_corte
                     inv_sim.at[idx_r, "Saldo_Restante"] = rem - rac_cortar
-                    if rac_cortar > 0:
-                        filas_proy_sem.append({
+
+                    if rac_cortar >= 1:
+                        rac_int = int(round(rac_cortar))
+                        rac_corte_sem += rac_int
+                        ico = ICONOS_SIM.get(row_s["Color_Cinta"], "")
+                        detalles_sem.append((edad_en_esa_sem, f"{ico} {row_s['Color_Cinta']} ({edad_en_esa_sem} sem): {rac_int:,}"))
+                        filas_graf_ps.append({
                             "Orden": off,
                             "Semana_Proy": et_sem,
                             "Color_Cinta": row_s["Color_Cinta"],
-                            "Racimos_Est": rac_cortar
+                            "Cajas_Est": round(rac_int * (1 - merma / 100.0) * ratio, 0)
                         })
 
-            if filas_proy_sem:
-                df_ps = pd.DataFrame(filas_proy_sem)
-                df_ps["Racimos_Est"] = df_ps["Racimos_Est"].round(0).astype(int)
-                df_ps["Cajas_Est"] = (df_ps["Racimos_Est"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
+                detalles_sem.sort(key=lambda x: -x)
+                texto_detalle = "  |  ".join([d for d in detalles_sem]) if detalles_sem else "Sin corte programado"
+                rac_tot_int = int(round(rac_corte_sem))
+                cajas_tot_int = int(round(rac_tot_int * (1 - merma / 100.0) * ratio))
+                saldo_pasa = int(round(inv_sim["Saldo_Restante"].sum()))
 
-                piv_sem_cinta = df_ps.pivot_table(
-                    index=["Orden", "Semana_Proy"], columns="Color_Cinta", values="Racimos_Est", aggfunc="sum", fill_value=0
-                ).reset_index().sort_values("Orden")
+                resumen_semanal.append({
+                    "Semana_Cosecha": et_sem,
+                    "Cintas_A_Cortar": texto_detalle,
+                    "Racimos_Corte": rac_tot_int,
+                    "Saldo_Que_Pasa": saldo_pasa,
+                    "Cajas_Proyectadas": cajas_tot_int
+                })
 
-                tot_sem_res = df_ps.groupby(["Orden", "Semana_Proy"]).agg(
-                    Total_Racimos=("Racimos_Est", "sum"),
-                    Cajas_Proyectadas=("Cajas_Est", "sum")
-                ).reset_index()
+            df_res_semanal = pd.DataFrame(resumen_semanal)
+            fila_tot_ps = pd.DataFrame([{
+                "Semana_Cosecha": "TOTAL CICLO (11 SEM)",
+                "Cintas_A_Cortar": "-",
+                "Racimos_Corte": int(df_res_semanal["Racimos_Corte"].sum()),
+                "Saldo_Que_Pasa": int(df_res_semanal["Saldo_Que_Pasa"].iloc[-1]),
+                "Cajas_Proyectadas": int(df_res_semanal["Cajas_Proyectadas"].sum())
+            }])
+            tabla_ps_final = pd.concat([df_res_semanal, fila_tot_ps], ignore_index=True)
+            filas_ps_idx = tabla_ps_final.index < len(df_res_semanal)
 
-                tabla_semanal = piv_sem_cinta.merge(tot_sem_res, on=["Orden", "Semana_Proy"]).drop(columns=["Orden"])
-                cols_cintas_ps = [c for c in tabla_semanal.columns if c not in ["Semana_Proy", "Total_Racimos", "Cajas_Proyectadas"]]
+            st.write("#### Plan Semanal de Embarques (Cintas, Racimos y Cajas)")
+            st.dataframe(
+                tabla_ps_final.style.background_gradient(subset=(filas_ps_idx, ["Cajas_Proyectadas"]), cmap="coolwarm_r"),
+                use_container_width=True, hide_index=True
+            )
 
-                fila_tot_ps = {"Semana_Proy": "TOTAL CICLO (11 SEM)"}
-                for c_ps in cols_cintas_ps + ["Total_Racimos", "Cajas_Proyectadas"]:
-                    fila_tot_ps[c_ps] = int(tabla_semanal[c_ps].sum())
-
-                tabla_semanal_final = pd.concat([tabla_semanal, pd.DataFrame([fila_tot_ps])], ignore_index=True)
-                st.write("#### Proyección de Racimos por Cinta y Cajas Totales (11 Semanas)")
-                st.dataframe(tabla_semanal_final, use_container_width=True, hide_index=True)
-
+            if filas_graf_ps:
                 import altair as alt
                 escala_ps = alt.Scale(
                     domain=["Amarilla", "Morada", "Roja", "Cafe", "Negra", "Verde", "Azul", "Blanca"],
                     range=["#FFD700", "#800080", "#D32F2F", "#6D4C41", "#212121", "#2E7D32", "#1565C0", "#E0E0E0"]
                 )
-                grp_graf_ps = df_ps.groupby(["Orden", "Semana_Proy", "Color_Cinta"])["Cajas_Est"].sum().reset_index()
+                df_gp = pd.DataFrame(filas_graf_ps).groupby(["Orden", "Semana_Proy", "Color_Cinta"])["Cajas_Est"].sum().reset_index()
                 orden_sems_lbl = df_cfg_edit["Semana_Proy"].tolist()
 
-                bar_ps = alt.Chart(grp_graf_ps).mark_bar().encode(
+                bar_ps = alt.Chart(df_gp).mark_bar().encode(
                     x=alt.X("Semana_Proy:N", sort=orden_sems_lbl, title="Semana de Cosecha"),
                     y=alt.Y("Cajas_Est:Q", title="Cajas Proyectadas (20 kg)"),
                     color=alt.Color("Color_Cinta:N", scale=escala_ps, title="Cinta"),
                     tooltip=["Semana_Proy", "Color_Cinta", "Cajas_Est"]
                 )
-                txt_ps_tot = alt.Chart(grp_graf_ps).mark_text(dy=-7, fontWeight="bold", fontSize=11, color="#FFFFFF").encode(
+                txt_ps_tot = alt.Chart(df_gp).mark_text(dy=-7, fontWeight="bold", fontSize=11, color="#FFFFFF").encode(
                     x=alt.X("Semana_Proy:N", sort=orden_sems_lbl),
                     y=alt.Y("sum(Cajas_Est):Q"),
                     text=alt.Text("sum(Cajas_Est):Q", format=",.0f")
                 )
                 st.altair_chart((bar_ps + txt_ps_tot).properties(height=360), use_container_width=True)
-            else:
-                st.info("Con los porcentajes configurados no hay racimos entre 9 y 12+ semanas para proyectar.")
 
 
 st.title("BANANERA LA LOLA S.A")
