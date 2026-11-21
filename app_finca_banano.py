@@ -877,11 +877,11 @@ elif rol == "Administrador":
                             except Exception as e:
                                 st.error(f"Error técnico al descontar: {repr(e)}")
 
-with tab4:
-    st.subheader("Corregir o Eliminar Registros (Solo Administrador)")
-    if not df.empty:
+    with tab4:
+        st.subheader("Corregir o Eliminar Registros (Solo Administrador)")
+        if not df.empty:
             cortes_df = df[df["Racimos"] < 0].copy()
-    if not cortes_df.empty:
+            if not cortes_df.empty:
                 cortes_df["Fila_Excel"] = cortes_df.index + 2
                 cortes_df["Fecha_Limpia"] = cortes_df["Fecha"].astype(str).str.strip().str[:10]
                 fechas_corte_disp = sorted(cortes_df["Fecha_Limpia"].unique().tolist(), reverse=True)
