@@ -877,7 +877,7 @@ elif rol == "Administrador":
                             except Exception as e:
                                 st.error(f"Error técnico al descontar: {repr(e)}")
 
-with tab4:
+  with tab4:
     st.subheader("Corregir o Eliminar Registros (Solo Administrador)")
     if not df.empty:
             cortes_df = df[df["Racimos"] < 0].copy()
