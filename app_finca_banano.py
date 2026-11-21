@@ -305,7 +305,7 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
                           .format({"Promedio_Por_Dia": "{:.1f}"}),
             use_container_width=True, hide_index=True
         )
-            st.write("### 3. Matriz de Embolse por Empleado y Lote (Según Filtros)")
+        st.write("### 3. Matriz de Embolse por Empleado y Lote (Según Filtros)")
     if not df_res.empty:
         piv_emp = df_res.pivot_table(index="Parcelero", columns="Lote", values="Racimos", aggfunc="sum", fill_value=0)
         lotes_activos = [lt for lt in LOTES if lt in piv_emp.columns]
