@@ -514,7 +514,7 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
             inv_sim["Saldo_Restante"] = inv_sim["Saldo"].astype(float)
 
             filas_cfg_default = []
-            for offset in range(11):
+            for offset in range(12):
                 fecha_fut = ahora + timedelta(weeks=offset)
                 num_sem_fut = fecha_fut.isocalendar().week
                 etiqueta_sem = f"Sem {num_sem_fut} (Actual)" if offset == 0 else f"Sem {num_sem_fut} (+{offset} sem)"
