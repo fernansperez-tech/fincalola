@@ -718,25 +718,49 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
 
                 if filas_graf_ps:
                     import altair as alt
+                    st.write("#### Gráfica de Cajas Proyectadas por Semana y Color de Cinta")
+                    num_sems_ver = st.slider(
+                        "Cantidad de semanas futuras a mostrar en la gráfica:",
+                        min_value=1, max_value=12, value=6, key=f"{prefijo}_slider_sems_graf"
+                    )
                     escala_ps = alt.Scale(
                         domain=["Amarilla", "Morada", "Roja", "Cafe", "Negra", "Verde", "Azul", "Blanca"],
-                        range=["#FFD700", "#800080", "#D32F2F", "#6D4C41", "#212121", "#2E7D32", "#1565C0", "#E0E0E0"]
+                        range=["#FFD700", "#9C27B0", "#E53935", "#8D6E63", "#424242", "#43A047", "#1E88E5", "#F5F5F5"]
                     )
-                    df_gp = pd.DataFrame(filas_graf_ps).groupby(["Orden", "Semana_Proy", "Color_Cinta"])["Cajas_Est"].sum().reset_index()
-                    orden_sems_lbl = df_cfg_edit["Semana_Proy"].tolist()
+                    df_gp = pd.DataFrame(filas_graf_ps)
+                    df_gp = df_gp[df_gp["Orden"] < num_sems_ver].groupby(["Orden", "Semana_Proy", "Color_Cinta"])["Cajas_Est"].sum().reset_index()
+                    orden_sems_lbl = df_cfg_edit["Semana_Proy"].iloc[:num_sems_ver].tolist()
 
-                    bar_ps = alt.Chart(df_gp).mark_bar().encode(
-                        x=alt.X("Semana_Proy:N", sort=orden_sems_lbl, title="Semana de Cosecha"),
+                    bar_ps = alt.Chart(df_gp).mark_bar(cornerRadiusTopLeft=3, cornerRadiusTopRight=3).encode(
+                        x=alt.X("Semana_Proy:N", sort=orden_sems_lbl, title="Semana de Cosecha", axis=alt.Axis(labelAngle=-20)),
                         y=alt.Y("Cajas_Est:Q", title="Cajas Proyectadas (20 kg)"),
                         color=alt.Color("Color_Cinta:N", scale=escala_ps, title="Cinta"),
-                        tooltip=["Semana_Proy", "Color_Cinta", "Cajas_Est"]
+                        tooltip=["Semana_Proy", "Color_Cinta", alt.Tooltip("Cajas_Est:Q", format=",.0f")]
                     )
-                    txt_ps_tot = alt.Chart(df_gp).mark_text(dy=-7, fontWeight="bold", fontSize=11, color="#FFFFFF").encode(
+                    txt_ps_seg = alt.Chart(df_gp).mark_text(baseline="middle", fontWeight="bold", fontSize=11).encode(
+                        x=alt.X("Semana_Proy:N", sort=orden_sems_lbl),
+                        y=alt.Y("Cajas_Est:Q", stack="zero", bandPosition=0.5),
+                        detail="Color_Cinta:N",
+                        color=alt.condition(
+                            alt.FieldOneOfPredicate(field="Color_Cinta", oneOf=["Amarilla", "Blanca"]),
+                            alt.value("#000000"),
+                            alt.value("#FFFFFF")
+                        ),
+                        text=alt.Text("Cajas_Est:Q", format=",.0f")
+                    )
+                    txt_ps_tot = alt.Chart(df_gp).mark_text(dy=-8, fontWeight="bold", fontSize=12, color="#FFFFFF").encode(
                         x=alt.X("Semana_Proy:N", sort=orden_sems_lbl),
                         y=alt.Y("sum(Cajas_Est):Q"),
                         text=alt.Text("sum(Cajas_Est):Q", format=",.0f")
                     )
-                    st.altair_chart((bar_ps + txt_ps_tot).properties(height=360), use_container_width=True)
+                    graf_ps_final = (bar_ps + txt_ps_seg + txt_ps_tot).properties(
+                        height=390, background="#1E2530", padding={"left": 12, "top": 18, "right": 12, "bottom": 12}
+                    ).configure_axis(
+                        labelColor="#E2E8F0", titleColor="#FFFFFF", gridColor="#334155", domainColor="#475569"
+                    ).configure_legend(
+                        labelColor="#E2E8F0", titleColor="#FFFFFF"
+                    ).configure_view(strokeWidth=0)
+                    st.altair_chart(graf_ps_final, use_container_width=True)
 
 
 st.title("BANANERA LA LOLA S.A")
@@ -1268,7 +1292,7 @@ elif rol == "Administrador":
                     except Exception as e:
                         st.error(f"Error al eliminar: {repr(e)}")
 
-    with tab5:
+        with tab5:
         st.subheader("Análisis Gráfico de Producción, Saldos y Pesos")
         if df.empty:
             st.info("Aún no hay datos suficientes para generar gráficas.")
@@ -1297,8 +1321,17 @@ elif rol == "Administrador":
 
             escala_cintas = alt.Scale(
                 domain=["Amarilla", "Morada", "Roja", "Cafe", "Negra", "Verde", "Azul", "Blanca"],
-                range=["#FFD700", "#800080", "#D32F2F", "#6D4C41", "#212121", "#2E7D32", "#1565C0", "#E0E0E0"]
+                range=["#FFD700", "#9C27B0", "#E53935", "#8D6E63", "#424242", "#43A047", "#1E88E5", "#F5F5F5"]
             )
+
+            def aplicar_tema_tarjeta(chart_obj, alto=380):
+                return chart_obj.properties(
+                    height=alto, background="#1E2530", padding={"left": 12, "top": 18, "right": 12, "bottom": 12}
+                ).configure_axis(
+                    labelColor="#E2E8F0", titleColor="#FFFFFF", gridColor="#334155", domainColor="#475569", labelAngle=0
+                ).configure_legend(
+                    labelColor="#E2E8F0", titleColor="#FFFFFF"
+                ).configure_view(strokeWidth=0)
 
             st.markdown("### 🔪 Sección 1: Gráfica de Peso Neto Cortado")
             cortes_base = df_g[df_g["Racimos"] < 0].copy()
@@ -1345,20 +1378,20 @@ elif rol == "Administrador":
 
                     grp_peso = cortes_g.groupby(["Lote", "Color_Cinta"])["Peso_Neto_kg"].sum().reset_index()
                     grp_peso["Peso_Neto_kg"] = grp_peso["Peso_Neto_kg"].round(1)
-                    bar_p = alt.Chart(grp_peso).mark_bar().encode(
+                    bar_p = alt.Chart(grp_peso).mark_bar(cornerRadiusTopLeft=3, cornerRadiusTopRight=3).encode(
                         x=alt.X("Lote:N", sort=LOTES, title="Lote"),
                         y=alt.Y("Peso_Neto_kg:Q", title="Peso Neto (kg)"),
                         color=alt.Color("Color_Cinta:N", scale=escala_cintas, title="Cinta"),
                         tooltip=["Lote", "Color_Cinta", alt.Tooltip("Peso_Neto_kg:Q", format=",.1f")]
                     )
-                    txt_p = alt.Chart(grp_peso).mark_text(dy=-6, fontWeight="bold", fontSize=11, color="#FFFFFF").encode(
-
+                    txt_p = alt.Chart(grp_peso).mark_text(dy=-8, fontWeight="bold", fontSize=11, color="#FFFFFF").encode(
                         x=alt.X("Lote:N", sort=LOTES),
                         y=alt.Y("sum(Peso_Neto_kg):Q"),
                         text=alt.Text("sum(Peso_Neto_kg):Q", format=",.0f")
                     )
-                    st.altair_chart((bar_p + txt_p).properties(height=360), use_container_width=True)
-                    st.divider()
+                    st.altair_chart(aplicar_tema_tarjeta(bar_p + txt_p), use_container_width=True)
+
+            st.divider()
             st.markdown("### 🌱 Sección 2: Gráficas de Embolse y Saldo en Mata")
             emb_base = df_g[df_g["Racimos"] > 0].copy()
             if emb_base.empty:
@@ -1394,25 +1427,29 @@ elif rol == "Administrador":
                 if not emb_g.empty:
                     st.write("#### 2. Racimos Embolsados por Lote y Color de Cinta")
                     grp_emb = emb_g.groupby(["Lote", "Color_Cinta"])["Racimos"].sum().reset_index()
-                    bar_e = alt.Chart(grp_emb).mark_bar().encode(
+                    bar_e = alt.Chart(grp_emb).mark_bar(cornerRadiusTopLeft=3, cornerRadiusTopRight=3).encode(
                         x=alt.X("Lote:N", sort=LOTES, title="Lote"),
                         y=alt.Y("Racimos:Q", title="Racimos Embolsados"),
                         color=alt.Color("Color_Cinta:N", scale=escala_cintas, title="Cinta"),
                         tooltip=["Lote", "Color_Cinta", "Racimos"]
                     )
-                    txt_e_seg = alt.Chart(grp_emb).mark_text(baseline="middle", fontWeight="bold", fontSize=10, color="#FFFFFF").encode(
+                    txt_e_seg = alt.Chart(grp_emb).mark_text(baseline="middle", fontWeight="bold", fontSize=10).encode(
                         x=alt.X("Lote:N", sort=LOTES),
                         y=alt.Y("Racimos:Q", stack="zero", bandPosition=0.5),
                         detail="Color_Cinta:N",
+                        color=alt.condition(
+                            alt.FieldOneOfPredicate(field="Color_Cinta", oneOf=["Amarilla", "Blanca"]),
+                            alt.value("#000000"),
+                            alt.value("#FFFFFF")
+                        ),
                         text=alt.Text("Racimos:Q", format=",.0f")
                     )
-                    txt_e_tot = alt.Chart(grp_emb).mark_text(dy=-7, fontWeight="bold", fontSize=11, color="#FFFFFF").encode(
-
+                    txt_e_tot = alt.Chart(grp_emb).mark_text(dy=-8, fontWeight="bold", fontSize=11, color="#FFFFFF").encode(
                         x=alt.X("Lote:N", sort=LOTES),
                         y=alt.Y("sum(Racimos):Q"),
                         text=alt.Text("sum(Racimos):Q", format=",.0f")
                     )
-                    st.altair_chart((bar_e + txt_e_seg + txt_e_tot).properties(height=370), use_container_width=True)
+                    st.altair_chart(aplicar_tema_tarjeta(bar_e + txt_e_seg + txt_e_tot), use_container_width=True)
 
                 st.write("#### 3. Saldos en Mata por Lote y Color de Cinta")
                 df_saldo_g = df_g.copy()
@@ -1439,25 +1476,28 @@ elif rol == "Administrador":
 
                 if filas_sg:
                     df_sg_plot = pd.DataFrame(filas_sg).groupby(["Lote", "Color_Cinta"])["Saldo_En_Mata"].sum().reset_index()
-                    bar_s = alt.Chart(df_sg_plot).mark_bar().encode(
+                    bar_s = alt.Chart(df_sg_plot).mark_bar(cornerRadiusTopLeft=3, cornerRadiusTopRight=3).encode(
                         x=alt.X("Lote:N", sort=LOTES, title="Lote"),
                         y=alt.Y("Saldo_En_Mata:Q", title="Saldo en Mata (Racimos)"),
                         color=alt.Color("Color_Cinta:N", scale=escala_cintas, title="Cinta"),
                         tooltip=["Lote", "Color_Cinta", "Saldo_En_Mata"]
                     )
-                    txt_s_seg = alt.Chart(df_sg_plot).mark_text(baseline="middle", fontWeight="bold", fontSize=10, color="#FFFFFF").encode(
+                    txt_s_seg = alt.Chart(df_sg_plot).mark_text(baseline="middle", fontWeight="bold", fontSize=10).encode(
                         x=alt.X("Lote:N", sort=LOTES),
                         y=alt.Y("Saldo_En_Mata:Q", stack="zero", bandPosition=0.5),
                         detail="Color_Cinta:N",
+                        color=alt.condition(
+                            alt.FieldOneOfPredicate(field="Color_Cinta", oneOf=["Amarilla", "Blanca"]),
+                            alt.value("#000000"),
+                            alt.value("#FFFFFF")
+                        ),
                         text=alt.Text("Saldo_En_Mata:Q", format=",.0f")
                     )
-                    txt_s_tot = alt.Chart(df_sg_plot).mark_text(dy=-7, fontWeight="bold", fontSize=11, color="#FFFFFF").encode(
-
+                    txt_s_tot = alt.Chart(df_sg_plot).mark_text(dy=-8, fontWeight="bold", fontSize=11, color="#FFFFFF").encode(
                         x=alt.X("Lote:N", sort=LOTES),
                         y=alt.Y("sum(Saldo_En_Mata):Q"),
                         text=alt.Text("sum(Saldo_En_Mata):Q", format=",.0f")
                     )
-                    st.altair_chart((bar_s + txt_s_seg + txt_s_tot).properties(height=370), use_container_width=True)
+                    st.altair_chart(aplicar_tema_tarjeta(bar_s + txt_s_seg + txt_s_tot), use_container_width=True)
                 else:
                     st.info("No hay saldos en mata disponibles para los filtros seleccionados.")
-
