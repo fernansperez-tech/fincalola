@@ -625,7 +625,7 @@ elif rol == "Administrador":
             if filtro_color != "Todos":
                 df_filtrado = df_filtrado[df_filtrado["Color_Cinta"] == filtro_color]
 
-                        df_filtrado["Peso_Bruto_kg"] = pd.to_numeric(df_filtrado["Parcelero"], errors="coerce").fillna(0.0)
+            df_filtrado["Peso_Bruto_kg"] = pd.to_numeric(df_filtrado["Parcelero"], errors="coerce").fillna(0.0)
             df_filtrado["Peso_Garrucha_kg"] = pd.to_numeric(df_filtrado["Estado"], errors="coerce").fillna(0.0)
             df_filtrado["Peso_Neto_kg"] = (df_filtrado["Peso_Bruto_kg"] - df_filtrado["Peso_Garrucha_kg"]).clip(lower=0.0)
 
