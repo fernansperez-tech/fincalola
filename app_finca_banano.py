@@ -996,9 +996,25 @@ with tab5:
 
             cortes_g = df_gf[df_gf["Racimos"] < 0].copy()
             if not cortes_g.empty:
+                def ext_tara_g(val):
+                    try:
+                        return float(str(val).split("|"))
+                    except Exception:
+                        return 0.0
+
+                def ext_vast_g(val):
+                    partes = str(val).split("|")
+                    if len(partes) > 1:
+                        try:
+                            return float(partes)
+                        except Exception:
+                            return 0.0
+                    return 0.0
+
                 cortes_g["Bruto"] = pd.to_numeric(cortes_g["Parcelero"], errors="coerce").fillna(0.0)
-                cortes_g["Tara"] = pd.to_numeric(cortes_g["Estado"], errors="coerce").fillna(0.0)
-                cortes_g["Peso_Neto_kg"] = (cortes_g["Bruto"] - cortes_g["Tara"]).clip(lower=0.0)
+                cortes_g["Tara"] = cortes_g["Estado"].apply(ext_tara_g)
+                cortes_g["Vastago"] = cortes_g["Estado"].apply(ext_vast_g)
+                cortes_g["Peso_Neto_kg"] = (cortes_g["Bruto"] - cortes_g["Tara"] - cortes_g["Vastago"]).clip(lower=0.0)
                 st.write("### 1. Peso Neto Cortado por Lote (kg)")
                 graf_peso = cortes_g.groupby("Lote")["Peso_Neto_kg"].sum()
                 st.bar_chart(graf_peso)
@@ -1008,5 +1024,4 @@ with tab5:
                 st.write("### 2. Racimos Embolsados por Lote")
                 graf_emb = emb_g.groupby("Lote")["Racimos"].sum()
                 st.bar_chart(graf_emb)
-
 
