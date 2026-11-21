@@ -657,7 +657,7 @@ elif rol == "Administrador":
             if filtro_color != "Todos":
                 df_filtrado = df_filtrado[df_filtrado["Color_Cinta"] == filtro_color]
 
-                       def extraer_tara(val):
+            def extraer_tara(val):
                 partes = str(val).split("|")
                 try:
                     return float(partes[0])
