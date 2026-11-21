@@ -583,41 +583,70 @@ elif rol == "Administrador":
 
 
 
-with tab2:
-        st.subheader("Buscador y Totales de Corte")
+    with tab2:
+        st.subheader("Buscador y Matriz de Corte (Promedios de Peso)")
         solo_cortes = df[df["Racimos"] < 0].copy() if not df.empty else pd.DataFrame()
         if solo_cortes.empty:
             st.info("Aún no hay cortes registrados desde la tableta.")
         else:
             ahora_c = datetime.now()
+            sem_act_c = ahora_c.isocalendar().week
+            anio_act_c = ahora_c.year
+
             solo_cortes["Racimos_Cortados"] = solo_cortes["Racimos"].abs()
             solo_cortes["Fecha"] = solo_cortes["Fecha"].astype(str).str.strip().str[:10]
             solo_cortes["Fecha_Dt"] = pd.to_datetime(solo_cortes["Fecha"], errors="coerce").dt.date
             solo_cortes["Anio"] = solo_cortes["Fecha"].str[:4]
             solo_cortes["Semana"] = solo_cortes["Semana"].astype(int)
 
+            sem_emb_ref = {}
+            if not df.empty:
+                ent_ref = df[df["Racimos"] > 0].groupby("Color_Cinta")["Semana"].min().to_dict()
+                for c_k, sm_v in ent_ref.items():
+                    sem_emb_ref[c_k] = int(sm_v)
+
+            def obtener_sem_emb(fila_c):
+                cl = fila_c["Color_Cinta"]
+                if cl in sem_emb_ref:
+                    return sem_emb_ref[cl]
+                return max(1, int(fila_c["Semana"]) - 10)
+
+            solo_cortes["Sem_Embolse"] = solo_cortes.apply(obtener_sem_emb, axis=1)
+            solo_cortes["Edad_Num"] = solo_cortes.apply(
+                lambda r: max(0, (int(r["Semana"]) - int(r["Sem_Embolse"])) + 1), axis=1
+            )
+            solo_cortes["Edad_Texto"] = solo_cortes["Edad_Num"].astype(str) + " sem"
+
             fechas_c_val = solo_cortes["Fecha_Dt"].dropna()
             f_min_c = fechas_c_val.min() if not fechas_c_val.empty else ahora_c.date()
             f_max_c = fechas_c_val.max() if not fechas_c_val.empty else ahora_c.date()
 
             rc1, rc2 = st.columns(2)
-            c_desde = rc1.date_input("Desde fecha:", value=f_min_c, min_value=f_min_c, max_value=f_max_c, key="corte_desde")
-            c_hasta = rc2.date_input("Hasta fecha:", value=f_max_c, min_value=f_min_c, max_value=f_max_c, key="corte_hasta")
+            c_desde = rc1.date_input("Desde fecha corte:", value=f_min_c, min_value=f_min_c, max_value=f_max_c, key="corte_desde")
+            c_hasta = rc2.date_input("Hasta fecha corte:", value=f_max_c, min_value=f_min_c, max_value=f_max_c, key="corte_hasta")
 
-            f1, f2 = st.columns(2)
+            f1, f2, f3 = st.columns(3)
             filtro_anio = f1.selectbox("Año:", ["Todos"] + sorted(solo_cortes["Anio"].unique().tolist(), reverse=True), key="corte_anio")
             semanas_c_disp = sorted(solo_cortes["Semana"].unique().tolist(), reverse=True)
             filtro_sem = f2.multiselect("Semanas de Corte (vacío = todas):", semanas_c_disp, key="corte_sem")
+            semanas_e_disp = sorted(solo_cortes["Sem_Embolse"].unique().tolist(), reverse=True)
+            filtro_sem_emb = f3.multiselect("Semanas de Embolse (vacío = todas):", semanas_e_disp, key="corte_sem_emb")
 
-            f3, f4 = st.columns(2)
-            filtro_lote = f3.selectbox("Lote:", ["Todos"] + sorted(solo_cortes["Lote"].unique().tolist()), key="corte_lote")
-            filtro_color = f4.selectbox("Color:", ["Todos"] + sorted(solo_cortes["Color_Cinta"].unique().tolist()), key="corte_color")
+            f4, f5, f6 = st.columns(3)
+            edades_disp = [f"{e} sem" for e in sorted(solo_cortes["Edad_Num"].unique().tolist(), reverse=True)]
+            filtro_edad = f4.multiselect("Edades al Corte (vacío = todas):", edades_disp, key="corte_edad")
+            filtro_lote = f5.selectbox("Lote:", ["Todos"] + sorted(solo_cortes["Lote"].unique().tolist()), key="corte_lote")
+            filtro_color = f6.selectbox("Color:", ["Todos"] + sorted(solo_cortes["Color_Cinta"].unique().tolist()), key="corte_color")
 
             df_filtrado = solo_cortes[(solo_cortes["Fecha_Dt"] >= c_desde) & (solo_cortes["Fecha_Dt"] <= c_hasta)].copy()
             if filtro_anio != "Todos":
                 df_filtrado = df_filtrado[df_filtrado["Anio"] == filtro_anio]
             if filtro_sem:
                 df_filtrado = df_filtrado[df_filtrado["Semana"].isin(filtro_sem)]
+            if filtro_sem_emb:
+                df_filtrado = df_filtrado[df_filtrado["Sem_Embolse"].isin(filtro_sem_emb)]
+            if filtro_edad:
+                df_filtrado = df_filtrado[df_filtrado["Edad_Texto"].isin(filtro_edad)]
             if filtro_lote != "Todos":
                 df_filtrado = df_filtrado[df_filtrado["Lote"] == filtro_lote]
             if filtro_color != "Todos":
@@ -628,33 +657,28 @@ with tab2:
             df_filtrado["Peso_Neto_kg"] = (df_filtrado["Peso_Bruto_kg"] - df_filtrado["Peso_Garrucha_kg"]).clip(lower=0.0)
 
             total_cortados = int(df_filtrado["Racimos_Cortados"].sum())
-            tot_bruto = round(float(df_filtrado["Peso_Bruto_kg"].sum()), 1)
-            tot_tara = round(float(df_filtrado["Peso_Garrucha_kg"].sum()), 1)
-            tot_neto = round(float(df_filtrado["Peso_Neto_kg"].sum()), 1)
-            cajas_cortadas = total_cortados * ratio
+            tot_bruto = float(df_filtrado["Peso_Bruto_kg"].sum())
+            tot_tara = float(df_filtrado["Peso_Garrucha_kg"].sum())
+            tot_neto = float(df_filtrado["Peso_Neto_kg"].sum())
+
+            prom_bruto_tot = round(tot_bruto / total_cortados, 2) if total_cortados > 0 else 0.0
+            prom_tara_tot = round(tot_tara / total_cortados, 2) if total_cortados > 0 else 0.0
+            prom_neto_tot = round(tot_neto / total_cortados, 2) if total_cortados > 0 else 0.0
 
             m_c1, m_c2, m_c3, m_c4 = st.columns(4)
             m_c1.metric("Racimos Cortados", f"{total_cortados:,}")
-            m_c2.metric("Peso Bruto (kg)", f"{tot_bruto:,.1f}")
-            m_c3.metric("Garrucha (kg)", f"{tot_tara:,.1f}")
-            m_c4.metric("Peso Neto (kg)", f"{tot_neto:,.1f}")
+            m_c2.metric("Prom. Bruto / Rac", f"{prom_bruto_tot:.2f} kg")
+            m_c3.metric("Prom. Garrucha / Rac", f"{prom_tara_tot:.2f} kg")
+            m_c4.metric("Prom. Neto / Rac", f"{prom_neto_tot:.2f} kg")
 
-            st.write("### Matriz de Cosecha por Lote, Cinta (Edad) y Pesos")
-            edad_ref = {}
-            if not df.empty:
-                ent_ref = df[df["Racimos"] > 0].groupby("Color_Cinta")["Semana"].min().to_dict()
-                sem_act_c = ahora_c.isocalendar().week
-                for c_k, sm_v in ent_ref.items():
-                    ed_c = max(0, (sem_act_c - int(sm_v)) + 1)
-                    edad_ref[c_k] = f"{c_k} ({ed_c} sem)"
-
-            df_filtrado["Cinta_Edad"] = df_filtrado["Color_Cinta"].apply(lambda x: edad_ref.get(x, x))
+            st.write("### Matriz de Cosecha por Lote, Cinta (Edad) y Pesos Promedio")
+            df_filtrado["Cinta_Edad"] = df_filtrado["Color_Cinta"] + " (" + df_filtrado["Edad_Texto"] + ")"
             piv_corte = df_filtrado.pivot_table(index="Lote", columns="Cinta_Edad", values="Racimos_Cortados", aggfunc="sum", fill_value=0)
             res_pesos_lote = df_filtrado.groupby("Lote").agg(
                 Total_Racimos=("Racimos_Cortados", "sum"),
-                Peso_Bruto_kg=("Peso_Bruto_kg", "sum"),
-                Garrucha_kg=("Peso_Garrucha_kg", "sum"),
-                Peso_Neto_kg=("Peso_Neto_kg", "sum")
+                Suma_Bruto=("Peso_Bruto_kg", "sum"),
+                Suma_Tara=("Peso_Garrucha_kg", "sum"),
+                Suma_Neto=("Peso_Neto_kg", "sum")
             )
 
             mat_corte = pd.DataFrame({"Lote": LOTES})
@@ -662,27 +686,32 @@ with tab2:
                 mat_corte[col_ce] = mat_corte["Lote"].map(piv_corte[col_ce]).fillna(0).astype(int)
 
             mat_corte["Total_Racimos"] = mat_corte["Lote"].map(res_pesos_lote["Total_Racimos"]).fillna(0).astype(int)
-            mat_corte["Peso_Bruto_kg"] = mat_corte["Lote"].map(res_pesos_lote["Peso_Bruto_kg"]).fillna(0.0).round(1)
-            mat_corte["Garrucha_kg"] = mat_corte["Lote"].map(res_pesos_lote["Garrucha_kg"]).fillna(0.0).round(1)
-            mat_corte["Peso_Neto_kg"] = mat_corte["Lote"].map(res_pesos_lote["Peso_Neto_kg"]).fillna(0.0).round(1)
-            mat_corte["Prom_Neto_Rac_kg"] = mat_corte.apply(
-                lambda r: round(r["Peso_Neto_kg"] / r["Total_Racimos"], 2) if r["Total_Racimos"] > 0 else 0.0, axis=1
-            )
+            s_bruto_l = mat_corte["Lote"].map(res_pesos_lote["Suma_Bruto"]).fillna(0.0)
+            s_tara_l = mat_corte["Lote"].map(res_pesos_lote["Suma_Tara"]).fillna(0.0)
+            s_neto_l = mat_corte["Lote"].map(res_pesos_lote["Suma_Neto"]).fillna(0.0)
+
+            mat_corte["Prom_Bruto_kg"] = [round(b / r, 2) if r > 0 else 0.0 for b, r in zip(s_bruto_l, mat_corte["Total_Racimos"])]
+            mat_corte["Prom_Garrucha_kg"] = [round(t / r, 2) if r > 0 else 0.0 for t, r in zip(s_tara_l, mat_corte["Total_Racimos"])]
+            mat_corte["Prom_Neto_kg"] = [round(n / r, 2) if r > 0 else 0.0 for n, r in zip(s_neto_l, mat_corte["Total_Racimos"])]
 
             fila_tot_mc = {"Lote": "TOTAL"}
             for col_c in piv_corte.columns:
                 fila_tot_mc[col_c] = int(mat_corte[col_c].sum())
             fila_tot_mc["Total_Racimos"] = total_cortados
-            fila_tot_mc["Peso_Bruto_kg"] = tot_bruto
-            fila_tot_mc["Garrucha_kg"] = tot_tara
-            fila_tot_mc["Peso_Neto_kg"] = tot_neto
-            fila_tot_mc["Prom_Neto_Rac_kg"] = round(tot_neto / total_cortados, 2) if total_cortados > 0 else 0.0
+            fila_tot_mc["Prom_Bruto_kg"] = prom_bruto_tot
+            fila_tot_mc["Prom_Garrucha_kg"] = prom_tara_tot
+            fila_tot_mc["Prom_Neto_kg"] = prom_neto_tot
 
             mat_corte_final = pd.concat([mat_corte, pd.DataFrame([fila_tot_mc])], ignore_index=True)
-            st.dataframe(mat_corte_final, use_container_width=True, hide_index=True)
+            filas_mc = mat_corte_final.index < len(mat_corte)
+            st.dataframe(
+                mat_corte_final.style.background_gradient(subset=(filas_mc, ["Prom_Neto_kg"]), cmap="coolwarm_r")
+                                     .format({"Prom_Bruto_kg": "{:.2f}", "Prom_Garrucha_kg": "{:.2f}", "Prom_Neto_kg": "{:.2f}"}),
+                use_container_width=True, hide_index=True
+            )
 
             csv_descarga = mat_corte_final.to_csv(index=False).encode("utf-8")
-            st.download_button("Descargar Matriz de Corte en Excel (CSV)", data=csv_descarga, file_name="matriz_cortes_pesos.csv", mime="text/csv")
+            st.download_button("Descargar Matriz de Corte en Excel (CSV)", data=csv_descarga, file_name="matriz_cortes_promedios.csv", mime="text/csv")
 
 
 with tab3:
