@@ -997,7 +997,7 @@ elif rol == "Administrador":
             if filtro_color != "Todos":
                 df_filtrado = df_filtrado[df_filtrado["Color_Cinta"] == filtro_color]
 
-                       pct_vastago = st.number_input("Descuento Vástago (%):", min_value=0.0, max_value=30.0, value=13.0, step=0.5, key="corte_pct_vastago")
+            pct_vastago = st.number_input("Descuento Vástago (%):", min_value=0.0, max_value=30.0, value=13.0, step=0.5, key="corte_pct_vastago")
 
             def extraer_tara(val):
                 partes = str(val).split("|")
