@@ -290,8 +290,8 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
             use_container_width=True, hide_index=True
         )
 
-        st.write("### 3. Matriz de Saldo en Mata por Lote, Cinta y Edad")
-        if not df.empty:
+    st.write("### 3. Matriz de Saldo en Mata por Lote, Cinta y Edad")
+    if not df.empty:
         df_mat = df.copy()
         df_mat["Fecha"] = df_mat["Fecha"].astype(str).str.strip().str[:10]
         df_mat["Anio"] = df_mat["Fecha"].str[:4]
