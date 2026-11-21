@@ -7,6 +7,7 @@ from datetime import datetime
 import time
 import gspread
 from google.oauth2.service_account import Credentials
+from datetime import datetime, timedelta
 
 st.set_page_config(page_title="Bananera la Lola S.a", page_icon="🍌", layout="centered")
 
