@@ -305,6 +305,23 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
                           .format({"Promedio_Por_Dia": "{:.1f}"}),
             use_container_width=True, hide_index=True
         )
+            st.write("### 3. Matriz de Embolse por Empleado y Lote (Según Filtros)")
+    if not df_res.empty:
+        piv_emp = df_res.pivot_table(index="Parcelero", columns="Lote", values="Racimos", aggfunc="sum", fill_value=0)
+        lotes_activos = [lt for lt in LOTES if lt in piv_emp.columns]
+        mat_emp = piv_emp[lotes_activos].copy()
+        mat_emp["TOTAL"] = mat_emp.sum(axis=1)
+        mat_emp = mat_emp.sort_values(by="TOTAL", ascending=False).reset_index()
+        fila_tot_emp = {"Parcelero": "TOTAL"}
+        for col_e in lotes_activos + ["TOTAL"]:
+            fila_tot_emp[col_e] = int(mat_emp[col_e].sum())
+        mat_emp_final = pd.concat([mat_emp, pd.DataFrame([fila_tot_emp])], ignore_index=True)
+        filas_me = mat_emp_final.index < len(mat_emp)
+        st.dataframe(
+            mat_emp_final.style.background_gradient(subset=(filas_me, ["TOTAL"]), cmap="coolwarm_r"),
+            use_container_width=True, hide_index=True
+        )
+
 
     if not df.empty:
         df_mat = df.copy()
