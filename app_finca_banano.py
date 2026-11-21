@@ -1090,7 +1090,8 @@ elif rol == "Administrador":
                         color=alt.Color("Color_Cinta:N", scale=escala_cintas, title="Cinta"),
                         tooltip=["Lote", "Color_Cinta", alt.Tooltip("Peso_Neto_kg:Q", format=",.1f")]
                     )
-                    txt_p = alt.Chart(grp_peso).mark_text(dy=-6, fontWeight="bold", fontSize=11).encode(
+                        txt_p = alt.Chart(grp_peso).mark_text(dy=-6, fontWeight="bold", fontSize=11, color="#FFFFFF").encode(
+
                         x=alt.X("Lote:N", sort=LOTES),
                         y=alt.Y("sum(Peso_Neto_kg):Q"),
                         text=alt.Text("sum(Peso_Neto_kg):Q", format=",.0f")
@@ -1144,7 +1145,8 @@ elif rol == "Administrador":
                         detail="Color_Cinta:N",
                         text=alt.Text("Racimos:Q", format=",.0f")
                     )
-                    txt_e_tot = alt.Chart(grp_emb).mark_text(dy=-7, fontWeight="bold", fontSize=11).encode(
+                    txt_e_tot = alt.Chart(grp_emb).mark_text(dy=-7, fontWeight="bold", fontSize=11, color="#FFFFFF").encode(
+
                         x=alt.X("Lote:N", sort=LOTES),
                         y=alt.Y("sum(Racimos):Q"),
                         text=alt.Text("sum(Racimos):Q", format=",.0f")
@@ -1188,7 +1190,8 @@ elif rol == "Administrador":
                         detail="Color_Cinta:N",
                         text=alt.Text("Saldo_En_Mata:Q", format=",.0f")
                     )
-                    txt_s_tot = alt.Chart(df_sg_plot).mark_text(dy=-7, fontWeight="bold", fontSize=11).encode(
+                    txt_s_tot = alt.Chart(df_sg_plot).mark_text(dy=-7, fontWeight="bold", fontSize=11, color="#FFFFFF").encode(
+
                         x=alt.X("Lote:N", sort=LOTES),
                         y=alt.Y("sum(Saldo_En_Mata):Q"),
                         text=alt.Text("sum(Saldo_En_Mata):Q", format=",.0f")
