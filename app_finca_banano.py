@@ -541,6 +541,15 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                     if nombre in texto:
                         return f"background-color: {fondo}; color: {letra}; font-weight: bold;"
                 return ""
+            sin_emb_df = df_fifo_m[df_fifo_m["Saldo"] < 0].copy()
+            if not sin_emb_df.empty:
+                sin_emb_df["Racimos_Pendientes"] = sin_emb_df["Saldo"].abs().astype(int)
+                st.warning(f"⚠️ Alerta: Hay **{int(sin_emb_df['Racimos_Pendientes'].sum()):,} racimos cortados** sin embolse previo registrado en el sistema:")
+                st.dataframe(
+                    sin_emb_df[["Lote", "Color_Cinta", "Racimos_Pendientes"]],
+                    use_container_width=True, hide_index=True
+                )
+
 
             st.write("### Balance Consolidado por Color y Edad (Toda la Finca)")
             bal_edad = solo_positivos.groupby(["Color_Cinta", "Anio", "Semana_Emb", "Edad_Txt"]).agg(
