@@ -913,7 +913,7 @@ with tab3:
                                 st.rerun()
                             except Exception as e:
                                 st.error(f"Error técnico al descontar: {repr(e)}")
-with tab4:
+    with tab4:
         st.subheader("Corregir o Eliminar Registros (Solo Administrador)")
         if not df.empty:
             cortes_df = df[df["Racimos"] < 0].copy()
@@ -935,14 +935,13 @@ with tab4:
                         except Exception as e:
                             st.error(f"Error al eliminar cosecha: {repr(e)}")
 
-
-if st.button("🔄 Recargar lista desde Google Sheets", key="btn_recargar_edit"):
+        if st.button("🔄 Recargar lista desde Google Sheets", key="btn_recargar_edit"):
             with st.spinner("Sincronizando con Google Sheets..."):
                 time.sleep(1.5)
             st.rerun()
-if df.empty:
+        if df.empty:
             st.warning("No se cargaron registros. Presiona el botón de recargar arriba.")
-else:
+        else:
             df_edit = df.copy()
             df_edit["Fila_Excel"] = df_edit.index + 2
             df_edit["Tipo"] = df_edit["Racimos"].apply(lambda x: "Embolse (+)" if int(x) > 0 else "Corte (-)")
@@ -1008,7 +1007,8 @@ else:
                         st.rerun()
                     except Exception as e:
                         st.error(f"Error al eliminar: {repr(e)}")
-with tab5:
+
+    with tab5:
         st.subheader("Análisis Gráfico de Producción y Pesos")
         if df.empty:
             st.info("Aún no hay datos suficientes para generar gráficas.")
@@ -1059,3 +1059,4 @@ with tab5:
                 st.write("### 2. Racimos Embolsados por Lote")
                 graf_emb = emb_g.groupby("Lote")["Racimos"].sum()
                 st.bar_chart(graf_emb)
+
