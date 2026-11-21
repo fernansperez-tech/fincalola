@@ -585,7 +585,7 @@ with tab1:
 
 
 
-    with tab2:
+with tab2:
         st.subheader("Buscador y Totales de Corte")
         solo_cortes = df[df["Racimos"] < 0].copy() if not df.empty else pd.DataFrame()
         if solo_cortes.empty:
@@ -669,7 +669,7 @@ with tab1:
             st.download_button("Descargar Selección en Excel (CSV)", data=csv_descarga, file_name="reporte_cortes_pesos.csv", mime="text/csv")
 
 
-    with tab3:
+with tab3:
         st.subheader("Descontar Corte con CSV Directo de Tableta")
         st.write("Sube el archivo .csv de la tableta (cada fila cuenta como 1 racimo).")
         archivo_csv = st.file_uploader("Seleccionar archivo .csv de la tableta", type=["csv"])
@@ -790,7 +790,7 @@ with tab1:
                                 st.error(f"Error técnico al descontar: {repr(e)}")
 
 
-    with tab4:
+with tab4:
         st.subheader("Corregir o Eliminar Registros (Solo Administrador)")
         if not df.empty:
             cortes_df = df[df["Racimos"] < 0].copy()
@@ -886,7 +886,7 @@ with tab1:
                     except Exception as e:
                         st.error(f"Error al eliminar: {repr(e)}")
 
-    with tab5:
+with tab5:
         st.subheader("Análisis Gráfico de Producción y Pesos")
         if df.empty:
             st.info("Aún no hay datos suficientes para generar gráficas.")
