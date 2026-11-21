@@ -744,7 +744,7 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                         "Cantidad de semanas futuras a mostrar en la gráfica:",
                         min_value=1, max_value=12, value=6, key=f"{prefijo}_slider_sems_graf"
                     )
-                        escala_ps = alt.Scale(
+                    escala_ps = alt.Scale(
                         domain=["Amarilla", "Morada", "Roja", "Cafe", "Café", "Negra", "Verde", "Azul", "Blanca"],
                         range=["#FFD700", "#9C27B0", "#E53935", "#8B4513", "#8B4513", "#111111", "#43A047", "#1E88E5", "#F5F5F5"]
                     )
