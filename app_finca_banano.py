@@ -593,8 +593,9 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                             "Cajas_Est": round(rac_int * (1 - merma / 100.0) * ratio, 0)
                         })
 
-                detalles_sem.sort(key=lambda x: -x)
-                texto_detalle = "  |  ".join([d for d in detalles_sem]) if detalles_sem else "Sin corte programado"
+                detalles_sem.sort(key=lambda x: -x[0])
+                texto_detalle = "  |  ".join([d[1] for d in detalles_sem]) if detalles_sem else "Sin corte programado"
+
                 rac_tot_int = int(round(rac_corte_sem))
                 cajas_tot_int = int(round(rac_tot_int * (1 - merma / 100.0) * ratio))
                 saldo_pasa = int(round(inv_sim["Saldo_Restante"].sum()))
