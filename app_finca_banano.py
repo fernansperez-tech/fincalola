@@ -336,6 +336,13 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
         ent_m = ent_m.sort_values(by=["Lote", "Color_Cinta", "Anio", "Semana"])
         sal_m = df_mat[df_mat["Racimos"] < 0].groupby(["Lote", "Color_Cinta"])["Racimos"].sum().abs().to_dict()
 
+        ICONOS_MATA = {
+            "Amarilla": "🟡 Amarilla", "Morada": "🟣 Morada",
+            "Roja": "🔴 Roja", "Cafe": "🟤 Cafe",
+            "Negra": "⚫ Negra", "Verde": "🟢 Verde",
+            "Azul": "🔵 Azul", "Blanca": "⚪ Blanca"
+        }
+
         reg_fifo = []
         for _, r_m in ent_m.iterrows():
             lt, cl, an_s, sm, emb_v = r_m["Lote"], r_m["Color_Cinta"], str(r_m["Anio"]), int(r_m["Semana"]), int(r_m["Racimos"])
@@ -348,24 +355,33 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
                 y_v = anio_hoy
             ed_v = max(0, ((anio_hoy - y_v) * 52 + (sem_hoy - sm)) + 1)
             if sld_v > 0:
-                etiq = f"{cl} ({ed_v} sem)"
-                reg_fifo.append({"Lote": lt, "Etiqueta": etiq, "Orden_Ed": -ed_v, "Saldo": sld_v})
+                cl_vis = ICONOS_MATA.get(cl, cl)
+                etiq = f"{cl_vis} ({ed_v} sem)"
+                reg_fifo.append({"Lote": lt, "Edad_Num": ed_v, "Edad_Txt": f"{ed_v} sem", "Etiqueta": etiq, "Orden_Ed": -ed_v, "Saldo": sld_v})
 
         df_fifo_m = pd.DataFrame(reg_fifo)
         if not df_fifo_m.empty:
-            cols_ordenadas = df_fifo_m.sort_values(by=["Orden_Ed", "Etiqueta"])["Etiqueta"].unique().tolist()
-            piv_saldo = df_fifo_m.pivot_table(index="Lote", columns="Etiqueta", values="Saldo", aggfunc="sum", fill_value=0)
+            edades_m_disp = [f"{e} sem" for e in sorted(df_fifo_m["Edad_Num"].unique().tolist(), reverse=True)]
+            sel_edad_mata = st.multiselect("Filtrar Saldo en Mata por Edad (vacío = todas):", edades_m_disp, key=f"{prefijo}_edad_mata")
+            if sel_edad_mata:
+                df_fifo_m = df_fifo_m[df_fifo_m["Edad_Txt"].isin(sel_edad_mata)]
 
-            matriz_final = pd.DataFrame({"Lote": LOTES})
-            for col_et in cols_ordenadas:
-                matriz_final[col_et] = matriz_final["Lote"].map(piv_saldo[col_et]).fillna(0).astype(int)
-            matriz_final["Saldo_En_Mata"] = matriz_final[cols_ordenadas].sum(axis=1).astype(int)
+            if not df_fifo_m.empty:
+                cols_ordenadas = df_fifo_m.sort_values(by=["Orden_Ed", "Etiqueta"])["Etiqueta"].unique().tolist()
+                piv_saldo = df_fifo_m.pivot_table(index="Lote", columns="Etiqueta", values="Saldo", aggfunc="sum", fill_value=0)
 
-            fila_tot_m = {"Lote": "TOTAL"}
-            for col_num in cols_ordenadas + ["Saldo_En_Mata"]:
-                fila_tot_m[col_num] = int(matriz_final[col_num].sum())
-            matriz_con_tot = pd.concat([matriz_final, pd.DataFrame([fila_tot_m])], ignore_index=True)
-            st.dataframe(matriz_con_tot, use_container_width=True, hide_index=True)
+                matriz_final = pd.DataFrame({"Lote": LOTES})
+                for col_et in cols_ordenadas:
+                    matriz_final[col_et] = matriz_final["Lote"].map(piv_saldo[col_et]).fillna(0).astype(int)
+                matriz_final["Saldo_En_Mata"] = matriz_final[cols_ordenadas].sum(axis=1).astype(int)
+
+                fila_tot_m = {"Lote": "TOTAL"}
+                for col_num in cols_ordenadas + ["Saldo_En_Mata"]:
+                    fila_tot_m[col_num] = int(matriz_final[col_num].sum())
+                matriz_con_tot = pd.concat([matriz_final, pd.DataFrame([fila_tot_m])], ignore_index=True)
+                st.dataframe(matriz_con_tot, use_container_width=True, hide_index=True)
+            else:
+                st.info("No hay saldo en mata para las edades seleccionadas.")
 
 
 st.title("BANANERA LA LOLA S.A")
