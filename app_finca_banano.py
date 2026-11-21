@@ -900,7 +900,7 @@ with tab4:
                             st.error(f"Error al eliminar cosecha: {repr(e)}")
 
 
-        if st.button("🔄 Recargar lista desde Google Sheets", key="btn_recargar_edit"):
+    if st.button("🔄 Recargar lista desde Google Sheets", key="btn_recargar_edit"):
             with st.spinner("Sincronizando con Google Sheets..."):
                 time.sleep(1.5)
             st.rerun()
