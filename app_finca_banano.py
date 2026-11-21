@@ -639,7 +639,7 @@ with tab2:
             m_c3.metric("Garrucha (kg)", f"{tot_tara:,.1f}")
             m_c4.metric("Peso Neto (kg)", f"{tot_neto:,.1f}")
 
-                        st.write("### Matriz de Cosecha por Lote, Cinta (Edad) y Pesos")
+            st.write("### Matriz de Cosecha por Lote, Cinta (Edad) y Pesos")
             edad_ref = {}
             if not df.empty:
                 ent_ref = df[df["Racimos"] > 0].groupby("Color_Cinta")["Semana"].min().to_dict()
