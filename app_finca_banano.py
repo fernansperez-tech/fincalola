@@ -342,7 +342,8 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
         )
 
 
-def mostrar_saldos_y_proyeccion(df, prefijo):
+def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
+
     if df.empty:
         st.info("Aún no hay movimientos registrados en el sistema.")
         return
@@ -425,51 +426,84 @@ def mostrar_saldos_y_proyeccion(df, prefijo):
         else:
             st.info("No hay saldo en mata para las edades seleccionadas.")
 
-    st.divider()
-    st.subheader("2. Proyección de Cosecha y Saldo en Mata (FIFO)")
-    col_r1, col_r2 = st.columns(2)
-    ratio = col_r1.number_input("Ratio (Cajas / Racimo):", value=1.15, min_value=0.50, max_value=2.50, step=0.05, key=f"{prefijo}_ratio")
-    merma = col_r2.slider("Merma estimada (%):", 0, 20, 5, key=f"{prefijo}_merma")
+        st.subheader("2. Gráfica de Saldos en Mata por Lote y Color de Cinta")
+    if not solo_pos_m.empty:
+        import altair as alt
+        escala_cintas_m = alt.Scale(
+            domain=["Amarilla", "Morada", "Roja", "Cafe", "Negra", "Verde", "Azul", "Blanca"],
+            range=["#FFD700", "#800080", "#D32F2F", "#6D4C41", "#212121", "#2E7D32", "#1565C0", "#E0E0E0"]
+        )
+        df_sg_plot = solo_pos_m.groupby(["Lote", "Color_Cinta"])["Saldo"].sum().reset_index()
+        bar_s = alt.Chart(df_sg_plot).mark_bar().encode(
+            x=alt.X("Lote:N", sort=LOTES, title="Lote"),
+            y=alt.Y("Saldo:Q", title="Saldo en Mata (Racimos)"),
+            color=alt.Color("Color_Cinta:N", scale=escala_cintas_m, title="Cinta"),
+            tooltip=["Lote", "Color_Cinta", "Saldo"]
+        )
+        txt_s_seg = alt.Chart(df_sg_plot).mark_text(baseline="middle", fontWeight="bold", fontSize=10).encode(
+            x=alt.X("Lote:N", sort=LOTES),
+            y=alt.Y("Saldo:Q", stack="zero", bandPosition=0.5),
+            detail="Color_Cinta:N",
+            color=alt.condition(
+                alt.FieldOneOfPredicate(field="Color_Cinta", oneOf=["Amarilla", "Blanca"]),
+                alt.value("#000000"),
+                alt.value("#FFFFFF")
+            ),
+            text=alt.Text("Saldo:Q", format=",.0f")
+        )
+        txt_s_tot = alt.Chart(df_sg_plot).mark_text(dy=-7, fontWeight="bold", fontSize=11, color="#FFFFFF").encode(
+            x=alt.X("Lote:N", sort=LOTES),
+            y=alt.Y("sum(Saldo):Q"),
+            text=alt.Text("sum(Saldo):Q", format=",.0f")
+        )
+        st.altair_chart((bar_s + txt_s_seg + txt_s_tot).properties(height=360), use_container_width=True)
 
-    if not df_fifo_m.empty:
-        solo_positivos = df_fifo_m[df_fifo_m["Saldo"] > 0]
-        total_racimos = int(solo_positivos["Saldo"].sum())
-        cajas_est = total_racimos * (1 - merma / 100.0) * ratio
-        m1, m2 = st.columns(2)
-        m1.metric("Saldo Real en Mata", f"{total_racimos:,} racimos")
-        m2.metric("Cajas Proyectadas (20 kg)", f"{cajas_est:,.0f} cajas")
+    if es_admin:
+        st.divider()
+        st.subheader("3. Proyección de Cosecha y Cajas (Solo Administrador)")
+        col_r1, col_r2 = st.columns(2)
+        ratio = col_r1.number_input("Ratio (Cajas / Racimo):", value=1.15, min_value=0.50, max_value=2.50, step=0.05, key=f"{prefijo}_ratio")
+        merma = col_r2.slider("Merma estimada (%):", 0, 20, 5, key=f"{prefijo}_merma")
 
-        def pintar_cinta_proy(val):
-            texto = str(val)
-            paleta = {
-                "Amarilla": ("#FFD700", "#000000"),
-                "Morada": ("#800080", "#FFFFFF"),
-                "Roja": ("#D32F2F", "#FFFFFF"),
-                "Cafe": ("#6D4C41", "#FFFFFF"),
-                "Negra": ("#212121", "#FFFFFF"),
-                "Verde": ("#2E7D32", "#FFFFFF"),
-                "Azul": ("#1565C0", "#FFFFFF"),
-                "Blanca": ("#F5F5F5", "#000000")
-            }
-            for nombre, (fondo, letra) in paleta.items():
-                if nombre in texto:
-                    return f"background-color: {fondo}; color: {letra}; font-weight: bold;"
-            return ""
+        if not df_fifo_m.empty:
+            solo_positivos = df_fifo_m[df_fifo_m["Saldo"] > 0]
+            total_racimos = int(solo_positivos["Saldo"].sum())
+            cajas_est = total_racimos * (1 - merma / 100.0) * ratio
+            m1, m2 = st.columns(2)
+            m1.metric("Saldo Real en Mata", f"{total_racimos:,} racimos")
+            m2.metric("Cajas Proyectadas (20 kg)", f"{cajas_est:,.0f} cajas")
 
-        st.write("### Balance Consolidado por Color y Edad (Toda la Finca)")
-        bal_edad = df_fifo_m.groupby(["Color_Cinta", "Anio", "Semana_Emb", "Edad_Txt"]).agg(
-            Embolsados=("Embolsados", "sum"), Cortados=("Cortados", "sum"), Saldo_En_Mata=("Saldo", "sum")
-        ).reset_index().rename(columns={"Edad_Txt": "Edad"})
-        bal_edad["Cajas_Est"] = (bal_edad["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
-        tot_be = pd.DataFrame([{
-            "Color_Cinta": "TOTAL", "Anio": "", "Semana_Emb": "", "Edad": "",
-            "Embolsados": int(bal_edad["Embolsados"].sum()),
-            "Cortados": int(bal_edad["Cortados"].sum()),
-            "Saldo_En_Mata": int(bal_edad["Saldo_En_Mata"].sum()),
-            "Cajas_Est": int(bal_edad["Cajas_Est"].sum())
-        }])
-        bal_edad_tot = pd.concat([bal_edad, tot_be], ignore_index=True)
-        st.dataframe(bal_edad_tot.style.map(pintar_cinta_proy, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
+            def pintar_cinta_proy(val):
+                texto = str(val)
+                paleta = {
+                    "Amarilla": ("#FFD700", "#000000"),
+                    "Morada": ("#800080", "#FFFFFF"),
+                    "Roja": ("#D32F2F", "#FFFFFF"),
+                    "Cafe": ("#6D4C41", "#FFFFFF"),
+                    "Negra": ("#212121", "#FFFFFF"),
+                    "Verde": ("#2E7D32", "#FFFFFF"),
+                    "Azul": ("#1565C0", "#FFFFFF"),
+                    "Blanca": ("#F5F5F5", "#000000")
+                }
+                for nombre, (fondo, letra) in paleta.items():
+                    if nombre in texto:
+                        return f"background-color: {fondo}; color: {letra}; font-weight: bold;"
+                return ""
+
+            st.write("### Balance Consolidado por Color y Edad (Toda la Finca)")
+            bal_edad = df_fifo_m.groupby(["Color_Cinta", "Anio", "Semana_Emb", "Edad_Txt"]).agg(
+                Embolsados=("Embolsados", "sum"), Cortados=("Cortados", "sum"), Saldo_En_Mata=("Saldo", "sum")
+            ).reset_index().rename(columns={"Edad_Txt": "Edad"})
+            bal_edad["Cajas_Est"] = (bal_edad["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
+            tot_be = pd.DataFrame([{
+                "Color_Cinta": "TOTAL", "Anio": "", "Semana_Emb": "", "Edad": "",
+                "Embolsados": int(bal_edad["Embolsados"].sum()),
+                "Cortados": int(bal_edad["Cortados"].sum()),
+                "Saldo_En_Mata": int(bal_edad["Saldo_En_Mata"].sum()),
+                "Cajas_Est": int(bal_edad["Cajas_Est"].sum())
+            }])
+            bal_edad_tot = pd.concat([bal_edad, tot_be], ignore_index=True)
+            st.dataframe(bal_edad_tot.style.map(pintar_cinta_proy, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
 
 
 st.title("BANANERA LA LOLA S.A")
@@ -593,7 +627,7 @@ elif rol == "Consulta de Embolse":
                 lote_qr = dato_qr
                 st.success(f"Lote escaneado: {lote_qr}")
     df = cargar_datos()
-    t_cons1, t_cons2 = st.tabs(["🌱 Reportes de Embolse", "📦 Saldos en Mata y Proyección"])
+    t_cons1, t_cons2 = st.tabs(["🌱 Reportes de Embolse", "📦 Saldos De Racimos"])
     with t_cons1:
         mostrar_reportes_embolse(df, prefijo="cons", lote_qr=lote_qr)
     with t_cons2:
@@ -616,7 +650,8 @@ elif rol == "Administrador":
         mostrar_reportes_embolse(df, prefijo="adm")
 
     with tab_proy:
-        mostrar_saldos_y_proyeccion(df, prefijo="adm_proy")
+     mostrar_saldos_y_proyeccion(df, prefijo="adm_proy", es_admin=True)
+
 
     with tab2:
 
