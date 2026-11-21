@@ -492,7 +492,7 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                 return ""
 
             st.write("### Balance Consolidado por Color y Edad (Toda la Finca)")
-            bal_edad = df_fifo_m.groupby(["Color_Cinta", "Anio", "Semana_Emb", "Edad_Txt"]).agg(
+            bal_edad = solo_positivos.groupby(["Color_Cinta", "Anio", "Semana_Emb", "Edad_Txt"]).agg(
                 Embolsados=("Embolsados", "sum"), Cortados=("Cortados", "sum"), Saldo_En_Mata=("Saldo", "sum")
             ).reset_index().rename(columns={"Edad_Txt": "Edad"})
             bal_edad["Cajas_Est"] = (bal_edad["Saldo_En_Mata"] * (1 - merma / 100.0) * ratio).round(0).astype(int)
@@ -505,7 +505,6 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
             }])
             bal_edad_tot = pd.concat([bal_edad, tot_be], ignore_index=True)
             st.dataframe(bal_edad_tot.style.map(pintar_cinta_proy, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
-
 
 st.title("BANANERA LA LOLA S.A")
 
