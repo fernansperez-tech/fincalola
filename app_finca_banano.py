@@ -573,7 +573,7 @@ elif rol == "Administrador":
             tot_cajas_lote = balance.groupby("Lote")["Cajas_Est"].sum()
             mat_bal = pd.DataFrame({"Lote": LOTES})
             for col_b in piv_bal.columns:
-                    mat_bal[col_b] = mat_bal["Lote"].map(piv_bal[col_b]).fillna(0).astype(int)
+                mat_bal[col_b] = mat_bal["Lote"].map(piv_bal[col_b]).fillna(0).astype(int)
                 mat_bal["Cajas_Proy"] = mat_bal["Lote"].map(tot_cajas_lote).fillna(0).astype(int)
                 fila_tot_mb = {"Lote": "TOTAL"}
             for c_mb in mat_bal.columns:
