@@ -342,7 +342,7 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
         )
 
 
-    def mostrar_saldos_y_proyeccion(df, prefijo):
+def mostrar_saldos_y_proyeccion(df, prefijo):
      if df.empty:
         st.info("Aún no hay movimientos registrados en el sistema.")
         return
