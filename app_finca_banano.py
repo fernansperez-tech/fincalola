@@ -770,9 +770,10 @@ with tab3:
             col_lote = c1.selectbox("Columna de Lote:", columnas_archivo, key="csv_col_lote")
             col_color = c2.selectbox("Columna de Color:", columnas_archivo, key="csv_col_color")
             col_fecha = c3.selectbox("Columna de Fecha:", ["Usar fecha de hoy"] + columnas_archivo, key="csv_col_fecha")
-            c4, c5 = st.columns(2)
-            col_bruto = c4.selectbox("Columna Peso Bruto (Opcional):", ["Ninguna"] + columnas_archivo, key="csv_col_bruto")
-            col_tara = c5.selectbox("Columna Peso Garrucha/Tara (Opcional):", ["Ninguna"] + columnas_archivo, key="csv_col_tara")
+            c4, c5, c6 = st.columns(3)
+            col_bruto = c4.selectbox("Peso Bruto (Opcional):", ["Ninguna"] + columnas_archivo, key="csv_col_bruto")
+            col_tara = c5.selectbox("Peso Garrucha/Tara (Opcional):", ["Ninguna"] + columnas_archivo, key="csv_col_tara")
+            col_vastago = c6.selectbox("Peso Vástago (Opcional):", ["Ninguna"] + columnas_archivo, key="csv_col_vastago")
 
 
             if col_lote == col_color or (col_fecha != "Usar fecha de hoy" and col_fecha in [col_lote, col_color]):
