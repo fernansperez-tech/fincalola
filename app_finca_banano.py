@@ -500,8 +500,8 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
         st.divider()
         st.subheader("1. Proyección de Cosecha y Cajas (Solo Administrador)")
         df_guardada = cargar_config_proyeccion() if es_admin else pd.DataFrame()
-        ratio_def = float(df_guardada["Ratio"].iloc) if (not df_guardada.empty and "Ratio" in df_guardada.columns) else 1.15
-        merma_def = int(df_guardada["Merma"].iloc) if (not df_guardada.empty and "Merma" in df_guardada.columns) else 5
+        ratio_def = float(df_guardada["Ratio"].iloc[0]) if (not df_guardada.empty and "Ratio" in df_guardada.columns) else 1.15
+        merma_def = int(df_guardada["Merma"].iloc[0]) if (not df_guardada.empty and "Merma" in df_guardada.columns) else 5
 
         col_r1, col_r2 = st.columns(2)
         ratio = col_r1.number_input("Ratio (Cajas / Racimo):", value=ratio_def, min_value=0.50, max_value=2.50, step=0.05, key=f"{prefijo}_ratio")
