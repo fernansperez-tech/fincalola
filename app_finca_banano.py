@@ -625,7 +625,7 @@ elif rol == "Administrador":
                 }])
                 bal_edad_tot = pd.concat([bal_edad, tot_be], ignore_index=True)
                 st.dataframe(bal_edad_tot.style.map(pintar_cinta_adm, subset=["Color_Cinta"]), use_container_width=True, hide_index=True)
-with tab2:
+    with tab2:
         st.subheader("Buscador y Matriz de Corte (Promedios de Peso)")
         solo_cortes = df[df["Racimos"] < 0].copy() if not df.empty else pd.DataFrame()
         if solo_cortes.empty:
@@ -791,7 +791,7 @@ with tab2:
             csv_descarga = mat_corte_final.to_csv(index=False).encode("utf-8")
             st.download_button("Descargar Matriz de Corte en Excel (CSV)", data=csv_descarga, file_name="matriz_cortes_promedios.csv", mime="text/csv")
 
-with tab3:
+    with tab3:
         st.subheader("Descontar Corte con CSV Directo de Tableta")
         st.write("Sube el archivo .csv de la tableta (cada fila cuenta como 1 racimo).")
         archivo_csv = st.file_uploader("Seleccionar archivo .csv de la tableta", type=["csv"])
@@ -912,7 +912,7 @@ with tab3:
                                 st.rerun()
                             except Exception as e:
                                 st.error(f"Error técnico al descontar: {repr(e)}")
-with tab4:
+    with tab4:
         st.subheader("Corregir o Eliminar Registros (Solo Administrador)")
         if not df.empty:
             cortes_df = df[df["Racimos"] < 0].copy()
@@ -1007,7 +1007,7 @@ with tab4:
                     except Exception as e:
                         st.error(f"Error al eliminar: {repr(e)}")
 
-with tab5:
+    with tab5:
         st.subheader("Análisis Gráfico de Producción, Saldos y Pesos")
         if df.empty:
             st.info("Aún no hay datos suficientes para generar gráficas.")
