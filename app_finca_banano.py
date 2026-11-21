@@ -997,26 +997,20 @@ elif rol == "Administrador":
             if filtro_color != "Todos":
                 df_filtrado = df_filtrado[df_filtrado["Color_Cinta"] == filtro_color]
 
+                       pct_vastago = st.number_input("Descuento Vástago (%):", min_value=0.0, max_value=30.0, value=13.0, step=0.5, key="corte_pct_vastago")
+
             def extraer_tara(val):
                 partes = str(val).split("|")
                 try:
-                    return float(partes[0])
+                    return float(partes)
                 except Exception:
                     return 0.0
 
-            def extraer_vastago(val):
-                partes = str(val).split("|")
-                if len(partes) > 1:
-                    try:
-                        return float(partes[1])
-                    except Exception:
-                        return 0.0
-                return 0.0
-
             df_filtrado["Peso_Bruto_kg"] = pd.to_numeric(df_filtrado["Parcelero"], errors="coerce").fillna(0.0)
             df_filtrado["Peso_Garrucha_kg"] = df_filtrado["Estado"].apply(extraer_tara)
-            df_filtrado["Peso_Vastago_kg"] = df_filtrado["Estado"].apply(extraer_vastago)
-            df_filtrado["Peso_Neto_kg"] = (df_filtrado["Peso_Bruto_kg"] - df_filtrado["Peso_Garrucha_kg"] - df_filtrado["Peso_Vastago_kg"]).clip(lower=0.0)
+            sin_garrucha = (df_filtrado["Peso_Bruto_kg"] - df_filtrado["Peso_Garrucha_kg"]).clip(lower=0.0)
+            df_filtrado["Peso_Vastago_kg"] = (sin_garrucha * (pct_vastago / 100.0)).round(2)
+            df_filtrado["Peso_Neto_kg"] = (sin_garrucha - df_filtrado["Peso_Vastago_kg"]).clip(lower=0.0)
 
             total_cortados = int(df_filtrado["Racimos_Cortados"].sum())
             tot_bruto = float(df_filtrado["Peso_Bruto_kg"].sum())
