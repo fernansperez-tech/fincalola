@@ -596,8 +596,8 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                                 "Cajas_Est": round(rac_int * (1 - merma / 100.0) * ratio, 0)
                             })
 
-                    detalles_sem.sort(key=lambda x: -x)
-                    texto_detalle = "  |  ".join([d for d in detalles_sem]) if detalles_sem else "Sin corte programado"
+                    detalles_sem.sort(key=lambda x: -x[0])
+                    texto_detalle = "  |  ".join([d[1] for d in detalles_sem]) if detalles_sem else "Sin corte programado"
 
                     detalles_saldo = []
                     for _, row_rem in inv_sim.iterrows():
@@ -607,8 +607,9 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                             ico_r = ICONOS_SIM.get(row_rem["Color_Cinta"], "")
                             detalles_saldo.append((ed_rem, f"{ico_r} {row_rem['Color_Cinta']} ({ed_rem} sem): {rem_v:,}"))
 
-                    detalles_saldo.sort(key=lambda x: -x)
-                    texto_saldo_pasa = "  |  ".join([d for d in detalles_saldo]) if detalles_saldo else "0 (Todo cosechado)"
+                    detalles_saldo.sort(key=lambda x: -x[0])
+                    texto_saldo_pasa = "  |  ".join([d[1] for d in detalles_saldo]) if detalles_saldo else "0 (Todo cosechado)"
+
 
                     rac_tot_int = int(round(rac_corte_sem))
                     cajas_tot_int = int(round(rac_tot_int * (1 - merma / 100.0) * ratio))
