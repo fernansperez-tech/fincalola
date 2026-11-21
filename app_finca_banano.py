@@ -595,7 +595,7 @@ elif rol == "Administrador":
                 m1, m2 = st.columns(2)
                 m1.metric("Saldo Real en Mata", f"{total_racimos:,} racimos")
                 m2.metric("Cajas Proyectadas (20 kg)", f"{cajas_est:,.0f} cajas")
-                            def pintar_cinta_adm(val):
+                def pintar_cinta_adm(val):
                     texto = str(val)
                     paleta = {
                         "Amarilla": ("#FFD700", "#000000"),
