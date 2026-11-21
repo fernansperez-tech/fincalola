@@ -752,8 +752,8 @@ elif rol == "Administrador":
                 use_container_width=True, hide_index=True
             )
 
-            csv_descarga = mat_corte_final.to_csv(index=False).encode("utf-8")
-            st.download_button("Descargar Matriz de Corte en Excel (CSV)", data=csv_descarga, file_name="matriz_cortes_promedios.csv", mime="text/csv")
+          csv_descarga = mat_corte_final.to_csv(index=False).encode("utf-8")
+          st.download_button("Descargar Matriz de Corte en Excel (CSV)", data=csv_descarga, file_name="matriz_cortes_promedios.csv", mime="text/csv")
 
   with tab3:
         st.subheader("Descontar Corte con CSV Directo de Tableta")
