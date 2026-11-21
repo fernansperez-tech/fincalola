@@ -116,6 +116,42 @@ def borrar_multiples_filas_gsheet(lista_filas_sheet):
         })
     if peticiones:
         ws.spreadsheet.batch_update({"requests": peticiones})
+def cargar_config_proyeccion():
+    try:
+        sh = conectar_gsheet()
+        try:
+            ws_p = sh.worksheet("Proyecciones")
+        except Exception:
+            ws_p = sh.add_worksheet(title="Proyecciones", rows=30, cols=10)
+            ws_p.append_row(["Orden", "Semana_Proy", "P12", "P11", "P10", "P9", "Ratio", "Merma", "Fecha_Guardado"])
+            return pd.DataFrame()
+        datos_p = ws_p.get_all_records()
+        return pd.DataFrame(datos_p) if datos_p else pd.DataFrame()
+    except Exception:
+        return pd.DataFrame()
+
+def guardar_config_proyeccion(df_cfg, ratio_val, merma_val):
+    sh = conectar_gsheet()
+    try:
+        ws_p = sh.worksheet("Proyecciones")
+    except Exception:
+        ws_p = sh.add_worksheet(title="Proyecciones", rows=30, cols=10)
+    ws_p.clear()
+    ahora_str = datetime.now().strftime("%Y-%m-%d %H:%M")
+    filas_ws = [["Orden", "Semana_Proy", "P12", "P11", "P10", "P9", "Ratio", "Merma", "Fecha_Guardado"]]
+    for _, r in df_cfg.iterrows():
+        filas_ws.append([
+            int(r["Orden"]),
+            str(r["Semana_Proy"]),
+            int(r["% 12+ sem"]),
+            int(r["% 11 sem"]),
+            int(r["% 10 sem"]),
+            int(r["% 9 sem"]),
+            float(ratio_val),
+            int(merma_val),
+            ahora_str
+        ])
+    ws_p.update("A1", filas_ws)
 
 def procesar_csv_tableta(df_tab, col_lote, col_color, col_fecha=None, col_bruto="Ninguna", col_tara="Ninguna", col_vastago="Ninguna"):
     ahora = datetime.now()
@@ -463,9 +499,14 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
     if es_admin:
         st.divider()
         st.subheader("1. Proyección de Cosecha y Cajas (Solo Administrador)")
+        df_guardada = cargar_config_proyeccion() if es_admin else pd.DataFrame()
+        ratio_def = float(df_guardada["Ratio"].iloc) if (not df_guardada.empty and "Ratio" in df_guardada.columns) else 1.15
+        merma_def = int(df_guardada["Merma"].iloc) if (not df_guardada.empty and "Merma" in df_guardada.columns) else 5
+
         col_r1, col_r2 = st.columns(2)
-        ratio = col_r1.number_input("Ratio (Cajas / Racimo):", value=1.15, min_value=0.50, max_value=2.50, step=0.05, key=f"{prefijo}_ratio")
-        merma = col_r2.slider("Merma estimada (%):", 0, 20, 5, key=f"{prefijo}_merma")
+        ratio = col_r1.number_input("Ratio (Cajas / Racimo):", value=ratio_def, min_value=0.50, max_value=2.50, step=0.05, key=f"{prefijo}_ratio")
+        merma = col_r2.slider("Merma estimada (%):", 0, 20, merma_def, key=f"{prefijo}_merma")
+
 
         if not df_fifo_m.empty:
             solo_positivos = df_fifo_m[df_fifo_m["Saldo"] > 0]
@@ -516,18 +557,29 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                 inv_sim = solo_positivos.groupby(["Color_Cinta", "Anio", "Semana_Emb", "Edad_Num"])["Saldo"].sum().reset_index()
                 inv_sim["Saldo_Restante"] = inv_sim["Saldo"].astype(float)
 
+                                mapa_guardado = {}
+                if not df_guardada.empty and "Semana_Proy" in df_guardada.columns:
+                    for _, rg in df_guardada.iterrows():
+                        mapa_guardado[str(rg["Semana_Proy"])] = {
+                            "p12": int(rg["P12"]),
+                            "p11": int(rg["P11"]),
+                            "p10": int(rg["P10"]),
+                            "p9": int(rg["P9"])
+                        }
+
                 filas_cfg_default = []
                 for offset in range(12):
                     fecha_fut = ahora + timedelta(weeks=offset)
                     num_sem_fut = fecha_fut.isocalendar().week
                     etiqueta_sem = f"Sem {num_sem_fut} (Actual)" if offset == 0 else f"Sem {num_sem_fut} (+{offset} sem)"
+                    prev = mapa_guardado.get(etiqueta_sem, {"p12": 100, "p11": 50, "p10": 30, "p9": 10})
                     filas_cfg_default.append({
                         "Orden": offset,
                         "Semana_Proy": etiqueta_sem,
-                        "% 12+ sem": 100,
-                        "% 11 sem": 50,
-                        "% 10 sem": 30,
-                        "% 9 sem": 10
+                        "% 12+ sem": prev["p12"],
+                        "% 11 sem": prev["p11"],
+                        "% 10 sem": prev["p10"],
+                        "% 9 sem": prev["p9"]
                     })
 
                 df_cfg_init = pd.DataFrame(filas_cfg_default)
@@ -545,6 +597,28 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                     hide_index=True,
                     key=f"{prefijo}_editor_pct_12sem"
                 )
+
+                b_g1, b_g2 = st.columns([2, 1])
+                if b_g1.button("💾 Guardar Proyección para Pedido de Cajas", type="primary", use_container_width=True, key=f"{prefijo}_btn_save_proy"):
+                    try:
+                        guardar_config_proyeccion(df_cfg_edit, ratio, merma)
+                        st.success("Proyección semanal, Ratio y Merma guardados en Google Sheets.")
+                        time.sleep(1.2)
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"Error al guardar proyección: {repr(e)}")
+                if b_g2.button("🔄 Restaurar Base (100/50/30/10)", use_container_width=True, key=f"{prefijo}_btn_reset_proy"):
+                    try:
+                        df_base_rst = pd.DataFrame([
+                            {"Orden": i, "Semana_Proy": r["Semana_Proy"], "% 12+ sem": 100, "% 11 sem": 50, "% 10 sem": 30, "% 9 sem": 10}
+                            for i, r in df_cfg_init.iterrows()
+                        ])
+                        guardar_config_proyeccion(df_base_rst, 1.15, 5)
+                        st.info("Valores base restaurados.")
+                        time.sleep(1.2)
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"Error al restaurar: {repr(e)}")
 
                 ICONOS_SIM = {
                     "Amarilla": "🟡", "Morada": "🟣", "Roja": "🔴", "Cafe": "🟤",
