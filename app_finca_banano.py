@@ -671,7 +671,7 @@ elif rol == "Administrador":
             m_c3.metric("Prom. Garrucha / Rac", f"{prom_tara_tot:.2f} kg")
             m_c4.metric("Prom. Neto / Rac", f"{prom_neto_tot:.2f} kg")
 
-                        st.write("### Matriz de Cosecha por Lote, Cinta (Edad) y Pesos Promedio")
+            st.write("### Matriz de Cosecha por Lote, Cinta (Edad) y Pesos Promedio")
             ICONOS_CINTA_COL = {
                 "Amarilla": "🟡 Amarilla", "Morada": "🟣 Morada",
                 "Roja": "🔴 Roja", "Cafe": "🟤 Cafe",
