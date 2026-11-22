@@ -889,7 +889,7 @@ if rol == "Parcelero (Embolse)":
     st.subheader("Registro de Fruta Embolsada")
     lote_detectado = "Lote 01"
     if st.toggle("Activar cámara para escanear QR", key="qr_parcelero"):
-    lote_url_p = st.query_params.get("lote", LOTES)
+         lote_url_p = st.query_params.get("lote", LOTES)
     lote_def_p = lote_url_p if lote_url_p in LOTES else LOTES
 
     if st.toggle("Activar cámara para escanear QR del Lote", key="qr_parcelero"):
