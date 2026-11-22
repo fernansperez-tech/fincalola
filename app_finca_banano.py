@@ -981,15 +981,19 @@ if rol == "Parcelero (Embolse)":
 
 elif rol == "Consulta de Embolse":
     st.subheader("Consulta de Embolse (Puyas y Supervisores)")
-    lote_qr = "Todos"
+    lote_url = st.query_params.get("lote", "Todos")
+    lote_qr = lote_url if lote_url in LOTES else "Todos"
     if st.toggle("Activar cámara para escanear QR del Lote", key="qr_consulta"):
         foto_qr_p = st.camera_input("Apunta al QR del Lote")
         if foto_qr_p:
             img_bgr = cv2.cvtColor(np.array(Image.open(foto_qr_p)), cv2.COLOR_RGB2BGR)
             dato_qr, _, _ = cv2.QRCodeDetector().detectAndDecode(img_bgr)
+            if "lote=" in str(dato_qr):
+                dato_qr = str(dato_qr).split("lote=")[-1].replace("%20", " ").strip()
             if dato_qr in LOTES:
                 lote_qr = dato_qr
                 st.success(f"Lote escaneado: {lote_qr}")
+
     df = cargar_datos()
     t_cons1, t_cons2 = st.tabs(["🌱 Reportes de Embolse", "📦 Saldos De Racimos"])
     with t_cons1:
