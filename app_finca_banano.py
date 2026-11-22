@@ -371,7 +371,7 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
         st.info("No hay registros de embolse para los filtros seleccionados.")
 
 
-    st.write("### 2. Ranking de Empleados (Cantidad Total y Promedio por Día)")
+    st.write("### 3. Ranking de Empleados (Cantidad Total y Promedio por Día)")
     if not df_res.empty:
         rank_emp = df_res.groupby("Parcelero").agg(
             Total_Racimos=("Racimos", "sum"),
@@ -390,7 +390,7 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
                           .format({"Promedio_Por_Dia": "{:.1f}"}),
             use_container_width=True, hide_index=True
         )
-    st.write("### 3. Matriz de Embolse por Empleado y Lote")
+    st.write("### 4. Matriz de Embolse por Empleado y Lote")
     if not df_res.empty:
         ver_fechas_celda = st.toggle("Mostrar fechas detalladas en cada celda (útil para revisar 1 semana)", value=False, key=f"{prefijo}_tog_fechas_m3")
         piv_num = df_res.pivot_table(index="Parcelero", columns="Lote", values="Racimos", aggfunc="sum", fill_value=0)
