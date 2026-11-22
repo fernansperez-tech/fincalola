@@ -352,18 +352,16 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
         for col_n in cols_cinta_activas + ["TOTAL"]:
             fila_tot_lc[col_n] = int(mat_lc[col_n].sum())
 
-            mat_lc_final = pd.concat([mat_lc, pd.DataFrame([fila_tot_lc])], ignore_index=True)
+        mat_lc_final = pd.concat([mat_lc, pd.DataFrame([fila_tot_lc])], ignore_index=True)
+        filas_lotes_idx = mat_lc_final.index < len(mat_lc)
+        fila_tot_idx = mat_lc_final.index == len(mat_lc)
 
-        def resaltar_totales_lc(df_in):
-            estilos = pd.DataFrame("", index=df_in.index, columns=df_in.columns)
-            estilos.iloc[-1, :] = "background-color: #1E3A8A; color: #FFFFFF; font-weight: bold;"
-            estilos["TOTAL"] = "background-color: #1E3A8A; color: #FFFFFF; font-weight: bold;"
-            return estilos
-
-        st.dataframe(
-            mat_lc_final.style.apply(resaltar_totales_lc, axis=None),
-            use_container_width=True, hide_index=True
+        estilo_lc = (
+            mat_lc_final.style
+            .background_gradient(subset=(filas_lotes_idx, ["TOTAL"]), cmap="coolwarm_r")
+            .background_gradient(subset=(fila_tot_idx, cols_cinta_activas), cmap="coolwarm_r", axis=1)
         )
+        st.dataframe(estilo_lc, use_container_width=True, hide_index=True)
 
         
     else:
