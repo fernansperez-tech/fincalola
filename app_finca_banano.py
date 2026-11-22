@@ -910,7 +910,8 @@ if rol == "Parcelero (Embolse)":
                 st.success(f"Lote escaneado: {lote_detectado}")
 
 
-    idx_lote_p = LOTES.index(lote_def_p) if lote_def_p in LOTES else 0
+    idx_lote_p = LOTES.index(lote_detectado) if lote_detectado in LOTES else 0
+
     lote = st.selectbox("Lote:", LOTES, index=idx_lote_p, key="parc_lote_sel")
 
     opciones_parc = ["Selecciona Parcelero..."] + PARCELEROS_BASE
