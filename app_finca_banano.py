@@ -887,10 +887,12 @@ rol = st.radio("Selecciona perfil:", ["Parcelero (Embolse)", "Consulta de Embols
 
 if rol == "Parcelero (Embolse)":
     st.subheader("Registro de Fruta Embolsada")
-    lote_detectado = "Lote 01"
-    if st.toggle("Activar cámara para escanear QR", key="qr_parcelero"):
-         lote_url_p = st.query_params.get("lote", LOTES)
-         lote_def_p = lote_url_p if lote_url_p in LOTES else LOTES
+    lote_url_p = str(st.query_params.get("lote", "")).replace("%20", " ").strip()
+    if lote_url_p not in LOTES and lote_url_p.startswith("Lote "):
+        num_lt = lote_url_p.replace("Lote ", "").strip()
+        if num_lt.isdigit() and f"Lote {int(num_lt):02d}" in LOTES:
+            lote_url_p = f"Lote {int(num_lt):02d}"
+    lote_detectado = lote_url_p if lote_url_p in LOTES else LOTES[0]
 
     if st.toggle("Activar cámara para escanear QR del Lote", key="qr_parcelero"):
         foto_qr = st.camera_input("Apunta al QR del Lote", key="cam_parc")
@@ -899,9 +901,14 @@ if rol == "Parcelero (Embolse)":
             dato_qr_p, _, _ = cv2.QRCodeDetector().detectAndDecode(img_bgr_p)
             if "lote=" in str(dato_qr_p):
                 dato_qr_p = str(dato_qr_p).split("lote=")[-1].replace("%20", " ").strip()
+            if dato_qr_p not in LOTES and str(dato_qr_p).startswith("Lote "):
+                num_lt = str(dato_qr_p).replace("Lote ", "").strip()
+                if num_lt.isdigit() and f"Lote {int(num_lt):02d}" in LOTES:
+                    dato_qr_p = f"Lote {int(num_lt):02d}"
             if dato_qr_p in LOTES:
-                lote_def_p = dato_qr_p
-                st.success(f"Lote escaneado: {lote_def_p}")
+                lote_detectado = dato_qr_p
+                st.success(f"Lote escaneado: {lote_detectado}")
+
 
     idx_lote_p = LOTES.index(lote_def_p) if lote_def_p in LOTES else 0
     lote = st.selectbox("Lote:", LOTES, index=idx_lote_p, key="parc_lote_sel")
