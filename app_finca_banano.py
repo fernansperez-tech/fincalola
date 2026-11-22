@@ -890,7 +890,7 @@ if rol == "Parcelero (Embolse)":
     lote_detectado = "Lote 01"
     if st.toggle("Activar cámara para escanear QR", key="qr_parcelero"):
          lote_url_p = st.query_params.get("lote", LOTES)
-    lote_def_p = lote_url_p if lote_url_p in LOTES else LOTES
+         lote_def_p = lote_url_p if lote_url_p in LOTES else LOTES
 
     if st.toggle("Activar cámara para escanear QR del Lote", key="qr_parcelero"):
         foto_qr = st.camera_input("Apunta al QR del Lote", key="cam_parc")
