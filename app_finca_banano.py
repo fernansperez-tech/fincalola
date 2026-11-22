@@ -544,14 +544,22 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                     if nombre in texto:
                         return f"background-color: {fondo}; color: {letra}; font-weight: bold;"
                 return ""
-            sin_emb_df = df_fifo_m[df_fifo_m["Saldo"] < 0].copy()
+                sin_emb_df = df_fifo_m[df_fifo_m["Saldo"] < 0].copy()
             if not sin_emb_df.empty:
+                ICONOS_ALERTA = {
+                    "Amarilla": "🟡 Amarilla", "Morada": "🟣 Morada",
+                    "Roja": "🔴 Roja", "Cafe": "🟤 Cafe", "Café": "🟤 Café",
+                    "Negra": "⚫ Negra", "Verde": "🟢 Verde",
+                    "Azul": "🔵 Azul", "Blanca": "⚪ Blanca"
+                }
+                sin_emb_df["Color_Cinta"] = sin_emb_df["Color_Cinta"].map(ICONOS_ALERTA).fillna(sin_emb_df["Color_Cinta"])
                 sin_emb_df["Racimos_Pendientes"] = sin_emb_df["Saldo"].abs().astype(int)
                 st.warning(f"⚠️ Alerta: Hay **{int(sin_emb_df['Racimos_Pendientes'].sum()):,} racimos cortados** sin embolse previo registrado en el sistema:")
                 st.dataframe(
                     sin_emb_df[["Lote", "Color_Cinta", "Racimos_Pendientes"]],
                     use_container_width=True, hide_index=True
                 )
+
 
 
             st.write("### Balance Consolidado por Color y Edad (Toda la Finca)")
