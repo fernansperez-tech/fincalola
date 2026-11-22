@@ -323,6 +323,44 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
                       .format({"Hectareas": "{:.2f}", "Racimos_Por_Ha": "{:.1f}"}),
         use_container_width=True, hide_index=True
     )
+    st.write("### Matriz de Embolse por Lote y Color de Cinta")
+    if not df_res.empty:
+        ICONOS_EMB_MAT = {
+            "Amarilla": "🟡 Amarilla", "Morada": "🟣 Morada",
+            "Roja": "🔴 Roja", "Cafe": "🟤 Cafe", "Café": "🟤 Café",
+            "Negra": "⚫ Negra", "Verde": "🟢 Verde",
+            "Azul": "🔵 Azul", "Blanca": "⚪ Blanca"
+        }
+        ORDEN_CINTAS_MAT = [
+            "🟡 Amarilla", "🟣 Morada", "🔴 Roja", "🟤 Cafe", "🟤 Café",
+            "⚫ Negra", "🟢 Verde", "🔵 Azul", "⚪ Blanca"
+        ]
+        df_mat_cinta = df_res.copy()
+        df_mat_cinta["Cinta_Vis"] = df_mat_cinta["Color_Cinta"].map(ICONOS_EMB_MAT).fillna(df_mat_cinta["Color_Cinta"])
+        piv_lc = df_mat_cinta.pivot_table(index="Lote", columns="Cinta_Vis", values="Racimos", aggfunc="sum", fill_value=0)
+
+        cols_cinta_activas = [c for c in ORDEN_CINTAS_MAT if c in piv_lc.columns] + [
+            c for c in piv_lc.columns if c not in ORDEN_CINTAS_MAT
+        ]
+
+        mat_lc = pd.DataFrame({"Lote": LOTES})
+        for col_c in cols_cinta_activas:
+            mat_lc[col_c] = mat_lc["Lote"].map(piv_lc[col_c]).fillna(0).astype(int)
+        mat_lc["TOTAL"] = mat_lc[cols_cinta_activas].sum(axis=1).astype(int)
+
+        fila_tot_lc = {"Lote": "TOTAL"}
+        for col_n in cols_cinta_activas + ["TOTAL"]:
+            fila_tot_lc[col_n] = int(mat_lc[col_n].sum())
+
+        mat_lc_final = pd.concat([mat_lc, pd.DataFrame([fila_tot_lc])], ignore_index=True)
+        filas_lc_idx = mat_lc_final.index < len(mat_lc)
+        st.dataframe(
+            mat_lc_final.style.background_gradient(subset=(filas_lc_idx, cols_cinta_activas + ["TOTAL"]), cmap="coolwarm_r"),
+            use_container_width=True, hide_index=True
+        )
+    else:
+        st.info("No hay registros de embolse para los filtros seleccionados.")
+
 
     st.write("### 2. Ranking de Empleados (Cantidad Total y Promedio por Día)")
     if not df_res.empty:
