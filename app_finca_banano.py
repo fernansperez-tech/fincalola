@@ -352,7 +352,7 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
         for col_n in cols_cinta_activas + ["TOTAL"]:
             fila_tot_lc[col_n] = int(mat_lc[col_n].sum())
 
-                mat_lc_final = pd.concat([mat_lc, pd.DataFrame([fila_tot_lc])], ignore_index=True)
+            mat_lc_final = pd.concat([mat_lc, pd.DataFrame([fila_tot_lc])], ignore_index=True)
 
         def resaltar_totales_lc(df_in):
             estilos = pd.DataFrame("", index=df_in.index, columns=df_in.columns)
