@@ -453,16 +453,20 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
 
     df_fifo_m = pd.DataFrame(reg_fifo)
 
-    if not es_admin:
+        if not es_admin:
         st.subheader("1. Matriz de Saldo en Mata por Lote, Cinta y Edad")
         solo_pos_m = df_fifo_m[df_fifo_m["Saldo"] > 0].copy() if not df_fifo_m.empty else pd.DataFrame()
         if solo_pos_m.empty:
             st.info("No hay saldos positivos en mata actualmente.")
         else:
-            edades_m_disp = [f"{e} sem" for e in sorted(solo_pos_m["Edad_Num"].unique().tolist(), reverse=True)]
-            sel_edad_mata = st.multiselect("Filtrar Saldo en Mata por Edad (vacío = todas):", edades_m_disp, key=f"{prefijo}_edad_mata")
-            if sel_edad_mata:
-                solo_pos_m = solo_pos_m[solo_pos_m["Edad_Txt"].isin(sel_edad_mata)]
+            max_ed_disp = max(14, int(solo_pos_m["Edad_Num"].max()))
+            rango_ed_m = st.slider(
+                "Rango de edades en mata (semanas):",
+                min_value=0, max_value=max_ed_disp, value=(0, 14), key=f"{prefijo}_rango_ed_mata"
+            )
+            solo_pos_m = solo_pos_m[
+                (solo_pos_m["Edad_Num"] >= rango_ed_m[0]) & (solo_pos_m["Edad_Num"] <= rango_ed_m[1])
+            ].copy()
 
             if not solo_pos_m.empty:
                 cols_ordenadas = solo_pos_m.sort_values(by=["Orden_Ed", "Etiqueta"])["Etiqueta"].unique().tolist()
@@ -479,29 +483,29 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                 matriz_con_tot = pd.concat([matriz_final, pd.DataFrame([fila_tot_m])], ignore_index=True)
                 st.dataframe(matriz_con_tot, use_container_width=True, hide_index=True)
             else:
-                st.info("No hay saldo en mata para las edades seleccionadas.")
+                st.info(f"No hay saldo en mata entre {rango_ed_m[0]} y {rango_ed_m[1]} semanas.")
 
         st.subheader("2. Gráfica de Saldos en Mata por Lote y Color de Cinta")
         if not solo_pos_m.empty:
             import altair as alt
             escala_cintas_m = alt.Scale(
-                domain=["Amarilla", "Morada", "Roja", "Cafe", "Negra", "Verde", "Azul", "Blanca"],
-                range=["#FFD700", "#9C27B0", "#E53935", "#8B4513", "#111111", "#43A047", "#1E88E5", "#F5F5F5"]
-
-
-
+                domain=["Amarilla", "Morada", "Roja", "Cafe", "Café", "Negra", "Verde", "Azul", "Blanca"],
+                range=["#FFD700", "#9C27B0", "#E53935", "#8B4513", "#8B4513", "#111111", "#43A047", "#1E88E5", "#F5F5F5"]
             )
             df_sg_plot = solo_pos_m.groupby(["Lote", "Color_Cinta"])["Saldo"].sum().reset_index()
-            bar_s = alt.Chart(df_sg_plot).mark_bar().encode(
+
+            bar_s = alt.Chart(df_sg_plot).mark_bar(cornerRadiusTopLeft=3, cornerRadiusTopRight=3).encode(
                 x=alt.X("Lote:N", sort=LOTES, title="Lote"),
                 y=alt.Y("Saldo:Q", title="Saldo en Mata (Racimos)"),
                 color=alt.Color("Color_Cinta:N", scale=escala_cintas_m, title="Cinta"),
+                order=alt.Order("Color_Cinta:N", sort="ascending"),
                 tooltip=["Lote", "Color_Cinta", "Saldo"]
             )
             txt_s_seg = alt.Chart(df_sg_plot).mark_text(baseline="middle", fontWeight="bold", fontSize=10).encode(
                 x=alt.X("Lote:N", sort=LOTES),
                 y=alt.Y("Saldo:Q", stack="zero", bandPosition=0.5),
                 detail="Color_Cinta:N",
+                order=alt.Order("Color_Cinta:N", sort="ascending"),
                 color=alt.condition(
                     alt.FieldOneOfPredicate(field="Color_Cinta", oneOf=["Amarilla", "Blanca"]),
                     alt.value("#000000"),
@@ -509,12 +513,19 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                 ),
                 text=alt.Text("Saldo:Q", format=",.0f")
             )
-            txt_s_tot = alt.Chart(df_sg_plot).mark_text(dy=-7, fontWeight="bold", fontSize=11, color="#FFFFFF").encode(
+            txt_s_tot = alt.Chart(df_sg_plot).mark_text(dy=-8, fontWeight="bold", fontSize=11, color="#FFFFFF").encode(
                 x=alt.X("Lote:N", sort=LOTES),
                 y=alt.Y("sum(Saldo):Q"),
                 text=alt.Text("sum(Saldo):Q", format=",.0f")
             )
-            st.altair_chart((bar_s + txt_s_seg + txt_s_tot).properties(height=360), use_container_width=True)
+            graf_s_final = (bar_s + txt_s_seg + txt_s_tot).properties(
+                height=370, background="#1E2530", padding={"left": 12, "top": 18, "right": 12, "bottom": 12}
+            ).configure_axis(
+                labelColor="#E2E8F0", titleColor="#FFFFFF", gridColor="#334155", domainColor="#475569", labelAngle=0
+            ).configure_legend(
+                labelColor="#E2E8F0", titleColor="#FFFFFF"
+            ).configure_view(strokeWidth=0)
+            st.altair_chart(graf_s_final, use_container_width=True)
 
     if es_admin:
         st.divider()
@@ -1455,8 +1466,8 @@ elif rol == "Administrador":
                 e_parc_g = ge4.selectbox("Parcelero:", ["Todos"] + parcs_emb, key="g_e_parc")
                 sems_e_g = sorted(emb_base["Semana"].unique().tolist(), reverse=True)
                 e_sems_g = ge5.multiselect("Semanas de Embolse:", sems_e_g, key="g_e_sems")
-                eds_e_g = [f"{e} sem" for e in sorted(emb_base["Edad_Num"].unique().tolist(), reverse=True)]
-                e_eds_g = ge6.multiselect("Edades de Cinta:", eds_e_g, key="g_e_eds")
+                max_ed_g = max(14, int(emb_base["Edad_Num"].max())) if not emb_base.empty else 14
+                e_rango_ed = ge6.slider("Rango de edades (semanas):", min_value=0, max_value=max_ed_g, value=(0, 14), key="g_e_rango_ed")
 
                 emb_g = emb_base[(emb_base["Fecha_Dt"] >= e_desde_g) & (emb_base["Fecha_Dt"] <= e_hasta_g)].copy()
                 if e_lote_g != "Todos":
@@ -1465,8 +1476,8 @@ elif rol == "Administrador":
                     emb_g = emb_g[emb_g["Parcelero"] == e_parc_g]
                 if e_sems_g:
                     emb_g = emb_g[emb_g["Semana"].isin(e_sems_g)]
-                if e_eds_g:
-                    emb_g = emb_g[emb_g["Edad_Txt"].isin(e_eds_g)]
+                emb_g = emb_g[(emb_g["Edad_Num"] >= e_rango_ed[0]) & (emb_g["Edad_Num"] <= e_rango_ed[1])]
+
 
                 if not emb_g.empty:
                     st.write("#### 2. Racimos Embolsados")
@@ -1509,20 +1520,21 @@ elif rol == "Administrador":
                 ent_sg = df_saldo_g[df_saldo_g["Racimos"] > 0]
                 if e_parc_g != "Todos":
                     ent_sg = ent_sg[ent_sg["Parcelero"] == e_parc_g]
-                ent_sg = ent_sg.groupby(["Lote", "Color_Cinta", "Anio", "Semana", "Edad_Txt"])["Racimos"].sum().reset_index()
+                ent_sg = ent_sg.groupby(["Lote", "Color_Cinta", "Anio", "Semana", "Edad_Num"])["Racimos"].sum().reset_index()
                 ent_sg = ent_sg.sort_values(by=["Lote", "Color_Cinta", "Anio", "Semana"])
                 sal_sg = df_saldo_g[df_saldo_g["Racimos"] < 0].groupby(["Lote", "Color_Cinta"])["Racimos"].sum().abs().to_dict()
 
                 filas_sg = []
                 for _, r_sg in ent_sg.iterrows():
-                    lt_s, cl_s, ed_t, emb_s = r_sg["Lote"], r_sg["Color_Cinta"], r_sg["Edad_Txt"], int(r_sg["Racimos"])
+                    lt_s, cl_s, ed_n, emb_s = r_sg["Lote"], r_sg["Color_Cinta"], int(r_sg["Edad_Num"]), int(r_sg["Racimos"])
                     desc_s = min(emb_s, sal_sg.get((lt_s, cl_s), 0))
                     sal_sg[(lt_s, cl_s)] = sal_sg.get((lt_s, cl_s), 0) - desc_s
                     sld_s = emb_s - desc_s
                     if sld_s > 0:
-                        if not e_eds_g or ed_t in e_eds_g:
+                        if e_rango_ed <= ed_n <= e_rango_ed:
                             if not e_sems_g or int(r_sg["Semana"]) in e_sems_g:
                                 filas_sg.append({"Lote": lt_s, "Color_Cinta": cl_s, "Saldo_En_Mata": sld_s})
+
 
                 if filas_sg:
                     df_sg_plot = pd.DataFrame(filas_sg).groupby(["Lote", "Color_Cinta"])["Saldo_En_Mata"].sum().reset_index()
