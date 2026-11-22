@@ -460,15 +460,14 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
         if solo_pos_m.empty:
             st.info("No hay saldos positivos en mata actualmente.")
         else:
-            max_ed_disp = max(104, int(solo_pos_m["Edad_Num"].max()))
-
-            rango_ed_m = st.slider(
-                "Rango de edades en mata (semanas):",
-                min_value=0, max_value=max_ed_disp, value=(0, 14), key=f"{prefijo}_rango_ed_mata"
+            edades_m_disp = [f"{e} sem" for e in sorted(solo_pos_m["Edad_Num"].unique().tolist(), reverse=True)]
+            edades_corte_def = [e for e in ["12 sem", "11 sem", "10 sem", "9 sem"] if e in edades_m_disp]
+            sel_edad_mata = st.multiselect(
+                "Filtrar Saldo en Mata por Edad (vacío = todas):",
+                edades_m_disp, default=edades_corte_def, key=f"{prefijo}_edad_mata"
             )
-            solo_pos_m = solo_pos_m[
-                (solo_pos_m["Edad_Num"] >= rango_ed_m[0]) & (solo_pos_m["Edad_Num"] <= rango_ed_m[1])
-            ].copy()
+            if sel_edad_mata:
+                solo_pos_m = solo_pos_m[solo_pos_m["Edad_Txt"].isin(sel_edad_mata)].copy()
 
             if not solo_pos_m.empty:
                 cols_ordenadas = solo_pos_m.sort_values(by=["Orden_Ed", "Etiqueta"])["Etiqueta"].unique().tolist()
@@ -485,7 +484,7 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                 matriz_con_tot = pd.concat([matriz_final, pd.DataFrame([fila_tot_m])], ignore_index=True)
                 st.dataframe(matriz_con_tot, use_container_width=True, hide_index=True)
             else:
-                st.info(f"No hay saldo en mata entre {rango_ed_m[0]} y {rango_ed_m[1]} semanas.")
+                st.info("No hay saldo en mata para las edades seleccionadas.")
 
         st.subheader("2. Gráfica de Saldos en Mata por Lote y Color de Cinta")
         if not solo_pos_m.empty:
