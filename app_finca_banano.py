@@ -238,10 +238,12 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
 
     c_lt, c_cl, c_em = st.columns(3)
     lista_lotes_ok = list(LOTES)
-    lotes_def_emb = [str(lote_qr).strip()] if str(lote_qr).strip() in lista_lotes_ok else []
-    sel_lote = c_lt.multiselect("Lotes (vacío = todos):", options=lista_lotes_ok, default=lotes_def_emb, key=f"{prefijo}_lotes_multi_{lote_qr}")
+    val_qr_limpio = str(lote_qr).strip()
+    lotes_def_emb = [val_qr_limpio] if val_qr_limpio in lista_lotes_ok else []
+    sel_lote = c_lt.multiselect("Lotes (vacío = todos):", options=lista_lotes_ok, default=lotes_def_emb, key=f"{prefijo}_sel_lotes_v3")
     sel_color = c_cl.selectbox("Color de Cinta:", ["Todos"] + sorted(solo_emb["Color_Cinta"].unique().tolist()), key=f"{prefijo}_color")
     sel_emp = c_em.selectbox("Empleado:", ["Todos"] + sorted(solo_emb["Parcelero"].unique().tolist()), key=f"{prefijo}_emp")
+
 
 
     df_res = solo_emb[(solo_emb["Fecha_Dt"] >= f_desde) & (solo_emb["Fecha_Dt"] <= f_hasta)].copy()
