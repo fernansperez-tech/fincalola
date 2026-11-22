@@ -1531,7 +1531,8 @@ elif rol == "Administrador":
                     sal_sg[(lt_s, cl_s)] = sal_sg.get((lt_s, cl_s), 0) - desc_s
                     sld_s = emb_s - desc_s
                     if sld_s > 0:
-                        if e_rango_ed <= ed_n <= e_rango_ed:
+                        if e_rango_ed[0] <= ed_n <= e_rango_ed[1]:
+
                             if not e_sems_g or int(r_sg["Semana"]) in e_sems_g:
                                 filas_sg.append({"Lote": lt_s, "Color_Cinta": cl_s, "Saldo_En_Mata": sld_s})
 
