@@ -278,11 +278,8 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     st.write("### 1. Rendimiento por Lote y Hectárea")
     lotes_activos_rep = [str(x).strip() for x in (sel_lote if sel_lote else LOTES)]
 
-    dic_ha_real = {}
-    for nombre_var in ["HECTAREAS_LOTES", "AREAS_LOTES", "LOTES_HA", "HECTAREAS", "AREA_LOTES", "HECTAREAS_FINCA", "hectareas_lotes"]:
-        if nombre_var in globals() and isinstance(globals()[nombre_var], dict):
-            dic_ha_real = globals()[nombre_var]
-            break
+    dic_ha_real = HECTAREAS_LOTE
+
 
     ICONOS_T1 = {
         "Amarilla": "🟡 Amarilla", "Morada": "🟣 Morada",
