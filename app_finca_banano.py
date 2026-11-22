@@ -889,20 +889,23 @@ if rol == "Parcelero (Embolse)":
     st.subheader("Registro de Fruta Embolsada")
     lote_detectado = "Lote 01"
     if st.toggle("Activar cámara para escanear QR", key="qr_parcelero"):
-        foto_qr = st.camera_input("Apunta al QR del Lote")
-        if foto_qr:
-            img_bgr = cv2.cvtColor(np.array(Image.open(foto_qr)), cv2.COLOR_RGB2BGR)
-            dato_qr, _, _ = cv2.QRCodeDetector().detectAndDecode(img_bgr)
-            if dato_qr in LOTES:
-                lote_detectado = dato_qr
-                st.success(f"Lote detectado: {lote_detectado}")
-    if "form_id" not in st.session_state:
-        st.session_state.form_id = 0
-    fid = st.session_state.form_id
+    lote_url_p = st.query_params.get("lote", LOTES)
+    lote_def_p = lote_url_p if lote_url_p in LOTES else LOTES
 
-    opciones_lote = ["Selecciona Lote..."] + LOTES
-    idx_lote_ini = opciones_lote.index(lote_detectado) if lote_detectado in opciones_lote else 0
-    lote_sel = st.selectbox("Lote:", opciones_lote, index=idx_lote_ini, key=f"reg_lote_{fid}")
+    if st.toggle("Activar cámara para escanear QR del Lote", key="qr_parcelero"):
+        foto_qr = st.camera_input("Apunta al QR del Lote", key="cam_parc")
+        if foto_qr:
+            img_bgr_p = cv2.cvtColor(np.array(Image.open(foto_qr)), cv2.COLOR_RGB2BGR)
+            dato_qr_p, _, _ = cv2.QRCodeDetector().detectAndDecode(img_bgr_p)
+            if "lote=" in str(dato_qr_p):
+                dato_qr_p = str(dato_qr_p).split("lote=")[-1].replace("%20", " ").strip()
+            if dato_qr_p in LOTES:
+                lote_def_p = dato_qr_p
+                st.success(f"Lote escaneado: {lote_def_p}")
+
+    idx_lote_p = LOTES.index(lote_def_p) if lote_def_p in LOTES else 0
+    lote = st.selectbox("Lote:", LOTES, index=idx_lote_p, key="parc_lote_sel")
+
     opciones_parc = ["Selecciona Parcelero..."] + PARCELEROS_BASE
     sel_p = st.selectbox("Parcelero / Responsable:", opciones_parc, key=f"reg_parc_{fid}")
     if sel_p == "Otro (Escribir nombre)":
