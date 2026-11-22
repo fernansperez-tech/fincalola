@@ -840,7 +840,7 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False, lote_qr="Todos"):
                     st.write("#### Gráfica de Cajas Proyectadas por Semana y Color de Cinta")
                     num_sems_ver = st.slider(
                         "Cantidad de semanas futuras a mostrar en la gráfica:",
-                        min_value=1, max_value=12, value=6, key=f"{prefijo}_slider_sems_graf"
+                        min_value=1, max_value=12, value=12, key=f"{prefijo}_slider_sems_graf"
                     )
                     escala_ps = alt.Scale(
                         domain=["Amarilla", "Morada", "Roja", "Cafe", "Café", "Negra", "Verde", "Azul", "Blanca"],
