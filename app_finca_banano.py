@@ -915,7 +915,10 @@ if rol == "Parcelero (Embolse)":
     lote = st.selectbox("Lote:", LOTES, index=idx_lote_p, key="parc_lote_sel")
 
     opciones_parc = ["Selecciona Parcelero..."] + PARCELEROS_BASE
+    fid = st.session_state.get("form_id", 0)
     sel_p = st.selectbox("Parcelero / Responsable:", opciones_parc, key=f"reg_parc_{fid}")
+
+    
     if sel_p == "Otro (Escribir nombre)":
         parcelero = st.text_input("Nombre del trabajador:", key=f"reg_otro_{fid}").strip()
     else:
