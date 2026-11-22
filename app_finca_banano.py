@@ -352,12 +352,20 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
         for col_n in cols_cinta_activas + ["TOTAL"]:
             fila_tot_lc[col_n] = int(mat_lc[col_n].sum())
 
-        mat_lc_final = pd.concat([mat_lc, pd.DataFrame([fila_tot_lc])], ignore_index=True)
-        filas_lc_idx = mat_lc_final.index < len(mat_lc)
+                mat_lc_final = pd.concat([mat_lc, pd.DataFrame([fila_tot_lc])], ignore_index=True)
+
+        def resaltar_totales_lc(df_in):
+            estilos = pd.DataFrame("", index=df_in.index, columns=df_in.columns)
+            estilos.iloc[-1, :] = "background-color: #1E3A8A; color: #FFFFFF; font-weight: bold;"
+            estilos["TOTAL"] = "background-color: #1E3A8A; color: #FFFFFF; font-weight: bold;"
+            return estilos
+
         st.dataframe(
-            mat_lc_final.style.background_gradient(subset=(filas_lc_idx, cols_cinta_activas + ["TOTAL"]), cmap="coolwarm_r"),
+            mat_lc_final.style.apply(resaltar_totales_lc, axis=None),
             use_container_width=True, hide_index=True
         )
+
+        
     else:
         st.info("No hay registros de embolse para los filtros seleccionados.")
 
