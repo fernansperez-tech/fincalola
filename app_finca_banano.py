@@ -220,7 +220,8 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     )
     solo_emb["Edad_Texto"] = solo_emb["Edad_Num"].astype(str) + " sem"
 
-    max_ed_emb = max(14, int(solo_emb["Edad_Num"].max()))
+    max_ed_emb = max(104, int(solo_emb["Edad_Num"].max()))
+
     rango_ed_emb = st.slider(
         "Rango de edades a consultar (semanas):",
         min_value=0, max_value=max_ed_emb, value=(0, 14), key=f"{prefijo}_rango_ed_emb"
@@ -465,7 +466,8 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
         if solo_pos_m.empty:
             st.info("No hay saldos positivos en mata actualmente.")
         else:
-            max_ed_disp = max(14, int(solo_pos_m["Edad_Num"].max()))
+            max_ed_disp = max(104, int(solo_pos_m["Edad_Num"].max()))
+
             rango_ed_m = st.slider(
                 "Rango de edades en mata (semanas):",
                 min_value=0, max_value=max_ed_disp, value=(0, 14), key=f"{prefijo}_rango_ed_mata"
@@ -1472,7 +1474,8 @@ elif rol == "Administrador":
                 e_parc_g = ge4.selectbox("Parcelero:", ["Todos"] + parcs_emb, key="g_e_parc")
                 sems_e_g = sorted(emb_base["Semana"].unique().tolist(), reverse=True)
                 e_sems_g = ge5.multiselect("Semanas de Embolse:", sems_e_g, key="g_e_sems")
-                max_ed_g = max(14, int(emb_base["Edad_Num"].max())) if not emb_base.empty else 14
+                max_ed_g = max(104, int(emb_base["Edad_Num"].max())) if not emb_base.empty else 104
+
                 e_rango_ed = ge6.slider("Rango de edades (semanas):", min_value=0, max_value=max_ed_g, value=(0, 14), key="g_e_rango_ed")
 
                 emb_g = emb_base[(emb_base["Fecha_Dt"] >= e_desde_g) & (emb_base["Fecha_Dt"] <= e_hasta_g)].copy()
