@@ -1469,10 +1469,11 @@ elif rol == "Administrador":
                 parcs_emb = sorted(emb_base["Parcelero"].astype(str).unique().tolist())
                 e_parc_g = ge4.selectbox("Parcelero:", ["Todos"] + parcs_emb, key="g_e_parc")
                 sems_e_g = sorted(emb_base["Semana"].unique().tolist(), reverse=True)
-                e_sems_g = ge5.multiselect("Semanas de Embolse:", sems_e_g, key="g_e_sems")
-                max_ed_g = max(104, int(emb_base["Edad_Num"].max())) if not emb_base.empty else 104
-
-                e_rango_ed = ge6.slider("Rango de edades (semanas):", min_value=0, max_value=max_ed_g, value=(0, 14), key="g_e_rango_ed")
+                               sems_e_g = sorted(emb_base["Semana"].unique().tolist(), reverse=True)
+                sem_act_def_g = [sem_act_g] if sem_act_g in sems_e_g else []
+                e_sems_g = ge5.multiselect("Semanas de Embolse (vacío = todas):", sems_e_g, default=sem_act_def_g, key="g_e_sems")
+                eds_e_g = [f"{e} sem" for e in sorted(emb_base["Edad_Num"].unique().tolist(), reverse=True)]
+                e_eds_g = ge6.multiselect("Edades de Cinta (vacío = todas):", eds_e_g, key="g_e_eds")
 
                 emb_g = emb_base[(emb_base["Fecha_Dt"] >= e_desde_g) & (emb_base["Fecha_Dt"] <= e_hasta_g)].copy()
                 if e_lote_g != "Todos":
@@ -1481,8 +1482,8 @@ elif rol == "Administrador":
                     emb_g = emb_g[emb_g["Parcelero"] == e_parc_g]
                 if e_sems_g:
                     emb_g = emb_g[emb_g["Semana"].isin(e_sems_g)]
-                emb_g = emb_g[(emb_g["Edad_Num"] >= e_rango_ed[0]) & (emb_g["Edad_Num"] <= e_rango_ed[1])]
-
+                if e_eds_g:
+                    emb_g = emb_g[emb_g["Edad_Txt"].isin(e_eds_g)]
 
                 if not emb_g.empty:
                     st.write("#### 2. Racimos Embolsados")
@@ -1525,21 +1526,21 @@ elif rol == "Administrador":
                 ent_sg = df_saldo_g[df_saldo_g["Racimos"] > 0]
                 if e_parc_g != "Todos":
                     ent_sg = ent_sg[ent_sg["Parcelero"] == e_parc_g]
-                ent_sg = ent_sg.groupby(["Lote", "Color_Cinta", "Anio", "Semana", "Edad_Num"])["Racimos"].sum().reset_index()
+                ent_sg = ent_sg.groupby(["Lote", "Color_Cinta", "Anio", "Semana", "Edad_Txt"])["Racimos"].sum().reset_index()
                 ent_sg = ent_sg.sort_values(by=["Lote", "Color_Cinta", "Anio", "Semana"])
                 sal_sg = df_saldo_g[df_saldo_g["Racimos"] < 0].groupby(["Lote", "Color_Cinta"])["Racimos"].sum().abs().to_dict()
 
                 filas_sg = []
                 for _, r_sg in ent_sg.iterrows():
-                    lt_s, cl_s, ed_n, emb_s = r_sg["Lote"], r_sg["Color_Cinta"], int(r_sg["Edad_Num"]), int(r_sg["Racimos"])
+                    lt_s, cl_s, ed_t, emb_s = r_sg["Lote"], r_sg["Color_Cinta"], r_sg["Edad_Txt"], int(r_sg["Racimos"])
                     desc_s = min(emb_s, sal_sg.get((lt_s, cl_s), 0))
                     sal_sg[(lt_s, cl_s)] = sal_sg.get((lt_s, cl_s), 0) - desc_s
                     sld_s = emb_s - desc_s
                     if sld_s > 0:
-                        if e_rango_ed[0] <= ed_n <= e_rango_ed[1]:
-
+                        if not e_eds_g or ed_t in e_eds_g:
                             if not e_sems_g or int(r_sg["Semana"]) in e_sems_g:
                                 filas_sg.append({"Lote": lt_s, "Color_Cinta": cl_s, "Saldo_En_Mata": sld_s})
+
 
 
                 if filas_sg:
