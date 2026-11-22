@@ -544,7 +544,7 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
                     if nombre in texto:
                         return f"background-color: {fondo}; color: {letra}; font-weight: bold;"
                 return ""
-                sin_emb_df = df_fifo_m[df_fifo_m["Saldo"] < 0].copy()
+            sin_emb_df = df_fifo_m[df_fifo_m["Saldo"] < 0].copy()
             if not sin_emb_df.empty:
                 ICONOS_ALERTA = {
                     "Amarilla": "🟡 Amarilla", "Morada": "🟣 Morada",
