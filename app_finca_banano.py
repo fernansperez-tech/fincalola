@@ -441,7 +441,8 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
 
 
 
-def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
+def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False, lote_qr="Todos"):
+
 
     if df.empty:
         st.info("Aún no hay movimientos registrados en el sistema.")
@@ -498,21 +499,29 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
 
     df_fifo_m = pd.DataFrame(reg_fifo)
 
-    if not es_admin:
+        if not es_admin:
         st.subheader("1. Matriz de Saldo en Mata por Lote, Cinta y Edad")
         solo_pos_m = df_fifo_m[df_fifo_m["Saldo"] > 0].copy() if not df_fifo_m.empty else pd.DataFrame()
         if solo_pos_m.empty:
             st.info("No hay saldos positivos en mata actualmente.")
         else:
+            c_f_m1, c_f_m2 = st.columns(2)
+            lotes_def_mata = [lote_qr] if (lote_qr != "Todos" and lote_qr in LOTES) else []
+            sel_lotes_mata = c_f_m1.multiselect(
+                "Filtrar por Lotes (vacío = todos):",
+                LOTES, default=lotes_def_mata, key=f"{prefijo}_lotes_mata_{lote_qr}"
+            )
+
             edades_reales = [f"{e} sem" for e in sorted(solo_pos_m["Edad_Num"].unique().tolist(), reverse=True)]
             edades_corte_def = ["12 sem", "11 sem", "10 sem", "9 sem"]
             edades_m_disp = list(dict.fromkeys(edades_corte_def + edades_reales))
-            sel_edad_mata = st.multiselect(
+            sel_edad_mata = c_f_m2.multiselect(
                 "Filtrar Saldo en Mata por Edad (vacío = todas):",
                 edades_m_disp, default=edades_corte_def, key=f"{prefijo}_edad_mata_v2"
-            
-
             )
+
+            if sel_lotes_mata:
+                solo_pos_m = solo_pos_m[solo_pos_m["Lote"].isin(sel_lotes_mata)].copy()
             if sel_edad_mata:
                 solo_pos_m = solo_pos_m[solo_pos_m["Edad_Txt"].isin(sel_edad_mata)].copy()
 
@@ -1013,7 +1022,8 @@ elif rol == "Consulta de Embolse":
     with t_cons1:
         mostrar_reportes_embolse(df, prefijo="cons", lote_qr=lote_qr)
     with t_cons2:
-        mostrar_saldos_y_proyeccion(df, prefijo="cons_proy")
+        mostrar_saldos_y_proyeccion(df, prefijo="cons_proy", lote_qr=lote_qr)
+
 
 
 elif rol == "Administrador":
