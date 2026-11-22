@@ -236,12 +236,13 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     edades_disp = [f"{e} sem" for e in sorted(solo_emb["Edad_Num"].unique().tolist(), reverse=True)]
     sel_edad = f3.multiselect("Edades (vacío = todas):", edades_disp, key=f"{prefijo}_edad")
 
-    f3, f4, f5 = st.columns(3)
-    lotes_def_emb = [x for x in [str(lote_qr).strip()] if x in LOTES]
-    sel_lote = f3.multiselect("Lotes (vacío = todos):", options=LOTES, default=lotes_def_emb, key=f"{prefijo}_lotes_multi_{lote_qr}")
+        c_lt, c_cl, c_em = st.columns(3)
+    lista_lotes_ok = list(LOTES)
+    lotes_def_emb = [str(lote_qr).strip()] if str(lote_qr).strip() in lista_lotes_ok else []
+    sel_lote = c_lt.multiselect("Lotes (vacío = todos):", options=lista_lotes_ok, default=lotes_def_emb, key=f"{prefijo}_lotes_multi_{lote_qr}")
+    sel_color = c_cl.selectbox("Color de Cinta:", ["Todos"] + sorted(solo_emb["Color_Cinta"].unique().tolist()), key=f"{prefijo}_color")
+    sel_emp = c_em.selectbox("Empleado:", ["Todos"] + sorted(solo_emb["Parcelero"].unique().tolist()), key=f"{prefijo}_emp")
 
-    sel_color = f4.selectbox("Color de Cinta:", ["Todos"] + sorted(solo_emb["Color_Cinta"].unique().tolist()), key=f"{prefijo}_color")
-    sel_emp = f5.selectbox("Empleado:", ["Todos"] + sorted(solo_emb["Parcelero"].unique().tolist()), key=f"{prefijo}_emp")
 
     df_res = solo_emb[(solo_emb["Fecha_Dt"] >= f_desde) & (solo_emb["Fecha_Dt"] <= f_hasta)].copy()
     if sel_anio != "Todos":
