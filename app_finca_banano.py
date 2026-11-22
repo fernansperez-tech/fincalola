@@ -1469,7 +1469,7 @@ elif rol == "Administrador":
                 parcs_emb = sorted(emb_base["Parcelero"].astype(str).unique().tolist())
                 e_parc_g = ge4.selectbox("Parcelero:", ["Todos"] + parcs_emb, key="g_e_parc")
                 sems_e_g = sorted(emb_base["Semana"].unique().tolist(), reverse=True)
-                               sems_e_g = sorted(emb_base["Semana"].unique().tolist(), reverse=True)
+                sems_e_g = sorted(emb_base["Semana"].unique().tolist(), reverse=True)
                 sem_act_def_g = [sem_act_g] if sem_act_g in sems_e_g else []
                 e_sems_g = ge5.multiselect("Semanas de Embolse (vacío = todas):", sems_e_g, default=sem_act_def_g, key="g_e_sems")
                 eds_e_g = [f"{e} sem" for e in sorted(emb_base["Edad_Num"].unique().tolist(), reverse=True)]
