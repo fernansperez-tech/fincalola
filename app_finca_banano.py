@@ -1089,7 +1089,7 @@ elif rol == "Administrador":
             f_max_c = fechas_c_val.max() if not fechas_c_val.empty else ahora_c.date()
 
             rc1, rc2 = st.columns(2)
-            c_desde = rc1.date_input("Desde fecha corte:", value=f_min_c, min_value=f_min_c, max_value=f_max_c, key="corte_desde")
+            c_desde = rc1.date_input("Desde fecha corte:", value=f_max_c, min_value=f_min_c, max_value=f_max_c, key="corte_desde")
             c_hasta = rc2.date_input("Hasta fecha corte:", value=f_max_c, min_value=f_min_c, max_value=f_max_c, key="corte_hasta")
 
             f1, f2, f3 = st.columns(3)
