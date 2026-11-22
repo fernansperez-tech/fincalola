@@ -342,41 +342,58 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
                           .format({"Promedio_Por_Dia": "{:.1f}"}),
             use_container_width=True, hide_index=True
         )
-        st.write("### 3. Matriz de Embolse por Empleado y Lote (Con Fecha en Cada Celda)")
+    st.write("### 3. Matriz de Embolse por Empleado y Lote")
     if not df_res.empty:
+        ver_fechas_celda = st.toggle("Mostrar fechas detalladas en cada celda (útil para revisar 1 semana)", value=False, key=f"{prefijo}_tog_fechas_m3")
         piv_num = df_res.pivot_table(index="Parcelero", columns="Lote", values="Racimos", aggfunc="sum", fill_value=0)
         lotes_activos = [lt for lt in LOTES if lt in piv_num.columns]
         tot_por_emp = piv_num[lotes_activos].sum(axis=1).sort_values(ascending=False)
         orden_emps = tot_por_emp.index.tolist()
 
-        df_det_celda = df_res.copy()
-        df_det_celda["Dia_Corto"] = pd.to_datetime(df_det_celda["Fecha"], errors="coerce").dt.strftime("%d/%m").fillna(df_det_celda["Fecha"].str[5:])
-        grp_celda = df_det_celda.groupby(["Parcelero", "Lote", "Dia_Corto"])["Racimos"].sum().reset_index()
+        if ver_fechas_celda:
+            df_det_celda = df_res.copy()
+            df_det_celda["Dia_Corto"] = pd.to_datetime(df_det_celda["Fecha"], errors="coerce").dt.strftime("%d/%m").fillna(df_det_celda["Fecha"].str[5:])
+            grp_celda = df_det_celda.groupby(["Parcelero", "Lote", "Dia_Corto"])["Racimos"].sum().reset_index()
 
-        celdas_texto = {}
-        for (emp_k, lt_k), sub_g in grp_celda.groupby(["Parcelero", "Lote"]):
-            partes = [f"{int(r['Racimos'])} ({r['Dia_Corto']})" for _, r in sub_g.iterrows()]
-            celdas_texto[(emp_k, lt_k)] = " + ".join(partes)
+            celdas_texto = {}
+            for (emp_k, lt_k), sub_g in grp_celda.groupby(["Parcelero", "Lote"]):
+                partes = [f"{int(r['Racimos'])} ({r['Dia_Corto']})" for _, r in sub_g.iterrows()]
+                celdas_texto[(emp_k, lt_k)] = " + ".join(partes)
 
-        filas_mat3 = []
-        for emp_n in orden_emps:
-            fila_d = {"Parcelero": emp_n}
+            filas_mat3 = []
+            for emp_n in orden_emps:
+                fila_d = {"Parcelero": emp_n}
+                for lt_n in lotes_activos:
+                    fila_d[lt_n] = celdas_texto.get((emp_n, lt_n), "0")
+                fila_d["TOTAL"] = int(tot_por_emp[emp_n])
+                filas_mat3.append(fila_d)
+
+            fila_tot_emp = {"Parcelero": "TOTAL"}
             for lt_n in lotes_activos:
-                fila_d[lt_n] = celdas_texto.get((emp_n, lt_n), "0")
-            fila_d["TOTAL"] = int(tot_por_emp[emp_n])
-            filas_mat3.append(fila_d)
+                fila_tot_emp[lt_n] = int(piv_num[lt_n].sum())
+            fila_tot_emp["TOTAL"] = int(tot_por_emp.sum())
 
-        fila_tot_emp = {"Parcelero": "TOTAL"}
-        for lt_n in lotes_activos:
-            fila_tot_emp[lt_n] = int(piv_num[lt_n].sum())
-        fila_tot_emp["TOTAL"] = int(tot_por_emp.sum())
+            mat_emp_final = pd.concat([pd.DataFrame(filas_mat3), pd.DataFrame([fila_tot_emp])], ignore_index=True)
+            filas_me = mat_emp_final.index < len(filas_mat3)
+            st.dataframe(
+                mat_emp_final.style.background_gradient(subset=(filas_me, ["TOTAL"]), cmap="coolwarm_r"),
+                use_container_width=True, hide_index=True
+            )
+        else:
+            mat_num = piv_num.loc[orden_emps, lotes_activos].astype(int).reset_index()
+            mat_num["TOTAL"] = tot_por_emp.values.astype(int)
+            fila_tot_n = {"Parcelero": "TOTAL"}
+            for lt_n in lotes_activos:
+                fila_tot_n[lt_n] = int(piv_num[lt_n].sum())
+            fila_tot_n["TOTAL"] = int(tot_por_emp.sum())
 
-        mat_emp_final = pd.concat([pd.DataFrame(filas_mat3), pd.DataFrame([fila_tot_emp])], ignore_index=True)
-        filas_me = mat_emp_final.index < len(filas_mat3)
-        st.dataframe(
-            mat_emp_final.style.background_gradient(subset=(filas_me, ["TOTAL"]), cmap="coolwarm_r"),
-            use_container_width=True, hide_index=True
-        )
+            mat_num_final = pd.concat([mat_num, pd.DataFrame([fila_tot_n])], ignore_index=True)
+            filas_mn = mat_num_final.index < len(mat_num)
+            st.dataframe(
+                mat_num_final.style.background_gradient(subset=(filas_mn, lotes_activos + ["TOTAL"]), cmap="coolwarm_r"),
+                use_container_width=True, hide_index=True
+            )
+
 
 
 def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
