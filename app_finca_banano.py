@@ -237,9 +237,8 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     sel_edad = f3.multiselect("Edades (vacío = todas):", edades_disp, key=f"{prefijo}_edad")
 
     f3, f4, f5 = st.columns(3)
-    lotes_op = ["Todos"] + sorted(solo_emb["Lote"].unique().tolist())
-    idx_lote = lotes_op.index(lote_qr) if lote_qr in lotes_op else 0
-    sel_lote = f3.selectbox("Lote:", lotes_op, index=idx_lote, key=f"{prefijo}_lote")
+    lotes_def_emb = [lote_qr] if (lote_qr != "Todos" and lote_qr in LOTES) else []
+    sel_lote = f3.multiselect("Lotes (vacío = todos):", LOTES, default=lotes_def_emb, key=f"{prefijo}_lotes_multi_{lote_qr}")
     sel_color = f4.selectbox("Color de Cinta:", ["Todos"] + sorted(solo_emb["Color_Cinta"].unique().tolist()), key=f"{prefijo}_color")
     sel_emp = f5.selectbox("Empleado:", ["Todos"] + sorted(solo_emb["Parcelero"].unique().tolist()), key=f"{prefijo}_emp")
 
@@ -251,8 +250,32 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     if sel_edad:
         df_res = df_res[df_res["Edad_Texto"].isin(sel_edad)]
 
-    if sel_lote != "Todos":
-        df_res = df_res[df_res["Lote"] == sel_lote]
+    if sel_lote:
+        df_res = df_res[df_res["Lote"].isin(sel_lote)]
+    if sel_color != "Todos":
+        df_res = df_res[df_res["Color_Cinta"] == sel_color]
+    if sel_emp != "Todos":
+        df_res = df_res[df_res["Parcelero"] == sel_emp]
+    lotes_def_emb = [lote_qr] if (lote_qr != "Todos" and lote_qr in LOTES) else []
+    sel_lote = f3.multiselect("Lotes (vacío = todos):", LOTES, default=lotes_def_emb, key=f"{prefijo}_lotes_multi_{lote_qr}")
+    sel_color = f4.selectbox("Color de Cinta:", ["Todos"] + sorted(solo_emb["Color_Cinta"].unique().tolist()), key=f"{prefijo}_color")
+    sel_emp = f5.selectbox("Empleado:", ["Todos"] + sorted(solo_emb["Parcelero"].unique().tolist()), key=f"{prefijo}_emp")
+
+    df_res = solo_emb[(solo_emb["Fecha_Dt"] >= f_desde) & (solo_emb["Fecha_Dt"] <= f_hasta)].copy()
+    if sel_anio != "Todos":
+        df_res = df_res[df_res["Anio"] == sel_anio]
+    if sel_sem:
+        df_res = df_res[df_res["Semana"].isin(sel_sem)]
+    if sel_edad:
+        df_res = df_res[df_res["Edad_Texto"].isin(sel_edad)]
+
+    if sel_lote:
+        df_res = df_res[df_res["Lote"].isin(sel_lote)]
+    if sel_color != "Todos":
+        df_res = df_res[df_res["Color_Cinta"] == sel_color]
+    if sel_emp != "Todos":
+        df_res = df_res[df_res["Parcelero"] == sel_emp]
+
     if sel_color != "Todos":
         df_res = df_res[df_res["Color_Cinta"] == sel_color]
     if sel_emp != "Todos":
@@ -261,68 +284,42 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     total_filtrado = int(df_res["Racimos"].sum())
     st.metric("Total General (Según Filtros)", f"{total_filtrado:,} racimos")
 
-    def formatear_cintas_visual(texto_cintas):
-        iconos = {
-            "Amarilla": "🟡 Amarilla", "Morada": "🟣 Morada",
-            "Roja": "🔴 Roja", "Cafe": "🟤 Cafe",
-            "Negra": "⚫ Negra", "Verde": "🟢 Verde",
-            "Azul": "🔵 Azul", "Blanca": "⚪ Blanca"
-        }
-        partes = [p.strip() for p in str(texto_cintas).split(",") if p.strip() != "-"]
-        if not partes:
-            return "-"
-        return " | ".join([iconos.get(p, p) for p in partes])
+       st.write("### 1. Rendimiento por Lote y Hectárea")
+    lotes_activos_rep = sel_lote if sel_lote else LOTES
+    rac_por_lote = df_res.groupby("Lote")["Racimos"].sum().to_dict() if not df_res.empty else {}
 
-    def pintar_cinta(val):
-        texto = str(val)
-        paleta = {
-            "Amarilla": ("#FFD700", "#000000"),
-            "Morada": ("#800080", "#FFFFFF"),
-            "Roja": ("#D32F2F", "#FFFFFF"),
-            "Cafe": ("#6D4C41", "#FFFFFF"),
-            "Negra": ("#212121", "#FFFFFF"),
-            "Verde": ("#2E7D32", "#FFFFFF"),
-            "Azul": ("#1565C0", "#FFFFFF"),
-            "Blanca": ("#F5F5F5", "#000000")
-        }
-        encontrados = [par for nom, par in paleta.items() if nom in texto]
-        if len(encontrados) == 1:
-            fondo, letra = encontrados.pop(0)
-            return f"background-color: {fondo}; color: {letra}; font-weight: bold;"
-        elif len(encontrados) > 1:
-            return "background-color: #263238; color: #FFFFFF; font-weight: bold;"
-        return ""
+    filas_rend = []
+    tot_ha_rep = 0.0
+    tot_rac_rep = 0
 
+    for lt_r in lotes_activos_rep:
+        ha_lt = float(HECTAREAS_LOTES.get(lt_r, 0.0)) if "HECTAREAS_LOTES" in globals() else 0.0
+        rac_lt = int(rac_por_lote.get(lt_r, 0))
+        ratio_ha = round(rac_lt / ha_lt, 1) if ha_lt > 0 else 0.0
+        tot_ha_rep += ha_lt
+        tot_rac_rep += rac_lt
+        filas_rend.append({
+            "Lote": lt_r,
+            "Hectareas": round(ha_lt, 2),
+            "Racimos_Embolsados": rac_lt,
+            "Racimos_x_Ha": ratio_ha
+        })
 
-    num_semanas = max(1, int(df_res["Semana"].nunique())) if not df_res.empty else 1
-    st.caption(f"Cálculo de Racimos/Ha promediado sobre **{num_semanas} semana(s)** activas en el filtro.")
+    ratio_ha_tot = round(tot_rac_rep / tot_ha_rep, 1) if tot_ha_rep > 0 else 0.0
+    filas_rend.append({
+        "Lote": "TOTAL",
+        "Hectareas": round(tot_ha_rep, 2),
+        "Racimos_Embolsados": tot_rac_rep,
+        "Racimos_x_Ha": ratio_ha_tot
+    })
 
-    st.write("### 1. Rendimiento por Lote (Racimos / Ha / Semana)")
-    res_lote_ha = pd.DataFrame({"Lote": LOTES})
-    res_lote_ha["Hectareas"] = res_lote_ha["Lote"].map(HECTAREAS_LOTE).fillna(0.0)
-    emb_lote = df_res.groupby("Lote").agg(
-        Cintas=("Color_Cinta", lambda x: ", ".join(sorted(set(x)))),
-        Racimos=("Racimos", "sum")
-    ).reset_index()
-    res_lote_ha = res_lote_ha.merge(emb_lote, on="Lote", how="left").fillna({"Cintas": "-", "Racimos": 0})
-    res_lote_ha["Racimos"] = res_lote_ha["Racimos"].astype(int)
-    res_lote_ha["Racimos_Por_Ha"] = res_lote_ha.apply(
-        lambda r: round(r["Racimos"] / (r["Hectareas"] * num_semanas), 1) if r["Hectareas"] > 0 else 0.0, axis=1
-    )
-    res_lote_ha["Cintas"] = res_lote_ha["Cintas"].apply(formatear_cintas_visual)
-
-    tot_ha = round(res_lote_ha["Hectareas"].sum(), 2)
-    tot_rac_lote = int(res_lote_ha["Racimos"].sum())
-    prom_ha_total = round(tot_rac_lote / (tot_ha * num_semanas), 1) if tot_ha > 0 else 0.0
-    fila_tot_1 = pd.DataFrame([{"Lote": "TOTAL", "Hectareas": tot_ha, "Cintas": "-", "Racimos": tot_rac_lote, "Racimos_Por_Ha": prom_ha_total}])
-    t1_final = pd.concat([res_lote_ha, fila_tot_1], ignore_index=True)
-    filas_1 = t1_final.index < len(res_lote_ha)
+    df_rend_final = pd.DataFrame(filas_rend)
+    filas_rend_idx = df_rend_final.index < len(lotes_activos_rep)
     st.dataframe(
-        t1_final.style.background_gradient(subset=(filas_1, ["Racimos_Por_Ha"]), cmap="coolwarm_r")
-                      .map(pintar_cinta, subset=["Cintas"])
-                      .format({"Hectareas": "{:.2f}", "Racimos_Por_Ha": "{:.1f}"}),
+        df_rend_final.style.background_gradient(subset=(filas_rend_idx, ["Racimos_Embolsados", "Racimos_x_Ha"]), cmap="coolwarm_r"),
         use_container_width=True, hide_index=True
     )
+
     st.write("### Matriz de Embolse por Lote y Color de Cinta")
     if not df_res.empty:
         ICONOS_EMB_MAT = {
