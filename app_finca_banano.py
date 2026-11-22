@@ -264,7 +264,7 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     st.metric("Total General (Según Filtros)", f"{total_filtrado:,} racimos")
 
     st.write("### 1. Rendimiento por Lote y Hectárea")
-        if sel_lote:
+    if sel_lote:
         lotes_activos_rep = [str(x).strip() for x in sel_lote]
     elif sel_color or sel_emp or sel_sem or sel_edad:
         lotes_con_datos = set(df_res["Lote"].astype(str).str.strip().unique()) if not df_res.empty else set()
