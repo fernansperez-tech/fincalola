@@ -241,7 +241,7 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     val_qr_limpio = str(lote_qr).strip()
     lotes_def_emb = [val_qr_limpio] if val_qr_limpio in lista_lotes_ok else []
     sel_lote = c_lt.multiselect("Lotes (vacío = todos):", lista_lotes_ok, default=lotes_def_emb, key=f"{prefijo}_lotes_v4_{val_qr_limpio}")
-        colores_disp = sorted(solo_emb["Color_Cinta"].dropna().astype(str).str.strip().unique().tolist())
+    colores_disp = sorted(solo_emb["Color_Cinta"].dropna().astype(str).str.strip().unique().tolist())
     emps_disp = sorted(solo_emb["Parcelero"].dropna().astype(str).str.strip().unique().tolist())
     sel_color = c_cl.multiselect("Colores de Cinta (vacío = todos):", colores_disp, key=f"{prefijo}_color_multi")
     sel_emp = c_em.multiselect("Empleados (vacío = todos):", emps_disp, key=f"{prefijo}_emp_multi")
