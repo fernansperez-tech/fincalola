@@ -326,9 +326,12 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     df_rend_final = pd.DataFrame(filas_rend)
     filas_rend_idx = df_rend_final.index < len(lotes_activos_rep)
     st.dataframe(
-        df_rend_final.style.background_gradient(subset=(filas_rend_idx, ["Racimos_x_Ha"]), cmap="coolwarm_r"),
+        df_rend_final.style
+        .format({"Hectareas": "{:.2f}", "Racimos_x_Ha": "{:.2f}"})
+        .background_gradient(subset=(filas_rend_idx, ["Racimos_x_Ha"]), cmap="coolwarm_r"),
         use_container_width=True, hide_index=True
     )
+
     st.write("### 2. Matriz de Embolse por Lote y Color de Cinta")
     if not df_res.empty:
         ICONOS_EMB_MAT = {
