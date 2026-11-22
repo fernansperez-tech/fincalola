@@ -529,7 +529,9 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False, lote_qr="Todos"):
                 cols_ordenadas = solo_pos_m.sort_values(by=["Orden_Ed", "Etiqueta"])["Etiqueta"].unique().tolist()
                 piv_saldo = solo_pos_m.pivot_table(index="Lote", columns="Etiqueta", values="Saldo", aggfunc="sum", fill_value=0)
 
-                matriz_final = pd.DataFrame({"Lote": LOTES})
+                lotes_mostrar_m = sel_lotes_mata if sel_lotes_mata else LOTES
+                matriz_final = pd.DataFrame({"Lote": lotes_mostrar_m})
+
                 for col_et in cols_ordenadas:
                     matriz_final[col_et] = matriz_final["Lote"].map(piv_saldo[col_et]).fillna(0).astype(int)
                 matriz_final["Saldo_En_Mata"] = matriz_final[cols_ordenadas].sum(axis=1).astype(int)
