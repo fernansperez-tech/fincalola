@@ -460,7 +460,7 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False):
         if solo_pos_m.empty:
             st.info("No hay saldos positivos en mata actualmente.")
         else:
-                        edades_reales = [f"{e} sem" for e in sorted(solo_pos_m["Edad_Num"].unique().tolist(), reverse=True)]
+            edades_reales = [f"{e} sem" for e in sorted(solo_pos_m["Edad_Num"].unique().tolist(), reverse=True)]
             edades_corte_def = ["12 sem", "11 sem", "10 sem", "9 sem"]
             edades_m_disp = list(dict.fromkeys(edades_corte_def + edades_reales))
             sel_edad_mata = st.multiselect(
