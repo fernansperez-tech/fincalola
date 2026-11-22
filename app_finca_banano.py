@@ -898,6 +898,15 @@ if len(st.session_state.cola_offline) > 0:
             st.error(f"Error al sincronizar: {repr(e)}")
 
 rol = st.radio("Selecciona perfil:", ["Parcelero (Embolse)", "Consulta de Embolse", "Administrador"], horizontal=True)
+lote_url_global = str(st.query_params.get("lote", "")).replace("%20", " ").strip()
+if lote_url_global and lote_url_global not in LOTES and lote_url_global.startswith("Lote "):
+    num_g = lote_url_global.replace("Lote ", "").strip()
+    if num_g.isdigit() and f"Lote {int(num_g):02d}" in LOTES:
+        lote_url_global = f"Lote {int(num_g):02d}"
+if lote_url_global in LOTES:
+    st.session_state["lote_qr_global"] = lote_url_global
+elif "lote_qr_global" not in st.session_state:
+    st.session_state["lote_qr_global"] = "Todos"
 
 if rol == "Parcelero (Embolse)":
     st.subheader("Registro de Fruta Embolsada")
