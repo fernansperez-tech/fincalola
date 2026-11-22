@@ -213,6 +213,19 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     solo_emb["Anio"] = solo_emb["Fecha"].str[:4]
     solo_emb["Semana"] = solo_emb["Semana"].astype(int)
 
+    sem_act = ahora.isocalendar().week
+    anio_act = ahora.year
+    solo_emb["Edad_Num"] = solo_emb.apply(
+        lambda r: max(0, ((anio_act - int(r["Anio"])) * 52 + (sem_act - int(r["Semana"]))) + 1), axis=1
+    )
+    solo_emb["Edad_Texto"] = solo_emb["Edad_Num"].astype(str) + " sem"
+
+    max_ed_emb = max(14, int(solo_emb["Edad_Num"].max()))
+    rango_ed_emb = st.slider(
+        "Rango de edades a consultar (semanas):",
+        min_value=0, max_value=max_ed_emb, value=(0, 14), key=f"{prefijo}_rango_ed_emb"
+    )
+
     fechas_validas = solo_emb["Fecha_Dt"].dropna()
     fecha_min = fechas_validas.min() if not fechas_validas.empty else ahora.date()
     fecha_max = fechas_validas.max() if not fechas_validas.empty else ahora.date()
@@ -221,19 +234,10 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     f_desde = r1.date_input("Desde fecha:", value=fecha_min, min_value=fecha_min, max_value=fecha_max, key=f"{prefijo}_desde")
     f_hasta = r2.date_input("Hasta fecha:", value=fecha_max, min_value=fecha_min, max_value=fecha_max, key=f"{prefijo}_hasta")
 
-    sem_act = ahora.isocalendar().week
-    anio_act = ahora.year
-    solo_emb["Edad_Num"] = solo_emb.apply(
-        lambda r: max(0, ((anio_act - int(r["Anio"])) * 52 + (sem_act - int(r["Semana"]))) + 1), axis=1
-    )
-    solo_emb["Edad_Texto"] = solo_emb["Edad_Num"].astype(str) + " sem"
-
-    f1, f2, f3 = st.columns(3)
+    f1, f2 = st.columns(2)
     sel_anio = f1.selectbox("Año:", ["Todos"] + sorted(solo_emb["Anio"].unique().tolist(), reverse=True), key=f"{prefijo}_anio")
     semanas_disp = sorted(solo_emb["Semana"].unique().tolist(), reverse=True)
     sel_sem = f2.multiselect("Semanas Embolse (vacío = todas):", semanas_disp, key=f"{prefijo}_sem")
-    edades_disp = [f"{e} sem" for e in sorted(solo_emb["Edad_Num"].unique().tolist(), reverse=True)]
-    sel_edad = f3.multiselect("Edades (vacío = todas):", edades_disp, key=f"{prefijo}_edad")
 
     f3, f4, f5 = st.columns(3)
     lotes_op = ["Todos"] + sorted(solo_emb["Lote"].unique().tolist())
@@ -242,14 +246,17 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     sel_color = f4.selectbox("Color de Cinta:", ["Todos"] + sorted(solo_emb["Color_Cinta"].unique().tolist()), key=f"{prefijo}_color")
     sel_emp = f5.selectbox("Empleado:", ["Todos"] + sorted(solo_emb["Parcelero"].unique().tolist()), key=f"{prefijo}_emp")
 
-    df_res = solo_emb[(solo_emb["Fecha_Dt"] >= f_desde) & (solo_emb["Fecha_Dt"] <= f_hasta)].copy()
+    df_res = solo_emb[
+        (solo_emb["Fecha_Dt"] >= f_desde) &
+        (solo_emb["Fecha_Dt"] <= f_hasta) &
+        (solo_emb["Edad_Num"] >= rango_ed_emb[0]) &
+        (solo_emb["Edad_Num"] <= rango_ed_emb[1])
+    ].copy()
+
     if sel_anio != "Todos":
         df_res = df_res[df_res["Anio"] == sel_anio]
     if sel_sem:
         df_res = df_res[df_res["Semana"].isin(sel_sem)]
-    if sel_edad:
-        df_res = df_res[df_res["Edad_Texto"].isin(sel_edad)]
-
     if sel_lote != "Todos":
         df_res = df_res[df_res["Lote"] == sel_lote]
     if sel_color != "Todos":
@@ -259,7 +266,6 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
 
     total_filtrado = int(df_res["Racimos"].sum())
     st.metric("Total General (Según Filtros)", f"{total_filtrado:,} racimos")
-
     def formatear_cintas_visual(texto_cintas):
         iconos = {
             "Amarilla": "🟡 Amarilla", "Morada": "🟣 Morada",
