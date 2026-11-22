@@ -249,21 +249,13 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     df_res = solo_emb[(solo_emb["Fecha_Dt"] >= f_desde) & (solo_emb["Fecha_Dt"] <= f_hasta)].copy()
     if sel_anio != "Todos":
         df_res = df_res[df_res["Anio"] == sel_anio]
-    if sel_sem:
-        df_res = df_res[df_res["Semana"].isin(sel_sem)]
-    if sel_edad:
-        df_res = df_res[df_res["Edad_Texto"].isin(sel_edad)]
-
-    if sel_lote:
-        df_res = df_res[df_res["Lote"].isin(sel_lote)]
-    if sel_color != "Todos":
-        df_res = df_res[df_res["Color_Cinta"] == sel_color]
-    if sel_emp != "Todos":
-        df_res = df_res[df_res["Parcelero"] == sel_emp]
-    lotes_def_emb = [lote_qr] if (lote_qr != "Todos" and lote_qr in LOTES) else []
-    sel_lote = f3.multiselect("Lotes (vacío = todos):", LOTES, default=lotes_def_emb, key=f"{prefijo}_lotes_multi_{lote_qr}")
-    sel_color = c_cl.selectbox("Color de Cinta:", ["Todos"] + sorted(solo_emb["Color_Cinta"].unique().tolist()), key=f"{prefijo}_color")
-    sel_emp = c_em.selectbox("Empleado:", ["Todos"] + sorted(solo_emb["Parcelero"].unique().tolist()), key=f"{prefijo}_emp")
+        c_lt, c_cl, c_em = st.columns(3)
+    lista_lotes_ok = list(LOTES)
+    val_qr_limpio = str(lote_qr).strip()
+    lotes_def_emb = [val_qr_limpio] if val_qr_limpio in lista_lotes_ok else []
+    sel_lote = c_lt.multiselect("Lotes (vacío = todos):", options=lista_lotes_ok, default=lotes_def_emb, key=f"{prefijo}_sel_lotes_v3")
+    sel_color = c_cl.selectbox("Color de Cinta:", ["Todos"] + sorted(solo_emb["Color_Cinta"].dropna().astype(str).unique().tolist()), key=f"{prefijo}_color_v3")
+    sel_emp = c_em.selectbox("Empleado:", ["Todos"] + sorted(solo_emb["Parcelero"].dropna().astype(str).unique().tolist()), key=f"{prefijo}_emp_v3")
 
     df_res = solo_emb[(solo_emb["Fecha_Dt"] >= f_desde) & (solo_emb["Fecha_Dt"] <= f_hasta)].copy()
     if sel_anio != "Todos":
@@ -272,14 +264,8 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
         df_res = df_res[df_res["Semana"].isin(sel_sem)]
     if sel_edad:
         df_res = df_res[df_res["Edad_Texto"].isin(sel_edad)]
-
     if sel_lote:
         df_res = df_res[df_res["Lote"].isin(sel_lote)]
-    if sel_color != "Todos":
-        df_res = df_res[df_res["Color_Cinta"] == sel_color]
-    if sel_emp != "Todos":
-        df_res = df_res[df_res["Parcelero"] == sel_emp]
-
     if sel_color != "Todos":
         df_res = df_res[df_res["Color_Cinta"] == sel_color]
     if sel_emp != "Todos":
