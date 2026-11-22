@@ -237,8 +237,9 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     sel_edad = f3.multiselect("Edades (vacío = todas):", edades_disp, key=f"{prefijo}_edad")
 
     f3, f4, f5 = st.columns(3)
-    lotes_def_emb = [lote_qr] if (lote_qr != "Todos" and lote_qr in LOTES) else []
-    sel_lote = f3.multiselect("Lotes (vacío = todos):", LOTES, default=lotes_def_emb, key=f"{prefijo}_lotes_multi_{lote_qr}")
+    lotes_def_emb = [x for x in [str(lote_qr).strip()] if x in LOTES]
+    sel_lote = f3.multiselect("Lotes (vacío = todos):", options=LOTES, default=lotes_def_emb, key=f"{prefijo}_lotes_multi_{lote_qr}")
+
     sel_color = f4.selectbox("Color de Cinta:", ["Todos"] + sorted(solo_emb["Color_Cinta"].unique().tolist()), key=f"{prefijo}_color")
     sel_emp = f5.selectbox("Empleado:", ["Todos"] + sorted(solo_emb["Parcelero"].unique().tolist()), key=f"{prefijo}_emp")
 
