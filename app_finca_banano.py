@@ -284,7 +284,7 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     total_filtrado = int(df_res["Racimos"].sum())
     st.metric("Total General (Según Filtros)", f"{total_filtrado:,} racimos")
 
-       st.write("### 1. Rendimiento por Lote y Hectárea")
+    st.write("### 1. Rendimiento por Lote y Hectárea")
     lotes_activos_rep = sel_lote if sel_lote else LOTES
     rac_por_lote = df_res.groupby("Lote")["Racimos"].sum().to_dict() if not df_res.empty else {}
 
