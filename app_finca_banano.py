@@ -246,6 +246,7 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
 
 
 
+
     df_res = solo_emb[(solo_emb["Fecha_Dt"] >= f_desde) & (solo_emb["Fecha_Dt"] <= f_hasta)].copy()
     if sel_anio != "Todos":
         df_res = df_res[df_res["Anio"] == sel_anio]
