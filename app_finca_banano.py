@@ -241,12 +241,10 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     val_qr_limpio = str(lote_qr).strip()
     lotes_def_emb = [val_qr_limpio] if val_qr_limpio in lista_lotes_ok else []
     sel_lote = c_lt.multiselect("Lotes (vacío = todos):", lista_lotes_ok, default=lotes_def_emb, key=f"{prefijo}_lotes_v4_{val_qr_limpio}")
-    sel_color = c_cl.selectbox("Color de Cinta:", ["Todos"] + sorted(solo_emb["Color_Cinta"].dropna().astype(str).unique().tolist()), key=f"{prefijo}_color")
-    sel_emp = c_em.selectbox("Empleado:", ["Todos"] + sorted(solo_emb["Parcelero"].dropna().astype(str).unique().tolist()), key=f"{prefijo}_emp")
-
-    df_res = solo_emb[(solo_emb["Fecha_Dt"] >= f_desde) & (solo_emb["Fecha_Dt"] <= f_hasta)].copy()
-    if sel_anio != "Todos":
-        df_res = df_res[df_res["Anio"] == sel_anio]
+        colores_disp = sorted(solo_emb["Color_Cinta"].dropna().astype(str).str.strip().unique().tolist())
+    emps_disp = sorted(solo_emb["Parcelero"].dropna().astype(str).str.strip().unique().tolist())
+    sel_color = c_cl.multiselect("Colores de Cinta (vacío = todos):", colores_disp, key=f"{prefijo}_color_multi")
+    sel_emp = c_em.multiselect("Empleados (vacío = todos):", emps_disp, key=f"{prefijo}_emp_multi")
 
     df_res = solo_emb[(solo_emb["Fecha_Dt"] >= f_desde) & (solo_emb["Fecha_Dt"] <= f_hasta)].copy()
     if sel_anio != "Todos":
@@ -256,11 +254,11 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     if sel_edad:
         df_res = df_res[df_res["Edad_Texto"].isin(sel_edad)]
     if sel_lote:
-        df_res = df_res[df_res["Lote"].isin(sel_lote)]
-    if sel_color != "Todos":
-        df_res = df_res[df_res["Color_Cinta"] == sel_color]
-    if sel_emp != "Todos":
-        df_res = df_res[df_res["Parcelero"] == sel_emp]
+        df_res = df_res[df_res["Lote"].astype(str).str.strip().isin(sel_lote)]
+    if sel_color:
+        df_res = df_res[df_res["Color_Cinta"].astype(str).str.strip().isin(sel_color)]
+    if sel_emp:
+        df_res = df_res[df_res["Parcelero"].astype(str).str.strip().isin(sel_emp)]
 
     total_filtrado = int(df_res["Racimos"].sum())
     st.metric("Total General (Según Filtros)", f"{total_filtrado:,} racimos")
