@@ -276,21 +276,42 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     st.metric("Total General (Según Filtros)", f"{total_filtrado:,} racimos")
 
     st.write("### 1. Rendimiento por Lote y Hectárea")
-    lotes_activos_rep = sel_lote if sel_lote else LOTES
-    rac_por_lote = df_res.groupby("Lote")["Racimos"].sum().to_dict() if not df_res.empty else {}
+    lotes_activos_rep = [str(x).strip() for x in (sel_lote if sel_lote else LOTES)]
+
+    dic_ha_real = {}
+    for nombre_var in ["HECTAREAS_LOTES", "AREAS_LOTES", "LOTES_HA", "HECTAREAS", "AREA_LOTES", "HECTAREAS_FINCA", "hectareas_lotes"]:
+        if nombre_var in globals() and isinstance(globals()[nombre_var], dict):
+            dic_ha_real = globals()[nombre_var]
+            break
+
+    ICONOS_T1 = {
+        "Amarilla": "🟡 Amarilla", "Morada": "🟣 Morada",
+        "Roja": "🔴 Roja", "Cafe": "🟤 Cafe", "Café": "🟤 Café",
+        "Negra": "⚫ Negra", "Verde": "🟢 Verde",
+        "Azul": "🔵 Azul", "Blanca": "⚪ Blanca"
+    }
+
+    cintas_por_lote = {}
+    if not df_res.empty:
+        for lt_k, sub_lt in df_res.groupby(df_res["Lote"].astype(str).str.strip()):
+            c_unicas = [ICONOS_T1.get(str(c).strip(), str(c).strip()) for c in sub_lt["Color_Cinta"].dropna().unique()]
+            cintas_por_lote[lt_k] = " / ".join(c_unicas) if c_unicas else "-"
+
+    rac_por_lote = df_res.groupby(df_res["Lote"].astype(str).str.strip())["Racimos"].sum().to_dict() if not df_res.empty else {}
 
     filas_rend = []
     tot_ha_rep = 0.0
     tot_rac_rep = 0
 
     for lt_r in lotes_activos_rep:
-        ha_lt = float(HECTAREAS_LOTES.get(lt_r, 0.0)) if "HECTAREAS_LOTES" in globals() else 0.0
+        ha_lt = float(dic_ha_real.get(lt_r, 0.0))
         rac_lt = int(rac_por_lote.get(lt_r, 0))
         ratio_ha = round(rac_lt / ha_lt, 1) if ha_lt > 0 else 0.0
         tot_ha_rep += ha_lt
         tot_rac_rep += rac_lt
         filas_rend.append({
             "Lote": lt_r,
+            "Color_Cinta": cintas_por_lote.get(lt_r, "-"),
             "Hectareas": round(ha_lt, 2),
             "Racimos_Embolsados": rac_lt,
             "Racimos_x_Ha": ratio_ha
@@ -299,6 +320,7 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     ratio_ha_tot = round(tot_rac_rep / tot_ha_rep, 1) if tot_ha_rep > 0 else 0.0
     filas_rend.append({
         "Lote": "TOTAL",
+        "Color_Cinta": "-",
         "Hectareas": round(tot_ha_rep, 2),
         "Racimos_Embolsados": tot_rac_rep,
         "Racimos_x_Ha": ratio_ha_tot
@@ -307,53 +329,9 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     df_rend_final = pd.DataFrame(filas_rend)
     filas_rend_idx = df_rend_final.index < len(lotes_activos_rep)
     st.dataframe(
-        df_rend_final.style.background_gradient(subset=(filas_rend_idx, ["Racimos_Embolsados", "Racimos_x_Ha"]), cmap="coolwarm_r"),
+        df_rend_final.style.background_gradient(subset=(filas_rend_idx, ["Racimos_x_Ha"]), cmap="coolwarm_r"),
         use_container_width=True, hide_index=True
     )
-
-    st.write("### Matriz de Embolse por Lote y Color de Cinta")
-    if not df_res.empty:
-        ICONOS_EMB_MAT = {
-            "Amarilla": "🟡 Amarilla", "Morada": "🟣 Morada",
-            "Roja": "🔴 Roja", "Cafe": "🟤 Cafe", "Café": "🟤 Café",
-            "Negra": "⚫ Negra", "Verde": "🟢 Verde",
-            "Azul": "🔵 Azul", "Blanca": "⚪ Blanca"
-        }
-        ORDEN_CINTAS_MAT = [
-            "🟡 Amarilla", "🟣 Morada", "🔴 Roja", "🟤 Cafe", "🟤 Café",
-            "⚫ Negra", "🟢 Verde", "🔵 Azul", "⚪ Blanca"
-        ]
-        df_mat_cinta = df_res.copy()
-        df_mat_cinta["Cinta_Vis"] = df_mat_cinta["Color_Cinta"].map(ICONOS_EMB_MAT).fillna(df_mat_cinta["Color_Cinta"])
-        piv_lc = df_mat_cinta.pivot_table(index="Lote", columns="Cinta_Vis", values="Racimos", aggfunc="sum", fill_value=0)
-
-        cols_cinta_activas = [c for c in ORDEN_CINTAS_MAT if c in piv_lc.columns] + [
-            c for c in piv_lc.columns if c not in ORDEN_CINTAS_MAT
-        ]
-
-        mat_lc = pd.DataFrame({"Lote": LOTES})
-        for col_c in cols_cinta_activas:
-            mat_lc[col_c] = mat_lc["Lote"].map(piv_lc[col_c]).fillna(0).astype(int)
-        mat_lc["TOTAL"] = mat_lc[cols_cinta_activas].sum(axis=1).astype(int)
-
-        fila_tot_lc = {"Lote": "TOTAL"}
-        for col_n in cols_cinta_activas + ["TOTAL"]:
-            fila_tot_lc[col_n] = int(mat_lc[col_n].sum())
-
-        mat_lc_final = pd.concat([mat_lc, pd.DataFrame([fila_tot_lc])], ignore_index=True)
-        filas_lotes_idx = mat_lc_final.index < len(mat_lc)
-        fila_tot_idx = mat_lc_final.index == len(mat_lc)
-
-        estilo_lc = (
-            mat_lc_final.style
-            .background_gradient(subset=(filas_lotes_idx, ["TOTAL"]), cmap="coolwarm_r")
-            .background_gradient(subset=(fila_tot_idx, cols_cinta_activas), cmap="coolwarm_r", axis=1)
-        )
-        st.dataframe(estilo_lc, use_container_width=True, hide_index=True)
-
-        
-    else:
-        st.info("No hay registros de embolse para los filtros seleccionados.")
 
 
     st.write("### 2. Ranking de Empleados (Cantidad Total y Promedio por Día)")
