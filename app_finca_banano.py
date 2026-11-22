@@ -499,7 +499,7 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False, lote_qr="Todos"):
 
     df_fifo_m = pd.DataFrame(reg_fifo)
 
-        if not es_admin:
+    if not es_admin:
         st.subheader("1. Matriz de Saldo en Mata por Lote, Cinta y Edad")
         solo_pos_m = df_fifo_m[df_fifo_m["Saldo"] > 0].copy() if not df_fifo_m.empty else pd.DataFrame()
         if solo_pos_m.empty:
