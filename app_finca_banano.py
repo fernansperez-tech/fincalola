@@ -1257,8 +1257,97 @@ elif rol == "Administrador":
                 use_container_width=True, hide_index=True
             )
 
-            csv_descarga = mat_corte_final.to_csv(index=False).encode("utf-8")
-            st.download_button("Descargar Matriz de Corte en Excel (CSV)", data=csv_descarga, file_name="matriz_cortes_promedios.csv", mime="text/csv")
+                        import io
+            from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+            from openpyxl.utils import get_column_letter
+
+            buffer_xlsx = io.BytesIO()
+            with pd.ExcelWriter(buffer_xlsx, engine="openpyxl") as writer:
+                mat_corte_final.to_excel(writer, index=False, sheet_name="Reporte_Cosecha", startrow=6)
+                ws = writer.sheets["Reporte_Cosecha"]
+
+                num_cols = len(mat_corte_final.columns)
+                ultima_col_letra = get_column_letter(max(num_cols, 6))
+
+                ws.merge_cells(f"A1:{ultima_col_letra}1")
+                ws["A1"] = "BANANERA LA LOLA S.A. — REPORTE GERENCIAL DE COSECHA Y PESOS"
+                ws["A1"].font = Font(name="Calibri", size=14, bold=True, color="FFFFFF")
+                ws["A1"].fill = PatternFill(start_color="1B4332", end_color="1B4332", fill_type="solid")
+                ws["A1"].alignment = Alignment(horizontal="center", vertical="center")
+                ws.row_dimensions[1].height = 28
+
+                ws.merge_cells(f"A2:{ultima_col_letra}2")
+                ws["A2"] = f"Período: {c_desde} al {c_hasta}  |  Descuento Vástago: {pct_vastago:.1f}%  |  Generado: {datetime.now().strftime('%Y-%m-%d %H:%M')}"
+                ws["A2"].font = Font(name="Calibri", size=10, italic=True, color="1B4332")
+                ws["A2"].fill = PatternFill(start_color="D8F3DC", end_color="D8F3DC", fill_type="solid")
+                ws["A2"].alignment = Alignment(horizontal="center", vertical="center")
+                ws.row_dimensions[2].height = 20
+
+                resumen_kpis = [
+                    ("Total Racimos", f"{total_cortados:,}"),
+                    ("Peso Neto Total (kg)", f"{tot_neto:,.2f}"),
+                    ("Prom. Bruto (kg)", f"{prom_bruto_tot:.2f}"),
+                    ("Prom. Garrucha (kg)", f"{prom_tara_tot:.2f}"),
+                    ("Prom. Vástago (kg)", f"{prom_vastago_tot:.2f}"),
+                    ("Prom. Neto (kg)", f"{prom_neto_tot:.2f}")
+                ]
+                for idx_k, (tit_k, val_k) in enumerate(resumen_kpis, start=1):
+                    c_tit = ws.cell(row=4, column=idx_k, value=tit_k)
+                    c_val = ws.cell(row=5, column=idx_k, value=val_k)
+                    c_tit.font = Font(name="Calibri", size=9, bold=True, color="333333")
+                    c_tit.fill = PatternFill(start_color="F1F5F9", end_color="F1F5F9", fill_type="solid")
+                    c_tit.alignment = Alignment(horizontal="center")
+                    c_val.font = Font(name="Calibri", size=11, bold=True, color="0F172A")
+                    c_val.alignment = Alignment(horizontal="center")
+
+                borde_fino = Border(
+                    left=Side(style="thin", color="CBD5E1"),
+                    right=Side(style="thin", color="CBD5E1"),
+                    top=Side(style="thin", color="CBD5E1"),
+                    bottom=Side(style="thin", color="CBD5E1")
+                )
+                fill_header = PatternFill(start_color="1E3A8A", end_color="1E3A8A", fill_type="solid")
+                font_header = Font(name="Calibri", size=10, bold=True, color="FFFFFF")
+                fill_total = PatternFill(start_color="E2E8F0", end_color="E2E8F0", fill_type="solid")
+                font_total = Font(name="Calibri", size=10, bold=True, color="0F172A")
+
+                fila_encabezado = 7
+                fila_final = fila_encabezado + len(mat_corte_final)
+                ws.row_dimensions[fila_encabezado].height = 24
+
+                for col_idx in range(1, num_cols + 1):
+                    col_name = str(mat_corte_final.columns[col_idx - 1])
+                    celda_h = ws.cell(row=fila_encabezado, column=col_idx)
+                    celda_h.fill = fill_header
+                    celda_h.font = font_header
+                    celda_h.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+                    celda_h.border = borde_fino
+
+                    max_len = max(len(col_name), 12)
+                    for r_idx in range(fila_encabezado + 1, fila_final + 1):
+                        celda = ws.cell(row=r_idx, column=col_idx)
+                        celda.border = borde_fino
+                        if col_idx == 1:
+                            celda.alignment = Alignment(horizontal="left", vertical="center")
+                        else:
+                            celda.alignment = Alignment(horizontal="right", vertical="center")
+                            if "kg" in col_name:
+                                celda.number_format = "#,##0.00"
+                            else:
+                                celda.number_format = "#,##0"
+                        if r_idx == fila_final:
+                            celda.fill = fill_total
+                            celda.font = font_total
+                        max_len = max(max_len, len(str(celda.value or "")) + 3)
+
+                    ws.column_dimensions[get_column_letter(col_idx)].width = min(max_len, 24)
+
+            st.download_button(
+                "📊 Descargar Reporte Gerencial en Excel (.xlsx)",
+                data=buffer_xlsx.getvalue(),
+                file_name=f"Reporte_Cosecha_Bananera_La_Lola_{c_desde}_a_{c_hasta}.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
 
     with tab3:
         st.subheader("Descontar Corte con CSV Directo de Tableta")
