@@ -680,22 +680,27 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False, lote_qr="Todos"):
                 inv_sim = solo_positivos.groupby(["Color_Cinta", "Anio", "Semana_Emb", "Edad_Num"])["Saldo"].sum().reset_index()
                 inv_sim["Saldo_Restante"] = inv_sim["Saldo"].astype(float)
 
-                mapa_guardado = {}
-                if not df_guardada.empty and "Semana_Proy" in df_guardada.columns:
-                    for _, rg in df_guardada.iterrows():
-                        mapa_guardado[str(rg["Semana_Proy"])] = {
-                            "p12": int(rg["P12"]),
-                            "p11": int(rg["P11"]),
-                            "p10": int(rg["P10"]),
-                            "p9": int(rg["P9"])
+                mapa_guardado_orden = {}
+                mapa_guardado_etiq = {}
+                if not df_guardada.empty:
+                    for idx_g, (_, rg) in enumerate(df_guardada.iterrows()):
+                        vals_g = {
+                            "p12": int(float(rg["P12"])),
+                            "p11": int(float(rg["P11"])),
+                            "p10": int(float(rg["P10"])),
+                            "p9": int(float(rg["P9"]))
                         }
+                        ord_g = int(float(rg["Orden"])) if "Orden" in df_guardada.columns and pd.notna(rg["Orden"]) else idx_g
+                        mapa_guardado_orden[ord_g] = vals_g
+                        if "Semana_Proy" in df_guardada.columns:
+                            mapa_guardado_etiq[str(rg["Semana_Proy"]).strip()] = vals_g
 
                 filas_cfg_default = []
                 for offset in range(13):
                     fecha_fut = ahora + timedelta(weeks=offset)
                     num_sem_fut = fecha_fut.isocalendar().week
                     etiqueta_sem = f"Sem {num_sem_fut} (Actual)" if offset == 0 else f"Sem {num_sem_fut} (+{offset} sem)"
-                    prev = mapa_guardado.get(etiqueta_sem, {"p12": 100, "p11": 50, "p10": 30, "p9": 10})
+                    prev = mapa_guardado_orden.get(offset, mapa_guardado_etiq.get(etiqueta_sem, {"p12": 100, "p11": 50, "p10": 30, "p9": 10}))
                     filas_cfg_default.append({
                         "Orden": offset,
                         "Semana_Proy": etiqueta_sem,
@@ -706,6 +711,7 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False, lote_qr="Todos"):
                     })
 
                 df_cfg_init = pd.DataFrame(filas_cfg_default)
+
                 df_cfg_edit = st.data_editor(
                     df_cfg_init,
                     column_config={
