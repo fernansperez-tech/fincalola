@@ -229,7 +229,10 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     solo_emb["Edad_Texto"] = solo_emb["Edad_Num"].astype(str) + " sem"
 
     f1, f2, f3 = st.columns(3)
-    sel_anio = f1.selectbox("Año:", ["Todos"] + sorted(solo_emb["Anio"].unique().tolist(), reverse=True), key=f"{prefijo}_anio")
+    anios_disp = sorted(solo_emb["Anio"].dropna().astype(str).str.strip().unique().tolist(), reverse=True)
+    anio_def_emb = [str(anio_act)] if str(anio_act) in anios_disp else []
+    sel_anio = f1.multiselect("Años (vacío = todos):", anios_disp, default=anio_def_emb, key=f"{prefijo}_anio_multi")
+
     semanas_disp = sorted(solo_emb["Semana"].unique().tolist(), reverse=True)
     sem_def_emb = [sem_act] if sem_act in semanas_disp else []
     sel_sem = f2.multiselect("Semanas Embolse (vacío = todas):", semanas_disp, default=sem_def_emb, key=f"{prefijo}_sem")
