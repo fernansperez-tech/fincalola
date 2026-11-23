@@ -1767,7 +1767,7 @@ elif rol == "Administrador":
 
 
 
-                if filas_sg:
+            if filas_sg:
                     df_sg_plot = pd.DataFrame(filas_sg).groupby(["Lote", "Color_Cinta"])["Saldo_En_Mata"].sum().reset_index()
                     bar_s = alt.Chart(df_sg_plot).mark_bar(cornerRadiusTopLeft=3, cornerRadiusTopRight=3).encode(
                         x=alt.X("Lote:N", sort=LOTES, title="Lote"),
