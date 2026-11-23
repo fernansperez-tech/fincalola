@@ -931,6 +931,9 @@ elif "lote_qr_global" not in st.session_state:
 
 if rol == "Parcelero (Embolse)":
     st.subheader("Registro de Fruta Embolsada")
+    if "form_id" not in st.session_state:
+        st.session_state.form_id = 0
+
     lote_url_p = str(st.query_params.get("lote", "")).replace("%20", " ").strip()
     if lote_url_p not in LOTES and lote_url_p.startswith("Lote "):
         num_lt = lote_url_p.replace("Lote ", "").strip()
