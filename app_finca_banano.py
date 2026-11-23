@@ -70,7 +70,7 @@ def conectar_hoja():
     gc = gspread.authorize(credenciales)
     sh = gc.open_by_key(ID_HOJA)
     return sh.worksheet(NOMBRE_HOJA)
-
+@st.cache_data(ttl=60)
 def cargar_datos():
     try:
         ws = conectar_hoja()
@@ -733,6 +733,7 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False, lote_qr="Todos"):
                         guardar_config_proyeccion(df_cfg_edit, ratio, merma)
                         st.success("Proyección semanal, Ratio y Merma guardados en Google Sheets.")
                         time.sleep(1.2)
+                        st.cache_data.clear()
                         st.rerun()
                     except Exception as e:
                         st.error(f"Error al guardar proyección: {repr(e)}")
@@ -745,6 +746,7 @@ def mostrar_saldos_y_proyeccion(df, prefijo, es_admin=False, lote_qr="Todos"):
                         guardar_config_proyeccion(df_base_rst, 1.15, 5)
                         st.info("Valores base restaurados.")
                         time.sleep(1.2)
+                        st.cache_data.clear()
                         st.rerun()
                     except Exception as e:
                         st.error(f"Error al restaurar: {repr(e)}")
@@ -903,6 +905,7 @@ if len(st.session_state.cola_offline) > 0:
             agregar_filas(st.session_state.cola_offline)
             st.session_state.cola_offline = []
             st.success("Registros sincronizados correctamente.")
+            st.cache_data.clear()
             st.rerun()
         except Exception as e:
             st.error(f"Error al sincronizar: {repr(e)}")
@@ -1034,6 +1037,7 @@ if rol == "Parcelero (Embolse)":
                 st.success(f"Guardados {racimos} racimos ({cinta}) en {lote_sel}.")
                 time.sleep(1.5)
                 st.session_state.form_id += 1
+                st.cache_data.clear()
                 st.rerun()
             except Exception as e:
                 st.error(f"Error técnico: {repr(e)}")
@@ -1462,6 +1466,7 @@ elif rol == "Administrador":
                                 agregar_filas(solo_nuevos)
                                 st.success("Se guardaron únicamente los días nuevos sin duplicar los anteriores.")
                                 time.sleep(1.5)
+                                st.cache_data.clear()
                                 st.rerun()
                         else:
                             st.info("Todos los días de este archivo ya fueron descontados anteriormente.")
@@ -1471,6 +1476,7 @@ elif rol == "Administrador":
                                 agregar_filas(descuentos)
                                 st.success(f"Listo. Se descontaron {total_prev:,} racimos respetando las fechas del CSV.")
                                 time.sleep(1.5)
+                                st.cache_data.clear()
                                 st.rerun()
                             except Exception as e:
                                 st.error(f"Error técnico al descontar: {repr(e)}")
@@ -1492,6 +1498,7 @@ elif rol == "Administrador":
                             borrar_multiples_filas_gsheet(filas_a_borrar)
                             st.success(f"Cosecha del {dia_borrar} eliminada por completo en 1 segundo.")
                             time.sleep(1.5)
+                            st.cache_data.clear()
                             st.rerun()
                         except Exception as e:
                             st.error(f"Error al eliminar cosecha: {repr(e)}")
@@ -1499,6 +1506,7 @@ elif rol == "Administrador":
         if st.button("🔄 Recargar lista desde Google Sheets", key="btn_recargar_edit"):
             with st.spinner("Sincronizando con Google Sheets..."):
                 time.sleep(1.5)
+            st.cache_data.clear()
             st.rerun()
         if df.empty:
             st.warning("No se cargaron registros. Presiona el botón de recargar arriba.")
@@ -1557,6 +1565,7 @@ elif rol == "Administrador":
                         actualizar_fila_gsheet(int(fila_sel), fila_actualizada)
                         st.success(f"Fila {fila_sel} actualizada correctamente.")
                         time.sleep(1.5)
+                        st.cache_data.clear()
                         st.rerun()
                     except Exception as e:
                         st.error(f"Error al actualizar: {repr(e)}")
@@ -1565,6 +1574,7 @@ elif rol == "Administrador":
                         borrar_fila_gsheet(int(fila_sel))
                         st.warning(f"Fila {fila_sel} eliminada permanentemente.")
                         time.sleep(1.5)
+                        st.cache_data.clear()
                         st.rerun()
                     except Exception as e:
                         st.error(f"Error al eliminar: {repr(e)}")
