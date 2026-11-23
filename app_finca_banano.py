@@ -1792,5 +1792,5 @@ elif rol == "Administrador":
                         text=alt.Text("sum(Saldo_En_Mata):Q", format=",.0f")
                     )
                     st.altair_chart(aplicar_tema_tarjeta(bar_s + txt_s_seg + txt_s_tot), use_container_width=True)
-                else:
+            else:
                     st.info("No hay saldos en mata disponibles para los filtros seleccionados.")
