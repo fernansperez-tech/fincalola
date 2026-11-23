@@ -1754,7 +1754,7 @@ elif rol == "Administrador":
             ent_sg = ent_sg.sort_values(by=["Lote", "Color_Cinta", "Anio", "Semana"])
             sal_sg = df_saldo_g[df_saldo_g["Racimos"] < 0].groupby(["Lote", "Color_Cinta"])["Racimos"].sum().abs().to_dict()
 
-                filas_sg = []
+            filas_sg = []
                 for _, r_sg in ent_sg.iterrows():
                     lt_s, cl_s, ed_t, emb_s = r_sg["Lote"], r_sg["Color_Cinta"], r_sg["Edad_Txt"], int(r_sg["Racimos"])
                     desc_s = min(emb_s, sal_sg.get((lt_s, cl_s), 0))
