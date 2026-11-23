@@ -917,6 +917,17 @@ if lote_url_global in LOTES:
     st.session_state["lote_qr_global"] = lote_url_global
 elif "lote_qr_global" not in st.session_state:
     st.session_state["lote_qr_global"] = "Todos"
+    
+lote_url_global = str(st.query_params.get("lote", "")).replace("%20", " ").strip()
+if lote_url_global and lote_url_global not in LOTES and lote_url_global.startswith("Lote "):
+    num_g = lote_url_global.replace("Lote ", "").strip()
+    if num_g.isdigit() and f"Lote {int(num_g):02d}" in LOTES:
+        lote_url_global = f"Lote {int(num_g):02d}"
+if lote_url_global in LOTES:
+    st.session_state["lote_qr_global"] = lote_url_global
+elif "lote_qr_global" not in st.session_state:
+    st.session_state["lote_qr_global"] = "Todos"
+
 
 if rol == "Parcelero (Embolse)":
     st.subheader("Registro de Fruta Embolsada")
@@ -1028,8 +1039,7 @@ if rol == "Parcelero (Embolse)":
 
 elif rol == "Consulta de Embolse":
     st.subheader("Consulta de Embolse (Puyas y Supervisores)")
-    lote_url = st.query_params.get("lote", "Todos")
-    lote_qr = lote_url if lote_url in LOTES else "Todos"
+    lote_qr = st.session_state.get("lote_qr_global", "Todos")
     if st.toggle("Activar cámara para escanear QR del Lote", key="qr_consulta"):
         foto_qr_p = st.camera_input("Apunta al QR del Lote")
         if foto_qr_p:
@@ -1037,9 +1047,15 @@ elif rol == "Consulta de Embolse":
             dato_qr, _, _ = cv2.QRCodeDetector().detectAndDecode(img_bgr)
             if "lote=" in str(dato_qr):
                 dato_qr = str(dato_qr).split("lote=")[-1].replace("%20", " ").strip()
+            if dato_qr not in LOTES and str(dato_qr).startswith("Lote "):
+                num_c = str(dato_qr).replace("Lote ", "").strip()
+                if num_c.isdigit() and f"Lote {int(num_c):02d}" in LOTES:
+                    dato_qr = f"Lote {int(num_c):02d}"
             if dato_qr in LOTES:
                 lote_qr = dato_qr
+                st.session_state["lote_qr_global"] = dato_qr
                 st.success(f"Lote escaneado: {lote_qr}")
+
 
     df = cargar_datos()
     t_cons1, t_cons2 = st.tabs(["🌱 Reportes de Embolse", "📦 Saldos De Racimos"])
