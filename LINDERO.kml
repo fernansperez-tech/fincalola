@@ -1,0 +1,1548 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document id="root_doc">
+<Schema name="lindero" id="lindero">
+	<SimpleField name="descriptio" type="string"></SimpleField>
+	<SimpleField name="timestamp" type="string"></SimpleField>
+	<SimpleField name="begin" type="string"></SimpleField>
+	<SimpleField name="end" type="string"></SimpleField>
+	<SimpleField name="altitudeMo" type="string"></SimpleField>
+	<SimpleField name="tessellate" type="float"></SimpleField>
+	<SimpleField name="extrude" type="float"></SimpleField>
+	<SimpleField name="visibility" type="float"></SimpleField>
+	<SimpleField name="drawOrder" type="float"></SimpleField>
+	<SimpleField name="icon" type="string"></SimpleField>
+</Schema>
+<Folder><name>lindero</name>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2070144724715,10.9013593757727,0 -74.2069982881488,10.9012394833818,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2066681095127,10.9011887403718,0 -74.2061533774655,10.9011484458438,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2069982881488,10.9012394833818,0 -74.2066681095127,10.9011887403718,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2061533774655,10.9011484458438,0 -74.2056198470309,10.9011260308625,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2056198470309,10.9011260308625,0 -74.2049928488414,10.9011200831486,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2049928488414,10.9011200831486,0 -74.2042521478216,10.9011018027802,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2070144724715,10.9013593757727,0 -74.2069255751216,10.9019486436627,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2069255751216,10.9019486436627,0 -74.2069269060183,10.9023303428002,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2043425909617,10.908524377641,0 -74.2040200116092,10.9084955850936,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2052656228642,10.9085863196086,0 -74.2043425909617,10.908524377641,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2026651046087,10.9083309936949,0 -74.2026810080708,10.908214547374,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2026751250283,10.9083504146633,0 -74.2026651046087,10.9083309936949,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2028621594424,10.9083713514667,0 -74.2026751250283,10.9083504146633,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2030715263842,10.9083951143774,0 -74.2028621594424,10.9083713514667,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2030697933629,10.9084249702459,0 -74.2031982233035,10.9084391180897,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2030715263842,10.9083951143774,0 -74.2030697933629,10.9084249702459,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2025862044057,10.9082384746557,0 -74.202691392831,10.9082119263859,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2034389157204,10.908452672423,0 -74.2031982233035,10.9084391180897,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2037924809369,10.9084823322267,0 -74.2034389157204,10.908452672423,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2040200116092,10.9084955850936,0 -74.2037924809369,10.9084823322267,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2055721619967,10.9086149946186,0 -74.2052656228642,10.9085863196086,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2058071100717,10.9086378672537,0 -74.2055721619967,10.9086149946186,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2036798281552,10.9011368320334,0 -74.2042521478216,10.9011018027802,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2036798281552,10.9011368320334,0 -74.2033915067447,10.9011799771428,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2031425346718,10.9012098638657,0 -74.2033915067447,10.9011799771428,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2029650471983,10.901213313412,0 -74.2031425346718,10.9012098638657,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2029650471983,10.901213313412,0 -74.2026113824788,10.9011463899076,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.202267452419,10.9010659145303,0 -74.2021777592608,10.9010436671727,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2024228158099,10.9010990716559,0 -74.202267452419,10.9010659145303,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2026113824788,10.9011463899076,0 -74.2024228158099,10.9010990716559,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2017738707125,10.9008854484734,0 -74.2016371438478,10.9008569184552,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2018398091242,10.9009354074533,0 -74.2017738707125,10.9008854484734,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2019159958908,10.900981059244,0 -74.2018398091242,10.9009354074533,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2020157825392,10.9010093428734,0 -74.2019159958908,10.900981059244,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2021777592608,10.9010436671727,0 -74.2020157825392,10.9010093428734,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2064046884068,10.9087041309675,0 -74.2061646981418,10.9086767017026,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2066515981632,10.9087197433082,0 -74.2064046884068,10.9087041309675,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2068457209995,10.90874206291,0 -74.2066515981632,10.9087197433082,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2072200348978,10.9087698124685,0 -74.2068457209995,10.90874206291,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2075851133067,10.9088005064623,0 -74.2072200348978,10.9087698124685,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2061646981418,10.9086767017026,0 -74.2058071100717,10.9086378672537,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2077708712422,10.9088115890034,0 -74.2075851133067,10.9088005064623,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2082766910701,10.9088428597107,0 -74.2077708712422,10.9088115890034,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2084739470757,10.9088584640155,0 -74.2082766910701,10.9088428597107,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2090075906828,10.9088959663166,0 -74.2084739470757,10.9088584640155,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2093364149105,10.9088337062174,0 -74.209351829499,10.9086807856931,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2093131687422,10.9088918141367,0 -74.2093351414446,10.9088387634074,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2092132452376,10.9088936972464,0 -74.2092941397116,10.9089029261144,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2090075906828,10.9088959663166,0 -74.2092132452376,10.9088936972464,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2092941397116,10.9089029261144,0 -74.2092942185777,10.9089029349406,0 -74.2092942974818,10.9089029434285,0 -74.2092943764224,10.908902951578,0 -74.2092944553981,10.908902959389,0 -74.2092945344073,10.9089029668613,0 -74.2092946134486,10.9089029739947,0 -74.2092946925204,10.9089029807892,0 -74.2092947716213,10.9089029872446,0 -74.2092948507498,10.9089029933607,0 -74.2092949299045,10.9089029991376,0 -74.2092950090837,10.9089030045749,0 -74.209295088286,10.9089030096727,0 -74.20929516751,10.9089030144309,0 -74.2092952467541,10.9089030188494,0 -74.2092953260169,10.908903022928,0 -74.2092954052969,10.9089030266667,0 -74.2092954845925,10.9089030300655,0 -74.2092955639022,10.9089030331243,0 -74.2092956432247,10.9089030358429,0 -74.2092957225583,10.9089030382214,0 -74.2092958019017,10.9089030402598,0 -74.2092958812532,10.9089030419579,0 -74.2092959606114,10.9089030433158,0 -74.2092960399749,10.9089030443334,0 -74.2092961193421,10.9089030450107,0 -74.209296245585,10.9089030453868,0 -74.209296245585,10.9089030453868,0 -74.209296357451,10.9089030450007,0 -74.2092964368181,10.9089030443167,0 -74.2092965161815,10.9089030432925,0 -74.2092965955396,10.908903041928,0 -74.209296674891,10.9089030402232,0 -74.2092967542342,10.9089030381782,0 -74.2092968335676,10.9089030357931,0 -74.2092969128898,10.9089030330678,0 -74.2092969921993,10.9089030300024,0 -74.2092970714946,10.908903026597,0 -74.2092971507743,10.9089030228516,0 -74.2092972300367,10.9089030187663,0 -74.2092973092804,10.9089030143412,0 -74.209297388504,10.9089030095764,0 -74.2092974677059,10.908903004472,0 -74.2092975468847,10.908902999028,0 -74.2092976260388,10.9089029932445,0 -74.2092977051668,10.9089029871217,0 -74.2092977842672,10.9089029806597,0 -74.2092978633384,10.9089029738586,0 -74.2092979423791,10.9089029667186,0 -74.2092980213876,10.9089029592397,0 -74.2092981003626,10.9089029514221,0 -74.2092981793026,10.9089029432659,0 -74.2092982582059,10.9089029347714,0 -74.2092983370713,10.9089029259386,0 -74.2092984158972,10.9089029167678,0 -74.209298494682,10.9089029072591,0 -74.2092985734243,10.9089028974126,0 -74.2092986521227,10.9089028872286,0 -74.2092987307757,10.9089028767073,0 -74.2092988093817,10.9089028658489,0 -74.2092988879393,10.9089028546535,0 -74.2092989664471,10.9089028431213,0 -74.2092990449034,10.9089028312527,0 -74.209299123307,10.9089028190478,0 -74.2092992016562,10.9089028065069,0 -74.2092992799496,10.90890279363,0 -74.2092993581858,10.9089027804177,0 -74.2092994363632,10.90890276687,0 -74.2092995144804,10.9089027529872,0 -74.209299592536,10.9089027387696,0 -74.2092996705284,10.9089027242175,0 -74.2092997484562,10.9089027093311,0 -74.2092998263179,10.9089026941107,0 -74.2092999041121,10.9089026785566,0 -74.2092999818372,10.9089026626691,0 -74.2093000594919,10.9089026464485,0 -74.2093001370746,10.9089026298951,0 -74.209300214584,10.9089026130092,0 -74.2093002920185,10.9089025957911,0 -74.2093003693767,10.9089025782412,0 -74.2093004466571,10.9089025603597,0 -74.2093005238583,10.908902542147,0 -74.2093006009788,10.9089025236035,0 -74.2093006780172,10.9089025047295,0 -74.209300754972,10.9089024855254,0 -74.2093008318418,10.9089024659915,0 -74.2093009086251,10.9089024461282,0 -74.2093009853205,10.9089024259358,0 -74.2093010619266,10.9089024054148,0 -74.2093011384418,10.9089023845655,0 -74.2093012148648,10.9089023633883,0 -74.2093012911941,10.9089023418837,0 -74.2093013674283,10.9089023200519,0 -74.2093014435659,10.9089022978936,0 -74.2093015196056,10.9089022754089,0 -74.2093015955459,10.9089022525985,0 -74.2093016713852,10.9089022294626,0 -74.2093017471224,10.9089022060018,0 -74.2093018227558,10.9089021822165,0 -74.2093018982841,10.9089021581071,0 -74.2093019737058,10.9089021336741,0 -74.2093020490196,10.9089021089179,0 -74.209302124224,10.9089020838391,0 -74.2093021993177,10.908902058438,0 -74.209302274299,10.9089020327152,0 -74.2093023491668,10.9089020066711,0 -74.2093024239196,10.9089019803063,0 -74.2093024985559,10.9089019536212,0 -74.2093025730744,10.9089019266164,0 -74.2093026474736,10.9089018992922,0 -74.2093027217522,10.9089018716494,0 -74.2093027959087,10.9089018436883,0 -74.2093028699418,10.9089018154095,0 -74.20930294385,10.9089017868135,0 -74.2093030176321,10.9089017579009,0 -74.2093030912865,10.9089017286723,0 -74.2093031648119,10.9089016991281,0 -74.209303238207,10.9089016692689,0 -74.2093033114703,10.9089016390953,0 -74.2093033846004,10.9089016086079,0 -74.209303457596,10.9089015778072,0 -74.2093035304557,10.9089015466938,0 -74.2093036031782,10.9089015152682,0 -74.209303675762,10.9089014835312,0 -74.2093037482058,10.9089014514833,0 -74.2093038205083,10.908901419125,0 -74.209303892668,10.9089013864571,0 -74.2093039646837,10.90890135348,0 -74.2093040365539,10.9089013201945,0 -74.2093041082773,10.9089012866011,0 -74.2093041798526,10.9089012527005,0 -74.2093042512784,10.9089012184934,0 -74.2093043225533,10.9089011839803,0 -74.2093043936761,10.9089011491619,0 -74.2093044646454,10.9089011140389,0 -74.2093045354598,10.908901078612,0 -74.2093046061181,10.9089010428817,0 -74.2093046766188,10.9089010068488,0 -74.2093047469607,10.908900970514,0 -74.2093048171424,10.9089009338779,0 -74.2093048871627,10.9089008969412,0 -74.2093049570202,10.9089008597047,0 -74.2093050267135,10.908900822169,0 -74.2093050962414,10.9089007843348,0 -74.2093051656026,10.9089007462028,0 -74.2093052347957,10.9089007077739,0 -74.2093053038195,10.9089006690486,0 -74.2093053726726,10.9089006300277,0 -74.2093054413538,10.9089005907119,0 -74.2093055098618,10.9089005511021,0 -74.2093055781952,10.9089005111988,0 -74.2093056463529,10.908900471003,0 -74.2093057143334,10.9089004305153,0 -74.2093057821356,10.9089003897365,0 -74.2093058497582,10.9089003486673,0 -74.2093059171998,10.9089003073086,0 -74.2093059844592,10.9089002656611,0 -74.2093060515352,10.9089002237257,0 -74.2093061184265,10.908900181503,0 -74.2093061851318,10.9089001389939,0 -74.2093062516498,10.9089000961992,0 -74.2093063179794,10.9089000531197,0 -74.2093063841192,10.9089000097562,0 -74.2093064500681,10.9088999661095,0 -74.2093065158247,10.9088999221804,0 -74.2093065813879,10.9088998779699,0 -74.2093066467564,10.9088998334786,0 -74.209306711929,10.9088997887075,0 -74.2093067769044,10.9088997436573,0 -74.2093068416815,10.908899698329,0 -74.209306906259,10.9088996527234,0 -74.2093069706356,10.9088996068412,0 -74.2093070348103,10.9088995606835,0 -74.2093070987817,10.9088995142511,0 -74.2093071625487,10.9088994675449,0 -74.2093072261101,10.9088994205656,0 -74.2093072894647,10.9088993733143,0 -74.2093073526112,10.9088993257917,0 -74.2093074155485,10.9088992779989,0 -74.2093074782755,10.9088992299366,0 -74.2093075407908,10.9088991816059,0 -74.2093076030934,10.9088991330075,0 -74.2093076651822,10.9088990841425,0 -74.2093077270558,10.9088990350117,0 -74.2093077887131,10.9088989856161,0 -74.2093078501531,10.9088989359566,0 -74.2093079113745,10.9088988860341,0 -74.2093079723761,10.9088988358496,0 -74.2093080331569,10.908898785404,0 -74.2093080937157,10.9088987346982,0 -74.2093081540513,10.9088986837333,0 -74.2093082141626,10.9088986325102,0 -74.2093082740485,10.9088985810298,0 -74.2093083337079,10.9088985292931,0 -74.2093083931396,10.9088984773011,0 -74.2093084523425,10.9088984250548,0 -74.2093085113155,10.9088983725551,0 -74.2093085700574,10.908898319803,0 -74.2093086285673,10.9088982667996,0 -74.2093086868439,10.9088982135458,0 -74.2093087448863,10.9088981600427,0 -74.2093088026931,10.9088981062912,0 -74.2093088602635,10.9088980522923,0 -74.2093089175964,10.908897998047,0 -74.2093089746905,10.9088979435565,0 -74.209309031545,10.9088978888217,0 -74.2093090881586,10.9088978338436,0 -74.2093091445303,10.9088977786233,0 -74.2093092006592,10.9088977231618,0 -74.209309256544,10.9088976674602,0 -74.2093093121838,10.9088976115194,0 -74.2093093675775,10.9088975553407,0 -74.2093094227241,10.9088974989249,0 -74.2093094776225,10.9088974422733,0 -74.2093095322717,10.9088973853867,0 -74.2093095866706,10.9088973282664,0 -74.2093096408183,10.9088972709134,0 -74.2093096947138,10.9088972133288,0 -74.2093097483559,10.9088971555136,0 -74.2093098017438,10.9088970974689,0 -74.2093098548764,10.9088970391959,0 -74.2093099077526,10.9088969806956,0 -74.2093099603715,10.9088969219692,0 -74.2093100127322,10.9088968630177,0 -74.2093100648336,10.9088968038422,0 -74.2093101166747,10.9088967444439,0 -74.2093101682546,10.9088966848239,0 -74.2093102195723,10.9088966249833,0 -74.2093102706269,10.9088965649232,0 -74.2093103214173,10.9088965046448,0 -74.2093103719426,10.9088964441491,0 -74.2093104222019,10.9088963834374,0 -74.2093104721942,10.9088963225108,0 -74.2093105219186,10.9088962613704,0 -74.2093105713741,10.9088962000174,0 -74.2093106205599,10.9088961384529,0 -74.2093106694749,10.908896076678,0 -74.2093107181183,10.9088960146941,0 -74.2093107664891,10.9088959525021,0 -74.2093108145865,10.9088958901033,0 -74.2093108624095,10.9088958274989,0 -74.2093109099573,10.9088957646901,0 -74.2093109572289,10.9088957016779,0 -74.2093110042234,10.9088956384637,0 -74.20931105094,10.9088955750485,0 -74.2093110973778,10.9088955114337,0 -74.2093111435359,10.9088954476203,0 -74.2093111894134,10.9088953836096,0 -74.2093112350095,10.9088953194028,0 -74.2093112803234,10.9088952550011,0 -74.2093113253541,10.9088951904058,0 -74.2093113701008,10.9088951256179,0 -74.2093114145627,10.9088950606388,0 -74.2093114587389,10.9088949954697,0 -74.2093115026287,10.9088949301118,0 -74.2093115462311,10.9088948645663,0 -74.2093115895455,10.9088947988344,0 -74.2093116325708,10.9088947329175,0 -74.2093116753064,10.9088946668167,0 -74.2093117177514,10.9088946005333,0 -74.209311759905,10.9088945340686,0 -74.2093118017665,10.9088944674237,0 -74.2093118433351,10.9088944005999,0 -74.2093118846099,10.9088943335986,0 -74.2093119255902,10.9088942664209,0 -74.2093119662753,10.9088941990681,0 -74.2093120066642,10.9088941315415,0 -74.2093120467564,10.9088940638424,0 -74.2093120865511,10.908893995972,0 -74.2093121260474,10.9088939279316,0 -74.2093121652447,10.9088938597225,0 -74.2093122041422,10.908893791346,0 -74.2093122427391,10.9088937228033,0 -74.2093122810348,10.9088936540958,0 -74.2093123190286,10.9088935852248,0 -74.2093123567196,10.9088935161915,0 -74.2093123941073,10.9088934469972,0 -74.2093124311909,10.9088933776433,0 -74.2093124679697,10.908893308131,0 -74.209312504443,10.9088932384617,0 -74.2093125406101,10.9088931686367,0 -74.2093125764704,10.9088930986572,0 -74.2093126120231,10.9088930285246,0 -74.2093126472677,10.9088929582403,0 -74.2093126822034,10.9088928878055,0 -74.2093127168295,10.9088928172216,0 -74.2093127511455,10.9088927464898,0 -74.2093127851507,10.9088926756116,0 -74.2093128188445,10.9088926045883,0 -74.2093128522261,10.9088925334211,0 -74.209312885295,10.9088924621116,0 -74.2093129180506,10.9088923906608,0 -74.2093129504922,10.9088923190703,0 -74.2093129826192,10.9088922473414,0 -74.2093130144311,10.9088921754754,0 -74.2093130459272,10.9088921034737,0 -74.209313077107,10.9088920313376,0 -74.2093131079698,10.9088919590685,0 -74.209313138515,10.9088918866678,0 -74.2093131687422,10.9088918141367,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.201836162777,10.9082397318479,0 -74.2015982227429,10.9082237005439,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2015982227429,10.9082237005439,0 -74.2009422443588,10.908183172585,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2009422443588,10.908183172585,0 -74.2006814436056,10.9081680777,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2002983075849,10.9081453541923,0 -74.2006814436056,10.9081680777,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1999960651298,10.9081257199543,0 -74.2002983075849,10.9081453541923,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1999559106858,10.9079617191252,0 -74.1999960651298,10.9081257199543,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1998746097853,10.9076591579618,0 -74.1999559106858,10.9079617191252,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1997525266167,10.9072088401085,0 -74.1998746097853,10.9076591579618,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1997525266167,10.9072088401085,0 -74.199383367125,10.9063011538666,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2016371438478,10.9008569184552,0 -74.2011068206409,10.9008602728142,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2004744688292,10.9008930183019,0 -74.2011068206409,10.9008602728142,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2002011720003,10.9008981917511,0 -74.2004744688292,10.9008930183019,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1973079900912,10.9010354865552,0 -74.1980944233977,10.9029622763962,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1981509143561,10.9010045632385,0 -74.1988299093018,10.900980391865,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1973079900912,10.9010354865552,0 -74.1981509143561,10.9010045632385,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1993562854502,10.9062304536465,0 -74.199383367125,10.9063011538666,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1991107195813,10.9056188173545,0 -74.1993562854502,10.9062304536465,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1988977143168,10.905064732549,0 -74.1991107195813,10.9056188173545,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1986643432469,10.904422239095,0 -74.1988977143168,10.905064732549,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1985509118579,10.9041259134288,0 -74.1986597308983,10.9044112980001,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1983953403114,10.9037634993535,0 -74.1985509118579,10.9041259134288,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1983486725304,10.9036354019717,0 -74.1983953403114,10.9037634993535,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1982382988008,10.9034085997922,0 -74.1983486725304,10.9036354019717,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1982382988008,10.9034085997922,0 -74.1980944233977,10.9029622763962,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1986332581783,10.9000675441355,0 -74.1985810834837,10.8998808575825,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1987114012116,10.9004796150897,0 -74.1986332581783,10.9000675441355,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1988035921616,10.9009144603857,0 -74.1987114012116,10.9004796150897,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1988299093018,10.900980391865,0 -74.1988035921616,10.9009144603857,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1999503918123,10.9002775138969,0 -74.1999041857983,10.9001382399525,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.200106559403,10.9006378300808,0 -74.1999503918123,10.9002775138969,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2001994734308,10.9008971136996,0 -74.200106559403,10.9006378300808,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1998357426034,10.899887257895,0 -74.1999041857983,10.9001382399525,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1997404495307,10.8995614149804,0 -74.1998357426034,10.899887257895,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1995969709922,10.8992268379561,0 -74.1997404495307,10.8995614149804,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1994741679547,10.8989903054453,0 -74.1995969709922,10.8992268379561,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1994066041028,10.8988643630837,0 -74.1994741679547,10.8989903054453,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1993372840064,10.8987561609253,0 -74.1994066041028,10.8988643630837,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1992196531318,10.8985596906982,0 -74.1993372840064,10.8987561609253,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1972910826705,10.9000518650379,0 -74.1968849684982,10.9001042852604,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1972910826705,10.9000518650379,0 -74.1981753426325,10.8998876969424,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1984321687963,10.8998618862612,0 -74.1981753426325,10.8998876969424,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1985302860551,10.8998719555412,0 -74.1984321687963,10.8998618862612,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1985810834837,10.8998808575825,0 -74.1985302860551,10.8998719555412,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1959058530433,10.9001116710227,0 -74.1957865947689,10.9000969698483,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1962188437077,10.9001204975644,0 -74.1959058530433,10.9001116710227,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1964620907263,10.9001306100304,0 -74.1962188437077,10.9001204975644,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1967418993818,10.9001195016707,0 -74.1964620907263,10.9001306100304,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1968849684982,10.9001042852604,0 -74.1967418993818,10.9001195016707,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.195982129077,10.8987756970522,0 -74.1959961671192,10.8986795203437,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1959179390509,10.8991139848464,0 -74.195982129077,10.8987756970522,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.195864121432,10.8994116136771,0 -74.1959179390509,10.8991139848464,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1957277817094,10.9000972175398,0 -74.195864121432,10.8994116136771,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1957865947689,10.9000969698483,0 -74.1957277817094,10.9000972175398,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1960468444607,10.8983333754166,0 -74.1959961671192,10.8986795203437,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1960616866293,10.898274202928,0 -74.1960468444607,10.8983333754166,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1960990617959,10.8982145876049,0 -74.1960616866293,10.898274202928,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1961494731629,10.898173535315,0 -74.1960990617959,10.8982145876049,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1962007290753,10.8981486410351,0 -74.1961494731629,10.898173535315,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1963306490338,10.8981451660175,0 -74.1962007290753,10.8981486410351,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1965618303369,10.8981290635327,0 -74.1963306490338,10.8981451660175,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1969786816634,10.8981118112068,0 -74.1965618303369,10.8981290635327,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1974242425644,10.8980665020788,0 -74.1969786816634,10.8981118112068,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1978260072016,10.8979685251036,0 -74.1974242425644,10.8980665020788,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1991120711149,10.8983805690771,0 -74.1992196531318,10.8985596906982,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1989724835987,10.8981364884301,0 -74.1991120711149,10.8983805690771,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1988059536102,10.8979049896515,0 -74.1989724835987,10.8981364884301,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1987256299673,10.8977862021849,0 -74.1988059536102,10.8979049896515,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1986457957201,10.8976976970059,0 -74.1987256299673,10.8977862021849,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1983397650716,10.8978169967946,0 -74.1986457957201,10.8976976970059,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1981340794458,10.8978892490475,0 -74.1983397650716,10.8978169967946,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1979859814059,10.8979241507737,0 -74.1981340794458,10.8978892490475,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1978260072016,10.8979685251036,0 -74.1979859814059,10.8979241507737,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2093770671882,10.9083837397125,0 -74.2094137336809,10.9079647312773,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.209351829499,10.9086807856931,0 -74.2093770671882,10.9083837397125,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2094228996763,10.9077686203023,0 -74.2094137336809,10.9079647312773,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2094528959599,10.9073658977231,0 -74.2094228996763,10.9077686203023,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.209467480821,10.9073396684284,0 -74.2094528959599,10.9073658977231,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2094729634475,10.9070945287163,0 -74.209467480821,10.9073396684284,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2095082659672,10.9064692805277,0 -74.2094729634475,10.9070945287163,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2095360081295,10.9061685008014,0 -74.2095759544529,10.9060848796454,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2095257361444,10.9062552017368,0 -74.2095360081295,10.9061685008014,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2095087287782,10.9063869411489,0 -74.2095257361444,10.9062552017368,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2095082659672,10.9064692805277,0 -74.2095087287782,10.9063869411489,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2096060942284,10.9059345145672,0 -74.2095759544529,10.9060848796454,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2096094659025,10.9057618459145,0 -74.2096060942284,10.9059345145672,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2096087377857,10.9056560202849,0 -74.2096094659025,10.9057618459145,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2096231041118,10.9056068963678,0 -74.2096087377857,10.9056560202849,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2096210199722,10.9054701310011,0 -74.2096231041118,10.9056068963678,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2096374612984,10.9052573333638,0 -74.2096210199722,10.9054701310011,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2096397267997,10.9050726011081,0 -74.2096374612984,10.9052573333638,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2096531700585,10.9047750358632,0 -74.2096397267997,10.9050726011081,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2096785602756,10.9043199183299,0 -74.2096531700585,10.9047750358632,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2095642599179,10.9043156461467,0 -74.2094263813517,10.9043313934978,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2092786836001,10.9043142718293,0 -74.2090788356143,10.9043089055409,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2094263813517,10.9043313934978,0 -74.2092786836001,10.9043142718293,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2024831293463,10.9082539744743,0 -74.2025862044057,10.9082384746557,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.202062279352,10.9082500048561,0 -74.2022484290826,10.9082630044782,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.201836162777,10.9082397318479,0 -74.202062279352,10.9082500048561,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2022484290826,10.9082630044782,0 -74.2024831293463,10.9082539744743,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2090788356143,10.9043089055409,0 -74.2084996850106,10.9043061508978,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2096784497731,10.9043199141997,0 -74.2095642599179,10.9043156461467,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2067077985936,10.9042189962326,0 -74.2067110476332,10.9042196381256,0 -74.2067142957732,10.9042202794367,0 -74.2067159195158,10.9042205997562,0 -74.2067175430454,10.9042209197888,0 -74.206719166366,10.9042212394875,0 -74.2067207894816,10.9042215588051,0 -74.206722412396,10.9042218776946,0 -74.2067240351134,10.9042221961087,0 -74.2067256576376,10.9042225140005,0 -74.2067272799727,10.9042228313227,0 -74.2067289021226,10.9042231480282,0 -74.2067305240913,10.90422346407,0 -74.2067321458827,10.9042237794009,0 -74.2067329567132,10.9042239367851,0 -74.2067337675009,10.9042240939739,0 -74.2067345782462,10.9042242509614,0 -74.2067353889497,10.9042244077417,0 -74.2067361996119,10.904224564309,0 -74.2067370102332,10.9042247206573,0 -74.2067378208142,10.9042248767808,0 -74.2067386313554,10.9042250326735,0 -74.2067394418572,10.9042251883297,0 -74.2067402523201,10.9042253437433,0 -74.2067410627447,10.9042254989086,0 -74.2067418731314,10.9042256538196,0 -74.2067426834808,10.9042258084704,0 -74.2067434937933,10.9042259628551,0 -74.2067443040694,10.9042261169679,0 -74.2067451143097,10.9042262708029,0 -74.2067459245146,10.9042264243541,0 -74.2067467346845,10.9042265776157,0 -74.2067475448202,10.9042267305818,0 -74.2067483549219,10.9042268832465,0 -74.2067491649902,10.9042270356039,0 -74.2067499750256,10.9042271876482,0 -74.2067507850287,10.9042273393734,0 -74.2067515949998,10.9042274907736,0 -74.2067524049395,10.904227641843,0 -74.2067532148483,10.9042277925756,0 -74.2067540247267,10.9042279429656,0 -74.2067548345752,10.9042280930071,0 -74.2067556443942,10.9042282426943,0 -74.2067564541844,10.9042283920211,0 -74.206757263946,10.9042285409817,0 -74.2067580736798,10.9042286895703,0 -74.2067588833861,10.9042288377809,0 -74.2067596930655,10.9042289856076,0 -74.2067605027185,10.9042291330447,0 -74.2067613123454,10.904229280086,0 -74.206762121947,10.9042294267259,0 -74.2067629315236,10.9042295729584,0 -74.2067637410757,10.9042297187776,0 -74.2067645506038,10.9042298641776,0 -74.2067653601086,10.9042300091525,0 -74.2067661695903,10.9042301536964,0 -74.2067669790495,10.9042302978035,0 -74.2067677884868,10.9042304414679,0 -74.2067685979026,10.9042305846836,0 -74.2067694072974,10.9042307274448,0 -74.2067702166717,10.9042308697456,0 -74.2067710260261,10.9042310115801,0 -74.2067718353609,10.9042311529424,0 -74.2067726446767,10.9042312938266,0 -74.2067734539741,10.9042314342268,0 -74.2067742632534,10.9042315741372,0 -74.2067750725152,10.9042317135519,0 -74.20677588176,10.9042318524649,0 -74.2067766909883,10.9042319908703,0 -74.2067775002005,10.9042321287624,0 -74.2067783093973,10.9042322661352,0 -74.206779118579,10.9042324029827,0 -74.2067799277461,10.9042325392992,0 -74.2067807368993,10.9042326750787,0 -74.2067815460389,10.9042328103153,0 -74.2067823551654,10.9042329450032,0 -74.2067831642794,10.9042330791365,0 -74.2067839733814,10.9042332127092,0 -74.2067847824718,10.9042333457155,0 -74.2067855915512,10.9042334781495,0 -74.2067864006199,10.9042336100053,0 -74.2067872096787,10.9042337412769,0 -74.2067880187278,10.9042338719587,0 -74.2067888277679,10.9042340020445,0 -74.2067896367994,10.9042341315286,0 -74.2067904458228,10.904234260405,0 -74.2067912548386,10.904234388668,0 -74.2067920638473,10.9042345163114,0 -74.2067928728495,10.9042346433296,0 -74.2067936818456,10.9042347697166,0 -74.206794490836,10.9042348954664,0 -74.2067952998214,10.9042350205733,0 -74.2067961088021,10.9042351450315,0 -74.2067969177782,10.9042352688358,0 -74.2067977267504,10.9042353919804,0 -74.206798535719,10.9042355144597,0 -74.2067993446846,10.9042356362679,0 -74.2068001536477,10.904235757399,0 -74.2068009626088,10.9042358778475,0 -74.2068017715684,10.9042359976076,0 -74.206802580527,10.9042361166733,0 -74.2068033894852,10.9042362350391,0 -74.2068041984434,10.904236352699,0 -74.2068050074021,10.9042364696474,0 -74.2068058163619,10.9042365858784,0 -74.2068066253233,10.9042367013863,0 -74.2068070298047,10.9042367588673,0 -74.2068074342867,10.9042368161654,0 -74.2068078387694,10.9042368732797,0 -74.2068082432528,10.9042369302097,0 -74.2068086477369,10.9042369869546,0 -74.2068090522219,10.9042370435137,0 -74.2068094567078,10.9042370998862,0 -74.2068098611947,10.9042371560714,0 -74.2068102656825,10.9042372120686,0 -74.2068106701715,10.9042372678771,0 -74.2068110746616,10.9042373234962,0 -74.2068114791529,10.9042373789251,0 -74.2068118836455,10.9042374341632,0 -74.2068122881395,10.9042374892096,0 -74.2068126926349,10.9042375440637,0 -74.2068130971317,10.9042375987248,0 -74.2068135016301,10.9042376531921,0 -74.2068139061301,10.9042377074648,0 -74.2068143106317,10.9042377615424,0 -74.2068147151351,10.9042378154241,0 -74.2068151196402,10.9042378691091,0 -74.2068155241473,10.9042379225967,0 -74.2068159286562,10.9042379758862,0 -74.2068163331671,10.9042380289769,0 -74.20681673768,10.9042380818681,0 -74.2068171421951,10.904238134559,0 -74.2068175467123,10.9042381870489,0 -74.2068179512318,10.9042382393371,0 -74.2068183557536,10.9042382914229,0 -74.2068187602777,10.9042383433055,0 -74.2068191648043,10.9042383949843,0 -74.2068195693333,10.9042384464584,0 -74.2068199738649,10.9042384977273,0 -74.2068203783992,10.9042385487901,0 -74.206820782936,10.9042385996461,0 -74.2068211874757,10.9042386502947,0 -74.2068215920181,10.9042387007351,0 -74.2068219965635,10.9042387509665,0 -74.2068224011117,10.9042388009883,0 -74.206822805663,10.9042388507997,0 -74.2068232102173,10.9042389004001,0 -74.2068236147747,10.9042389497886,0 -74.2068240193354,10.9042389989646,0 -74.2068244238992,10.9042390479274,0 -74.2068248284665,10.9042390966762,0 -74.206825233037,10.9042391452102,0 -74.2068256376111,10.9042391935289,0 -74.2068260421886,10.9042392416314,0 -74.2068264467697,10.9042392895171,0 -74.2068268513544,10.9042393371851,0 -74.2068272559429,10.9042393846349,0 -74.2068276605351,10.9042394318657,0 -74.2068280651311,10.9042394788767,0 -74.206828469731,10.9042395256672,0 -74.2068288743349,10.9042395722366,0 -74.2068292789427,10.904239618584,0 -74.2068296835547,10.9042396647088,0 -74.2068300881708,10.9042397106102,0 -74.2068304927911,10.9042397562875,0 -74.2068308974157,10.9042398017401,0 -74.2068313020446,10.9042398469671,0 -74.2068317066779,10.9042398919679,0 -74.2068321113157,10.9042399367417,0 -74.206832515958,10.9042399812879,0 -74.2068329206049,10.9042400256056,0 -74.2068333252564,10.9042400696942,0 -74.2068337299126,10.904240113553,0 -74.2068341345737,10.9042401571811,0 -74.2068345392395,10.904240200578,0 -74.2068349439103,10.9042402437429,0 -74.2068353485861,10.904240286675,0 -74.2068357532668,10.9042403293737,0 -74.2068361579527,10.9042403718382,0 -74.2068365626438,10.9042404140678,0 -74.20683696734,10.9042404560617,0 -74.2068373720416,10.9042404978193,0 -74.2068377767485,10.9042405393399,0 -74.2068381814608,10.9042405806227,0 -74.2068385861786,10.9042406216669,0 -74.2068389909019,10.9042406624719,0 -74.2068393956309,10.904240703037,0 -74.2068398003655,10.9042407433614,0 -74.2068402051058,10.9042407834443,0 -74.206840609852,10.9042408232852,0 -74.206841014604,10.9042408628833,0 -74.2068414193619,10.9042409022377,0 -74.2068418241258,10.9042409413479,0 -74.2068422288958,10.9042409802131,0 -74.2068426336718,10.9042410188325,0 -74.2068430384541,10.9042410572055,0 -74.2068434432426,10.9042410953313,0 -74.2068438480374,10.9042411332093,0 -74.2068442528386,10.9042411708386,0 -74.206844657658,10.9042412082148,0 -74.2068450625096,10.9042412453338,0 -74.2068454673933,10.9042412821965,0 -74.2068458723091,10.9042413188036,0 -74.2068462772571,10.9042413551561,0 -74.2068466822373,10.9042413912547,0 -74.2068470872499,10.9042414271003,0 -74.2068474922947,10.9042414626937,0 -74.2068478973719,10.9042414980358,0 -74.2068483024814,10.9042415331274,0 -74.2068487076234,10.9042415679693,0 -74.2068491127979,10.9042416025624,0 -74.2068495180048,10.9042416369075,0 -74.2068499232443,10.9042416710055,0 -74.2068503285163,10.9042417048571,0 -74.206850733821,10.9042417384633,0 -74.2068511391583,10.9042417718249,0 -74.2068515445283,10.9042418049426,0 -74.206851949931,10.9042418378174,0 -74.2068523553665,10.90424187045,0 -74.2068527608348,10.9042419028413,0 -74.206853166336,10.9042419349922,0 -74.20685357187,10.9042419669035,0 -74.2068539774369,10.904241998576,0 -74.2068543830368,10.9042420300105,0 -74.2068547886696,10.9042420612079,0 -74.2068551943355,10.9042420921691,0 -74.2068556000345,10.9042421228948,0 -74.2068560057665,10.904242153386,0 -74.2068564115317,10.9042421836433,0 -74.2068568173301,10.9042422136678,0 -74.2068572231617,10.9042422434601,0 -74.2068576290266,10.9042422730212,0 -74.2068580349247,10.9042423023519,0 -74.2068584408562,10.9042423314531,0 -74.2068588468211,10.9042423603254,0 -74.2068592528193,10.9042423889699,0 -74.206859658851,10.9042424173873,0 -74.2068600649162,10.9042424455786,0 -74.2068604710149,10.9042424735443,0 -74.2068608771472,10.9042425012856,0 -74.2068612833131,10.9042425288031,0 -74.2068616895126,10.9042425560978,0 -74.2068620957457,10.9042425831704,0 -74.2068625020126,10.9042426100218,0 -74.2068629083133,10.9042426366528,0 -74.2068633146477,10.9042426630643,0 -74.2068637210159,10.9042426892571,0 -74.206864127418,10.904242715232,0 -74.206864533854,10.90424274099,0 -74.2068649403239,10.9042427665317,0 -74.2068653468279,10.9042427918581,0 -74.2068657533658,10.90424281697,0 -74.2068661599378,10.9042428418682,0 -74.2068665665438,10.9042428665536,0 -74.206866973184,10.9042428910269,0 -74.2068673798584,10.9042429152891,0 -74.206867786567,10.904242939341,0 -74.2068681933098,10.9042429631834,0 -74.2068686000868,10.9042429868172,0 -74.2068690068982,10.9042430102431,0 -74.206869413744,10.904243033462,0 -74.2068698206241,10.9042430564748,0 -74.2068702275387,10.9042430792823,0 -74.2068706344877,10.9042431018854,0 -74.2068710414713,10.9042431242848,0 -74.2068714484894,10.9042431464814,0 -74.2068718555421,10.904243168476,0 -74.2068722626294,10.9042431902696,0 -74.2068726697513,10.9042432118628,0 -74.206873076908,10.9042432332566,0 -74.2068734840993,10.9042432544518,0 -74.2068738913255,10.9042432754493,0 -74.2068742985865,10.9042432962497,0 -74.2068747058823,10.9042433168541,0 -74.206875113213,10.9042433372633,0 -74.2068755205786,10.904243357478,0 -74.2068759279792,10.9042433774991,0 -74.2068763354147,10.9042433973275,0 -74.2068767428853,10.9042434169639,0 -74.206877150391,10.9042434364093,0 -74.2068775579318,10.9042434556644,0 -74.2068779655078,10.9042434747302,0 -74.2068783731189,10.9042434936074,0 -74.2068787807653,10.9042435122968,0 -74.2068791884469,10.9042435307994,0 -74.2068795961638,10.9042435491159,0 -74.2068800039161,10.9042435672472,0 -74.2068804117037,10.9042435851941,0 -74.2068808195267,10.9042436029574,0 -74.2068812273853,10.9042436205381,0 -74.2068816352793,10.9042436379368,0 -74.2068820432088,10.9042436551546,0 -74.2068828591746,10.9042436890503,0 -74.206883675283,10.904243722232,0 -74.2068844915342,10.9042437547062,0 -74.2068853079286,10.9042437864798,0 -74.2068861244665,10.9042438175594,0 -74.2068869411482,10.9042438479516,0 -74.206887757974,10.9042438776633,0 -74.2068885749441,10.904243906701,0 -74.206889392059,10.9042439350715,0 -74.2068902093188,10.9042439627815,0 -74.2068910267239,10.9042439898376,0 -74.2068918442747,10.9042440162467,0 -74.2068926619713,10.9042440420152,0 -74.2068934798132,10.90424406715,0 -74.20689429779,10.9042440916568,0 -74.206895115898,10.9042441155424,0 -74.2068959341366,10.9042441388138,0 -74.2068967525053,10.9042441614778,0 -74.2068975710035,10.9042441835415,0 -74.2068983896305,10.9042442050119,0 -74.2068992083859,10.9042442258959,0 -74.206900027269,10.9042442462005,0 -74.2069008462792,10.9042442659327,0 -74.2069016654159,10.9042442850994,0 -74.2069024846785,10.9042443037076,0 -74.2069033040665,10.9042443217643,0 -74.2069041235792,10.9042443392765,0 -74.2069049432162,10.904244356251,0 -74.2069057629767,10.904244372695,0 -74.2069065828601,10.9042443886153,0 -74.206907402866,10.9042444040191,0 -74.2069082229937,10.9042444189131,0 -74.2069090432425,10.9042444333043,0 -74.206909863612,10.9042444471999,0 -74.2069106841016,10.9042444606067,0 -74.2069115047105,10.9042444735317,0 -74.2069123254383,10.9042444859818,0 -74.2069131462844,10.9042444979641,0 -74.2069139672481,10.9042445094855,0 -74.2069147883289,10.904244520553,0 -74.2069156095263,10.9042445311736,0 -74.2069164308394,10.9042445413542,0 -74.206917252268,10.9042445511018,0 -74.2069180738112,10.9042445604234,0 -74.2069188954685,10.9042445693259,0 -74.2069197172394,10.9042445778163,0 -74.2069205391232,10.9042445859017,0 -74.2069213611194,10.9042445935889,0 -74.2069221832274,10.9042446008849,0 -74.2069230054465,10.9042446077967,0 -74.2069238277762,10.9042446143313,0 -74.2069246502159,10.9042446204957,0 -74.206925472765,10.9042446262968,0 -74.2069262954229,10.9042446317416,0 -74.206927118189,10.904244636837,0 -74.2069279410627,10.9042446415901,0 -74.2069287640435,10.9042446460078,0 -74.2069295871307,10.904244650097,0 -74.2069304103238,10.9042446538648,0 -74.2069312336222,10.9042446573182,0 -74.2069320570253,10.904244660464,0 -74.2069328805324,10.9042446633093,0 -74.206933704143,10.9042446658611,0 -74.2069345278565,10.9042446681262,0 -74.2069353516724,10.9042446701118,0 -74.2069361755899,10.9042446718246,0 -74.2069369996086,10.9042446732719,0 -74.2069378237279,10.9042446744604,0 -74.2069386479471,10.9042446753972,0 -74.2069394722657,10.9042446760892,0 -74.206940296683,10.9042446765434,0 -74.2069411211985,10.9042446767669,0 -74.2069419458116,10.9042446767664,0 -74.2069427705217,10.9042446765491,0 -74.2069435953282,10.9042446761219,0 -74.2069444202306,10.9042446754918,0 -74.2069452452281,10.9042446746657,0 -74.2069460703203,10.9042446736507,0 -74.2069468955066,10.9042446724536,0 -74.2069485461589,10.9042446695413,0 -74.2069501971802,10.9042446659846,0 -74.206951848566,10.9042446618393,0 -74.2069535003115,10.9042446571612,0 -74.2069551524118,10.904244652006,0 -74.2069568048624,10.9042446464295,0 -74.2069584576585,10.9042446404875,0 -74.2069601107953,10.9042446342357,0 -74.2069617642681,10.90424462773,0 -74.2069650722031,10.9042446141797,0 -74.2069683814255,10.9042446002828,0 -74.2069716918976,10.9042445864855,0 -74.2069733475904,10.9042445797637,0 -74.2069750035815,10.9042445732341,0 -74.2069766598661,10.9042445669524,0 -74.2069783164396,10.9042445609746,0 -74.2069799732971,10.9042445553563,0 -74.2069816304339,10.9042445501533,0 -74.2069832878454,10.9042445454214,0 -74.2069849455267,10.9042445412163,0 -74.2069866034733,10.904244537594,0 -74.2069882616803,10.90424453461,0 -74.2069899201431,10.9042445323202,0 -74.2069907494688,10.9042445314531,0 -74.2069915788568,10.9042445307804,0 -74.2069924083063,10.9042445303091,0 -74.2069932378168,10.9042445300463,0 -74.2069940673877,10.9042445299989,0 -74.2069948970184,10.9042445301737,0 -74.2069957267083,10.904244530578,0 -74.2069965564568,10.9042445312185,0 -74.2069973862634,10.9042445321023,0 -74.2069982161274,10.9042445332363,0 -74.2069990460482,10.9042445346275,0 -74.2069998760253,10.9042445362829,0 -74.207000706058,10.9042445382094,0 -74.2070015361459,10.9042445404141,0 -74.2070023662882,10.9042445429039,0 -74.2070031964844,10.9042445456857,0 -74.2070040267339,10.9042445487666,0 -74.2070048570361,10.9042445521535,0 -74.2070056873905,10.9042445558534,0 -74.2070065177963,10.9042445598732,0 -74.2070073482532,10.90424456422,0 -74.2070081787603,10.9042445689006,0 -74.2070090093173,10.9042445739221,0 -74.2070098399234,10.9042445792915,0 -74.2070106705781,10.9042445850157,0 -74.2070115012807,10.9042445911017,0 -74.2070123320308,10.9042445975564,0 -74.2070131628276,10.9042446043869,0 -74.2070139936707,10.9042446116,0 -74.2070148245595,10.9042446192028,0 -74.2070156554932,10.9042446272023,0 -74.2070164864715,10.9042446356054,0 -74.2070173174935,10.9042446444191,0 -74.2070181485588,10.9042446536503,0 -74.2070189796668,10.9042446633061,0 -74.2070198108169,10.9042446733933,0 -74.2070206420085,10.9042446839191,0 -74.207021473241,10.9042446948903,0 -74.2070223045138,10.9042447063139,0 -74.2070231358082,10.904244718193,0 -74.2070239670743,10.9042447305202,0 -74.2070247983092,10.9042447432944,0 -74.207025629513,10.904244756515,0 -74.2070264606857,10.9042447701816,0 -74.2070272918271,10.9042447842934,0 -74.2070281229373,10.90424479885,0 -74.2070289540163,10.9042448138507,0 -74.2070297850639,10.904244829295,0 -74.2070306160802,10.9042448451823,0 -74.2070314470652,10.9042448615121,0 -74.2070322780188,10.9042448782838,0 -74.2070331089411,10.9042448954967,0 -74.2070339398319,10.9042449131504,0 -74.2070347706912,10.9042449312443,0 -74.2070356015191,10.9042449497777,0 -74.2070364323155,10.9042449687502,0 -74.2070372630803,10.9042449881611,0 -74.2070380938136,10.9042450080098,0 -74.2070389245153,10.9042450282959,0 -74.2070397551854,10.9042450490187,0 -74.2070405858238,10.9042450701776,0 -74.2070414164306,10.9042450917722,0 -74.2070422470057,10.9042451138017,0 -74.207043077549,10.9042451362658,0 -74.2070439080606,10.9042451591636,0 -74.2070447385405,10.9042451824948,0 -74.2070455689885,10.9042452062587,0 -74.2070463994047,10.9042452304548,0 -74.2070472297891,10.9042452550824,0 -74.2070480601415,10.9042452801411,0 -74.2070488904621,10.9042453056302,0 -74.2070497207507,10.9042453315492,0 -74.2070505510073,10.9042453578974,0 -74.207051381232,10.9042453846745,0 -74.2070522114246,10.9042454118796,0 -74.2070530415852,10.9042454395124,0 -74.2070538717138,10.9042454675721,0 -74.2070547018102,10.9042454960583,0 -74.2070555318745,10.9042455249704,0 -74.2070563619066,10.9042455543078,0 -74.2070571919065,10.9042455840699,0 -74.2070580218743,10.9042456142561,0 -74.2070588518098,10.904245644866,0 -74.2070596817131,10.9042456758988,0 -74.207060511584,10.9042457073541,0 -74.2070613414227,10.9042457392313,0 -74.207062171229,10.9042457715297,0 -74.2070630010029,10.9042458042489,0 -74.2070638307444,10.9042458373883,0 -74.2070646604535,10.9042458709472,0 -74.2070654901301,10.9042459049251,0 -74.2070663197743,10.9042459393215,0 -74.207067149386,10.9042459741357,0 -74.2070679789651,10.9042460093673,0 -74.2070688085117,10.9042460450155,0 -74.2070696380257,10.90424608108,0 -74.207070467507,10.90424611756,0 -74.2070712969557,10.904246154455,0 -74.2070721263718,10.9042461917645,0 -74.2070729557552,10.9042462294878,0 -74.2070737851058,10.9042462676244,0 -74.2070746144237,10.9042463061737,0 -74.2070754437088,10.9042463451352,0 -74.2070762729611,10.9042463845083,0 -74.2070771021805,10.9042464242924,0 -74.2070779313672,10.9042464644869,0 -74.2070787605209,10.9042465050913,0 -74.2070795896417,10.904246546105,0 -74.2070804187296,10.9042465875274,0 -74.2070812477845,10.904246629358,0 -74.2070820768064,10.9042466715961,0 -74.2070829057953,10.9042467142413,0 -74.2070837347511,10.9042467572929,0 -74.2070845636739,10.9042468007503,0 -74.2070853925636,10.9042468446131,0 -74.2070862214201,10.9042468888806,0 -74.2070870502435,10.9042469335522,0 -74.2070878790337,10.9042469786274,0 -74.2070887077906,10.9042470241056,0 -74.2070895365144,10.9042470699862,0 -74.2070903652048,10.9042471162687,0 -74.207091193862,10.9042471629525,0 -74.2070920224859,10.904247210037,0 -74.2070928510764,10.9042472575217,0 -74.2070936796335,10.9042473054059,0 -74.2070945081572,10.9042473536891,0 -74.2070953366476,10.9042474023707,0 -74.2070961651044,10.9042474514502,0 -74.2070969935279,10.9042475009271,0 -74.2070978219178,10.9042475508006,0 -74.2070986502741,10.9042476010703,0 -74.207099478597,10.9042476517356,0 -74.2071003068863,10.9042477027958,0 -74.207101135142,10.9042477542506,0 -74.207101963364,10.9042478060992,0 -74.2071027915525,10.904247858341,0 -74.2071036197072,10.9042479109757,0 -74.2071044478283,10.9042479640024,0 -74.2071052759156,10.9042480174208,0 -74.2071061039692,10.9042480712302,0 -74.207106931989,10.90424812543,0 -74.2071077599751,10.9042481800197,0 -74.2071085879273,10.9042482349987,0 -74.2071094158456,10.9042482903665,0 -74.2071102437301,10.9042483461224,0 -74.2071110715807,10.9042484022659,0 -74.2071118993974,10.9042484587964,0 -74.2071127271801,10.9042485157134,0 -74.2071135549289,10.9042485730163,0 -74.2071143826437,10.9042486307044,0 -74.2071152103244,10.9042486887773,0 -74.2071160379711,10.9042487472344,0 -74.2071168655838,10.9042488060751,0 -74.2071176931623,10.9042488652988,0 -74.2071185207068,10.904248924905,0 -74.207119348217,10.904248984893,0 -74.2071201756931,10.9042490452624,0 -74.207121003135,10.9042491060125,0 -74.2071218305427,10.9042491671428,0 -74.2071226579162,10.9042492286527,0 -74.2071234852554,10.9042492905416,0 -74.2071243125603,10.904249352809,0 -74.2071251398308,10.9042494154543,0 -74.207125967067,10.9042494784769,0 -74.2071267942689,10.9042495418763,0 -74.2071276214363,10.9042496056519,0 -74.2071284485694,10.904249669803,0 -74.207129275668,10.9042497343292,0 -74.2071301027321,10.9042497992299,0 -74.2071309297617,10.9042498645045,0 -74.2071317567568,10.9042499301524,0 -74.2071325837173,10.904249996173,0 -74.2071334106433,10.9042500625659,0 -74.2071342375347,10.9042501293304,0 -74.2071350643915,10.9042501964659,0 -74.2071358912136,10.9042502639719,0 -74.2071367180011,10.9042503318478,0 -74.2071375447538,10.904250400093,0 -74.2071383714719,10.904250468707,0 -74.2071391981551,10.9042505376892,0 -74.2071400248037,10.904250607039,0 -74.2071408514174,10.9042506767559,0 -74.2071416779963,10.9042507468392,0 -74.2071425045404,10.9042508172885,0 -74.2071433310496,10.9042508881031,0 -74.2071441575239,10.9042509592825,0 -74.2071449839632,10.904251030826,0 -74.2071458103676,10.9042511027332,0 -74.2071466367371,10.9042511750035,0 -74.2071474630716,10.9042512476362,0 -74.207148289371,10.9042513206309,0 -74.2071491156354,10.9042513939869,0 -74.2071499418647,10.9042514677037,0 -74.207150768059,10.9042515417807,0 -74.2071515942181,10.9042516162174,0 -74.207152420342,10.904251691013,0 -74.2071532464308,10.9042517661672,0 -74.2071540724844,10.9042518416794,0 -74.2071548985028,10.9042519175488,0 -74.2071557244859,10.9042519937751,0 -74.2071565504338,10.9042520703575,0 -74.2071573763463,10.9042521472957,0 -74.2071582022236,10.9042522245888,0 -74.2071590280655,10.9042523022365,0 -74.207159853872,10.9042523802381,0 -74.2071606796431,10.9042524585931,0 -74.2071615053788,10.9042525373008,0 -74.2071623310791,10.9042526163608,0 -74.2071631567439,10.9042526957724,0 -74.2071639823732,10.9042527755351,0 -74.207164807967,10.9042528556483,0 -74.2071656335252,10.9042529361115,0 -74.2071664590478,10.904253016924,0 -74.2071672845349,10.9042530980853,0 -74.2071681099864,10.9042531795948,0 -74.2071689354021,10.904253261452,0 -74.2071697607823,10.9042533436562,0 -74.2071705861267,10.904253426207,0 -74.2071714114354,10.9042535091037,0 -74.2071722367083,10.9042535923458,0 -74.2071730619455,10.9042536759327,0 -74.2071738871469,10.9042537598638,0 -74.2071747123125,10.9042538441386,0 -74.2071755374422,10.9042539287565,0 -74.2071763625361,10.9042540137168,0 -74.207177187594,10.9042540990192,0 -74.207178012616,10.9042541846629,0 -74.2071788376021,10.9042542706474,0 -74.2071796625522,10.9042543569721,0 -74.2071804874663,10.9042544436365,0 -74.2071813123444,10.9042545306401,0 -74.2071821371865,10.9042546179821,0 -74.2071829619925,10.9042547056621,0 -74.2071837867623,10.9042547936795,0 -74.2071846114961,10.9042548820336,0 -74.2071854361937,10.9042549707241,0 -74.2071862608552,10.9042550597502,0 -74.2071870854804,10.9042551491114,0 -74.2071879100695,10.9042552388071,0 -74.2071887346222,10.9042553288368,0 -74.2071895591388,10.9042554191999,0 -74.2071903836191,10.9042555098959,0 -74.207191208063,10.9042556009241,0 -74.2071920324707,10.904255692284,0 -74.207192856842,10.904255783975,0 -74.2071936811769,10.9042558759966,0 -74.2071945054754,10.9042559683481,0 -74.2071953297375,10.9042560610291,0 -74.2071961539632,10.9042561540389,0 -74.2071969781524,10.904256247377,0 -74.2071978023051,10.9042563410428,0 -74.2071986264213,10.9042564350358,0 -74.207199450501,10.9042565293553,0 -74.207200274544,10.9042566240008,0 -74.2072010985505,10.9042567189717,0 -74.2072019225204,10.9042568142675,0 -74.2072027464537,10.9042569098876,0 -74.2072035703503,10.9042570058314,0 -74.2072043942102,10.9042571020984,0 -74.2072052180334,10.904257198688,0 -74.2072060418199,10.9042572955995,0 -74.2072068655696,10.9042573928325,0 -74.2072076892826,10.9042574903864,0 -74.2072085129588,10.9042575882606,0 -74.2072093365981,10.9042576864545,0 -74.2072101602006,10.9042577849676,0 -74.2072109837662,10.9042578837993,0 -74.2072118072949,10.904257982949,0 -74.2072126307867,10.9042580824162,0 -74.2072134542416,10.9042581822002,0 -74.2072142776594,10.9042582823006,0 -74.2072151010403,10.9042583827167,0 -74.2072159243842,10.904258483448,0 -74.207216747691,10.9042585844939,0 -74.2072175709608,10.9042586858539,0 -74.2072183941935,10.9042587875273,0 -74.2072192173891,10.9042588895136,0 -74.2072200405476,10.9042589918123,0 -74.2072208636689,10.9042590944227,0 -74.207221686753,10.9042591973443,0 -74.2072225097999,10.9042593005765,0 -74.2072233328096,10.9042594041188,0 -74.207224155782,10.9042595079706,0 -74.2072249787172,10.9042596121313,0 -74.207225801615,10.9042597166003,0 -74.2072266244755,10.9042598213771,0 -74.2072274472987,10.9042599264612,0 -74.2072282700845,10.9042600318518,0 -74.2072290928329,10.9042601375486,0 -74.2072299155439,10.9042602435508,0 -74.2072307382175,10.9042603498579,0 -74.2072315608536,10.9042604564695,0 -74.2072323834522,10.9042605633848,0 -74.2072332060133,10.9042606706033,0 -74.2072340285368,10.9042607781245,0 -74.2072348510228,10.9042608859478,0 -74.2072356734712,10.9042609940725,0 -74.207236495882,10.9042611024982,0 -74.20723731826,10.9042612112324,0 -74.2072381406216,10.9042613203011,0 -74.2072389629663,10.9042614297037,0 -74.2072397852928,10.9042615394375,0 -74.2072406075993,10.9042616494997,0 -74.2072414298844,10.9042617598874,0 -74.2072422521464,10.9042618705979,0 -74.2072430743837,10.9042619816282,0 -74.2072438965948,10.9042620929757,0 -74.2072447187781,10.9042622046374,0 -74.2072455409319,10.9042623166105,0 -74.2072463630547,10.9042624288923,0 -74.207247185145,10.9042625414799,0 -74.207248007201,10.9042626543705,0 -74.2072488292213,10.9042627675613,0 -74.2072496512043,10.9042628810494,0 -74.2072504731483,10.9042629948321,0 -74.2072512950518,10.9042631089064,0 -74.2072521169132,10.9042632232697,0 -74.2072529387308,10.904263337919,0 -74.2072537605032,10.9042634528516,0 -74.2072545822288,10.9042635680647,0 -74.2072554039058,10.9042636835554,0 -74.2072562255329,10.9042637993208,0 -74.2072570471083,10.9042639153583,0 -74.2072578686305,10.9042640316649,0 -74.2072586900979,10.9042641482379,0 -74.207259511509,10.9042642650744,0 -74.207260332862,10.9042643821716,0 -74.2072611541555,10.9042644995267,0 -74.2072619753879,10.9042646171369,0 -74.2072627965575,10.9042647349993,0 -74.2072636176628,10.9042648531112,0 -74.2072644387023,10.9042649714696,0 -74.2072652596742,10.9042650900719,0 -74.2072660805771,10.9042652089152,0 -74.2072669014092,10.9042653279966,0 -74.2072677221692,10.9042654473133,0 -74.2072685428553,10.9042655668626,0 -74.207269363466,10.9042656866415,0 -74.2072701839997,10.9042658066474,0 -74.2072710044548,10.9042659268773,0 -74.2072718248298,10.9042660473285,0 -74.2072726451229,10.904266167998,0 -74.2072734653328,10.9042662888832,0 -74.2072742854577,10.9042664099812,0 -74.207275105496,10.9042665312891,0 -74.2072759254463,10.9042666528043,0 -74.2072767453069,10.9042667745237,0 -74.2072775650761,10.9042668964446,0 -74.2072783847526,10.9042670185643,0 -74.2072792043346,10.9042671408798,0 -74.2072800238205,10.9042672633884,0 -74.2072808432088,10.9042673860872,0 -74.2072816624979,10.9042675089734,0 -74.2072824816862,10.9042676320442,0 -74.2072833007721,10.9042677552968,0 -74.2072841197541,10.9042678787284,0 -74.2072849386305,10.9042680023361,0 -74.2072857573998,10.9042681261171,0 -74.2072873946171,10.9042683741122,0 -74.2072890314212,10.9042686224507,0 -74.2072906678189,10.9042688710509,0 -74.207292303816,10.9042691198444,0 -74.2072955746318,10.9042696177368,0 -74.2072988439154,10.9042701155796,0 -74.2073021117137,10.9042706128245,0 -74.2073037450705,10.9042708610514,0 -74.2073053780735,10.904271108923,0 -74.2073070107285,10.904271356371,0 -74.2073086430414,10.9042716033268,0 -74.2073102750181,10.9042718497219,0 -74.2073119066644,10.9042720954875,0 -74.2073135379862,10.9042723405554,0 -74.2073143535272,10.9042724628062,0 -74.2073151689893,10.9042725848568,0 -74.2073159843731,10.9042727066987,0 -74.2073167996795,10.9042728283233,0 -74.2073176149091,10.9042729497219,0 -74.2073184300627,10.9042730708862,0 -74.207319245141,10.9042731918074,0 -74.2073200601448,10.9042733124771,0 -74.2073208750747,10.9042734328866,0 -74.2073216899316,10.9042735530274,0 -74.2073225047161,10.9042736728909,0 -74.2073233194289,10.9042737924686,0 -74.2073241340709,10.9042739117518,0 -74.2073249486427,10.9042740307321,0 -74.207325763145,10.9042741494007,0 -74.2073265775787,10.9042742677493,0 -74.2073273919443,10.9042743857691,0 -74.2073282062428,10.9042745034518,0 -74.2073290204747,10.9042746207885,0 -74.2073298346408,10.9042747377709,0 -74.2073306487419,10.9042748543903,0 -74.2073314627787,10.9042749706381,0 -74.2073322767519,10.9042750865059,0 -74.2073330906622,10.9042752019849,0 -74.2073339045104,10.9042753170668,0 -74.2073347182972,10.9042754317428,0 -74.2073355320233,10.9042755460045,0 -74.2073363456896,10.9042756598432,0 -74.2073371592966,10.9042757732503,0 -74.2073379728451,10.9042758862174,0 -74.2073387863359,10.9042759987359,0 -74.2073395997697,10.9042761107971,0 -74.2073404131473,10.9042762223926,0 -74.2073412264692,10.9042763335137,0 -74.2073420397364,10.9042764441518,0 -74.2073428529495,10.9042765542985,0 -74.2073436661092,10.9042766639451,0 -74.2073444792164,10.9042767730831,0 -74.2073452922716,10.9042768817038,0 -74.2073461052757,10.9042769897989,0 -74.2073469182293,10.9042770973595,0 -74.2073477311333,10.9042772043773,0 -74.2073485439883,10.9042773108436,0 -74.207349356795,10.9042774167499,0 -74.2073501695543,10.9042775220875,0 -74.2073509822668,10.904277626848,0 -74.2073517949332,10.9042777310227,0 -74.2073526075544,10.9042778346032,0 -74.2073534201308,10.9042779375812,0 -74.207354232663,10.904278039949,0 -74.2073550451518,10.9042781416983,0 -74.2073558575977,10.9042782428206,0 -74.2073566700017,10.9042783433075,0 -74.2073574823645,10.9042784431507,0 -74.2073582946866,10.9042785423417,0 -74.2073591069689,10.9042786408721,0 -74.2073599192122,10.9042787387336,0 -74.2073607314171,10.9042788359177,0 -74.2073615435844,10.9042789324161,0 -74.2073623557148,10.9042790282204,0 -74.207363167809,10.9042791233221,0 -74.2073639798679,10.9042792177129,0 -74.207364791892,10.9042793113844,0 -74.2073651978913,10.9042793579478,0 -74.2073656038822,10.9042794043282,0 -74.2073660098648,10.9042794505245,0 -74.2073664158392,10.9042794965358,0 -74.2073668218054,10.9042795423609,0 -74.2073672277636,10.9042795879989,0 -74.2073676337139,10.9042796334486,0 -74.2073680396564,10.9042796787091,0 -74.207368445591,10.9042797237792,0 -74.207368851518,10.904279768658,0 -74.2073692574375,10.9042798133443,0 -74.2073696633494,10.9042798578372,0 -74.207370069254,10.9042799021355,0 -74.2073704751512,10.9042799462383,0 -74.2073708810413,10.9042799901444,0 -74.2073712869242,10.9042800338529,0 -74.2073716928002,10.9042800773626,0 -74.2073720986691,10.9042801206726,0 -74.2073725045313,10.9042801637817,0 -74.2073729103867,10.904280206689,0 -74.2073733162354,10.9042802493933,0 -74.2073737220776,10.9042802918937,0 -74.2073741279132,10.9042803341891,0 -74.2073745337426,10.9042803762783,0 -74.2073749395656,10.9042804181605,0 -74.2073753453824,10.9042804598345,0 -74.2073757511931,10.9042805012993,0 -74.2073761569978,10.9042805425538,0 -74.2073765627965,10.904280583597,0 -74.2073769685895,10.9042806244278,0 -74.2073773743766,10.9042806650453,0 -74.2073777801582,10.9042807054482,0 -74.2073781859342,10.9042807456356,0 -74.2073785917047,10.9042807856065,0 -74.2073789974698,10.9042808253598,0 -74.2073794032296,10.9042808648943,0 -74.2073798089843,10.9042809042092,0 -74.2073802147338,10.9042809433033,0 -74.2073806204784,10.9042809821756,0 -74.207381026218,10.9042810208251,0 -74.2073814319527,10.9042810592506,0 -74.2073818376828,10.9042810974512,0 -74.2073822434082,10.9042811354257,0 -74.2073826491291,10.9042811731732,0 -74.2073830548455,10.9042812106926,0 -74.2073834605575,10.9042812479828,0 -74.2073838662652,10.9042812850429,0 -74.2073842719688,10.9042813218716,0 -74.2073846776682,10.9042813584681,0 -74.2073850833637,10.9042813948312,0 -74.2073854890552,10.9042814309599,0 -74.2073858947433,10.9042814668519,0 -74.207386300433,10.9042815024883,0 -74.2073867061266,10.9042815378636,0 -74.2073871118248,10.9042815729785,0 -74.2073875175282,10.904281607834,0 -74.2073879232375,10.9042816424307,0 -74.2073883289533,10.9042816767694,0 -74.2073887346763,10.904281710851,0 -74.2073891404072,10.9042817446761,0 -74.2073895461465,10.9042817782457,0 -74.207389951895,10.9042818115605,0 -74.2073903576533,10.9042818446213,0 -74.207390763422,10.9042818774288,0 -74.2073911692019,10.904281909984,0 -74.2073915749935,10.9042819422874,0 -74.2073919807975,10.90428197434,0 -74.2073923866146,10.9042820061425,0 -74.2073927924455,10.9042820376958,0 -74.2073931982907,10.9042820690005,0 -74.207393604151,10.9042821000576,0 -74.2073940100269,10.9042821308677,0 -74.2073944159193,10.9042821614317,0 -74.2073948218286,10.9042821917503,0 -74.2073952277555,10.9042822218244,0 -74.2073956337008,10.9042822516548,0 -74.2073960396651,10.9042822812421,0 -74.207396445649,10.9042823105873,0 -74.2073968516531,10.9042823396911,0 -74.2073972576782,10.9042823685543,0 -74.2073976637249,10.9042823971777,0 -74.2073980697938,10.904282425562,0 -74.2073984758856,10.9042824537081,0 -74.2073988820009,10.9042824816167,0 -74.2073992881405,10.9042825092887,0 -74.207399694305,10.9042825367248,0 -74.2074001004949,10.9042825639258,0 -74.207400506711,10.9042825908925,0 -74.2074009129539,10.9042826176257,0 -74.2074013192243,10.9042826441262,0 -74.2074017255228,10.9042826703947,0 -74.2074021318502,10.9042826964321,0 -74.207402538207,10.9042827222392,0 -74.2074029445938,10.9042827478166,0 -74.2074033510114,10.9042827731654,0 -74.2074037574604,10.9042827982861,0 -74.2074041639415,10.9042828231796,0 -74.2074045704553,10.9042828478467,0 -74.2074049770025,10.9042828722881,0 -74.2074053835837,10.9042828965048,0 -74.2074057901996,10.9042829204974,0 -74.2074061968508,10.9042829442667,0 -74.2074066035379,10.9042829678136,0 -74.2074070102618,10.9042829911388,0 -74.2074074170229,10.9042830142431,0 -74.207407823822,10.9042830371273,0 -74.2074082306597,10.9042830597922,0 -74.2074086375366,10.9042830822385,0 -74.2074090444535,10.9042831044671,0 -74.2074094514109,10.9042831264788,0 -74.2074098584096,10.9042831482743,0 -74.2074102654501,10.9042831698545,0 -74.2074106725332,10.90428319122,0 -74.2074110796595,10.9042832123718,0 -74.2074114868296,10.9042832333105,0 -74.2074118940442,10.9042832540371,0 -74.2074123013039,10.9042832745522,0 -74.2074127086095,10.9042832948567,0 -74.2074131159615,10.9042833149513,0 -74.2074135233607,10.9042833348369,0 -74.2074139308076,10.9042833545142,0 -74.2074143383029,10.904283373984,0 -74.2074147458473,10.9042833932471,0 -74.2074151534415,10.9042834123043,0 -74.2074155610861,10.9042834311564,0 -74.2074159687817,10.9042834498041,0 -74.207416376529,10.9042834682483,0 -74.2074167843286,10.9042834864898,0 -74.2074171921812,10.9042835045293,0 -74.2074176000876,10.9042835223676,0 -74.2074180080482,10.9042835400056,0 -74.2074184160638,10.9042835574439,0 -74.207418824135,10.9042835746834,0 -74.2074192322572,10.904283591728,0 -74.2074196404199,10.9042836085849,0 -74.2074200486229,10.9042836252553,0 -74.2074204568658,10.9042836417405,0 -74.2074208651488,10.9042836580417,0 -74.2074212734717,10.9042836741601,0 -74.2074216818344,10.9042836900969,0 -74.2074224986789,10.9042837214305,0 -74.2074233156816,10.9042837520521,0 -74.2074241328418,10.9042837819712,0 -74.2074249501587,10.9042838111976,0 -74.2074257676317,10.9042838397407,0 -74.2074265852601,10.9042838676101,0 -74.2074274030431,10.9042838948155,0 -74.2074282209801,10.9042839213665,0 -74.2074290390702,10.9042839472727,0 -74.2074298573129,10.9042839725436,0 -74.2074306757074,10.9042839971888,0 -74.207431494253,10.904284021218,0 -74.207432312949,10.9042840446407,0 -74.2074331317947,10.9042840674666,0 -74.2074339507893,10.9042840897053,0 -74.2074347699321,10.9042841113662,0 -74.2074355892226,10.9042841324591,0 -74.2074364086598,10.9042841529935,0 -74.2074372282432,10.9042841729791,0 -74.2074380479719,10.9042841924254,0 -74.2074388678454,10.904284211342,0 -74.2074396878629,10.9042842297385,0 -74.2074405080236,10.9042842476246,0 -74.207441328327,10.9042842650097,0 -74.2074421487721,10.9042842819036,0 -74.2074429693584,10.9042842983158,0 -74.2074437900852,10.9042843142559,0 -74.2074446109517,10.9042843297335,0 -74.2074454319572,10.9042843447581,0 -74.207446253101,10.9042843593396,0 -74.2074470743824,10.9042843734872,0 -74.2074478958007,10.9042843872108,0 -74.2074487173552,10.9042844005199,0 -74.2074495390451,10.904284413424,0 -74.2074503608699,10.9042844259329,0 -74.2074511828286,10.904284438056,0 -74.2074520049207,10.904284449803,0 -74.2074528271454,10.9042844611834,0 -74.207453649502,10.904284472207,0 -74.2074544719898,10.9042844828832,0 -74.2074552946081,10.9042844932217,0 -74.2074561173562,10.904284503232,0 -74.2074569402334,10.9042845129238,0 -74.2074577632389,10.9042845223067,0 -74.2074585863721,10.9042845313902,0 -74.2074594096322,10.9042845401839,0 -74.2074602330186,10.9042845486975,0 -74.2074610565305,10.9042845569406,0 -74.2074618801672,10.9042845649227,0 -74.207462703928,10.9042845726534,0 -74.2074635278122,10.9042845801424,0 -74.207464351819,10.9042845873992,0 -74.2074651759478,10.9042845944335,0 -74.2074660001979,10.9042846012547,0 -74.2074668245686,10.9042846078727,0 -74.207467649059,10.9042846142968,0 -74.2074684736685,10.9042846205369,0 -74.2074701232417,10.9042846325044,0 -74.2074717732823,10.9042846438535,0 -74.2074734237848,10.9042846546628,0 -74.2074750747436,10.9042846650104,0 -74.2074767261531,10.9042846749749,0 -74.2074783780077,10.9042846846345,0 -74.2074816830297,10.904284703353,0 -74.2074849897647,10.9042847217928,0 -74.2074882981679,10.9042847405809,0 -74.2074899529811,10.9042847503016,0 -74.2074916081946,10.9042847603445,0 -74.2074932638026,10.904284770788,0 -74.2074949197997,10.9042847817106,0 -74.2074965761803,10.9042847931905,0 -74.2074982329386,10.9042848053062,0 -74.2074990614578,10.9042848116269,0 -74.2074998900692,10.904284818136,0 -74.2075007187723,10.9042848248432,0 -74.2075015475664,10.9042848317583,0 -74.2075023764507,10.9042848388912,0 -74.2075032054246,10.9042848462516,0 -74.2075040344873,10.9042848538493,0 -74.2075048636382,10.9042848616941,0 -74.2075056928765,10.9042848697959,0 -74.2075065222016,10.9042848781643,0 -74.2075073516127,10.9042848868093,0 -74.2075081811092,10.9042848957406,0 -74.2075090106904,10.9042849049679,0 -74.2075098403554,10.9042849145012,0 -74.2075106701037,10.9042849243502,0 -74.2075114999346,10.9042849345247,0 -74.2075123298473,10.9042849450344,0 -74.2075131598328,10.9042849559096,0 -74.2075139898576,10.9042849672315,0 -74.2075148199159,10.9042849790052,0 -74.207515650005,10.9042849912279,0 -74.2075164801223,10.9042850038967,0 -74.2075173102649,10.9042850170088,0 -74.2075181404302,10.9042850305614,0 -74.2075189706155,10.9042850445515,0 -74.2075198008181,10.9042850589764,0 -74.2075206310352,10.9042850738331,0 -74.2075214612642,10.9042850891189,0 -74.2075222915024,10.904285104831,0 -74.2075231217469,10.9042851209664,0 -74.2075239519952,10.9042851375224,0 -74.2075247822446,10.904285154496,0 -74.2075256124922,10.9042851718845,0 -74.2075264427354,10.904285189685,0 -74.2075272729715,10.9042852078946,0 -74.2075281031978,10.9042852265106,0 -74.2075289334116,10.90428524553,0 -74.2075297636101,10.9042852649501,0 -74.2075305937907,10.9042852847679,0 -74.2075314239506,10.9042853049807,0 -74.2075322540872,10.9042853255857,0 -74.2075330841977,10.9042853465798,0 -74.2075339142794,10.9042853679604,0 -74.2075347443296,10.9042853897245,0 -74.2075355743456,10.9042854118694,0 -74.2075364043247,10.9042854343922,0 -74.2075372342642,10.90428545729,0 -74.2075380641614,10.9042854805601,0 -74.2075388940135,10.9042855041994,0 -74.2075397238179,10.9042855282053,0 -74.2075405535718,10.9042855525749,0 -74.2075413832725,10.9042855773053,0 -74.2075422129174,10.9042856023937,0 -74.2075430425037,10.9042856278373,0 -74.2075438720287,10.9042856536331,0 -74.2075447014897,10.9042856797784,0 -74.207545530884,10.9042857062703,0 -74.2075463602089,10.904285733106,0 -74.2075471894616,10.9042857602826,0 -74.2075480186396,10.9042857877973,0 -74.2075488477399,10.9042858156473,0 -74.2075496767601,10.9042858438296,0 -74.2075505056972,10.9042858723415,0 -74.2075513345487,10.9042859011801,0 -74.2075521633118,10.9042859303426,0 -74.2075529919838,10.9042859598262,0 -74.207553820562,10.9042859896279,0 -74.2075546490437,10.9042860197449,0 -74.2075554774262,10.9042860501745,0 -74.2075563057067,10.9042860809137,0 -74.2075571338826,10.9042861119597,0 -74.2075579619513,10.9042861433096,0 -74.2075587899363,10.9042861749429,0 -74.2075596178567,10.9042862068422,0 -74.2075604457128,10.9042862390027,0 -74.2075612735048,10.9042862714198,0 -74.2075621012329,10.9042863040889,0 -74.2075629288971,10.9042863370055,0 -74.2075637564979,10.9042863701647,0 -74.2075645840352,10.9042864035622,0 -74.2075654115093,10.9042864371931,0 -74.2075662389205,10.9042864710528,0 -74.2075670662688,10.9042865051368,0 -74.2075678935545,10.9042865394404,0 -74.2075687207777,10.9042865739589,0 -74.2075695479388,10.9042866086878,0 -74.2075703750377,10.9042866436224,0 -74.2075712020748,10.9042866787581,0 -74.2075720290502,10.9042867140902,0 -74.2075728559641,10.9042867496142,0 -74.2075736828167,10.9042867853253,0 -74.2075745096082,10.904286821219,0 -74.2075761630086,10.9042868935355,0 -74.2075778161667,10.9042869665267,0 -74.2075794690842,10.9042870401555,0 -74.2075811217626,10.9042871143849,0 -74.2075827742032,10.9042871891778,0 -74.2075844264077,10.9042872644972,0 -74.2075860783776,10.9042873403061,0 -74.2075877301143,10.9042874165673,0 -74.2075893816194,10.9042874932439,0 -74.2075910328944,10.9042875702988,0 -74.2075926839408,10.904287647695,0 -74.2075943347601,10.9042877253954,0 -74.2075959853538,10.904287803363,0 -74.2075976357235,10.9042878815608,0 -74.2076009357966,10.9042880384985,0 -74.2076042349916,10.9042881959123,0 -74.2076075333189,10.9042883535045,0 -74.2076108305408,10.9042885107734,0 -74.2076124786952,10.9042885891559,0 -74.2076141265659,10.9042886673358,0 -74.2076157741683,10.9042887452874,0 -74.207617421518,10.9042888229847,0 -74.2076190686302,10.9042889004017,0 -74.2076207155207,10.9042889775127,0 -74.2076223622047,10.9042890542916,0 -74.2076240086978,10.9042891307126,0 -74.2076256550154,10.9042892067498,0 -74.207627301173,10.9042892823773,0 -74.2076289471861,10.9042893575691,0 -74.2076305930701,10.9042894322994,0 -74.2076322388405,10.9042895065423,0 -74.2076338845127,10.9042895802719,0 -74.2076355301023,10.9042896534623,0 -74.2076371756246,10.9042897260875,0 -74.2076388210952,10.9042897981217,0 -74.2076404665295,10.9042898695389,0 -74.207642111943,10.9042899403134,0 -74.2076437573511,10.9042900104191,0 -74.2076454027694,10.9042900798301,0 -74.2076462254871,10.9042901142671,0 -74.2076470482132,10.9042901485206,0 -74.2076478709495,10.9042901825876,0 -74.207648693698,10.9042902164647,0 -74.2076495164607,10.9042902501487,0 -74.2076503392394,10.9042902836364,0 -74.2076511620361,10.9042903169246,0 -74.2076519848527,10.9042903500099,0 -74.2076528076912,10.9042903828892,0 -74.2076536305535,10.9042904155593,0 -74.2076544534414,10.9042904480168,0 -74.2076552763571,10.9042904802586,0 -74.2076560993023,10.9042905122813,0 -74.2076569222832,10.9042905440957,0 -74.2076585684122,10.9042906072959,0 -74.2076602147708,10.9042906699789,0 -74.2076618613597,10.9042907321876,0 -74.2076635081799,10.904290793965,0 -74.2076651552321,10.9042908553538,0 -74.2076668025172,10.904290916397,0 -74.2076684500359,10.9042909771374,0 -74.2076700977891,10.9042910376178,0 -74.2076717457777,10.9042910978812,0 -74.2076733940024,10.9042911579703,0 -74.2076766911637,10.9042912777973,0 -74.2076799892794,10.9042913974419,0 -74.2076832883562,10.9042915172468,0 -74.2076865884006,10.904291637555,0 -74.2076882387877,10.904291698005,0 -74.2076898894193,10.9042917587094,0 -74.207691540296,10.9042918197111,0 -74.2076931914188,10.904291881053,0 -74.2076948427885,10.9042919427777,0 -74.2076964944058,10.9042920049284,0 -74.2076981462716,10.9042920675478,0 -74.2076997983868,10.9042921306788,0 -74.2077014507521,10.9042921943643,0 -74.2077031033684,10.904292258647,0 -74.2077047562365,10.9042923235699,0 -74.2077064093572,10.9042923891759,0 -74.2077072360125,10.9042924222484,0 -74.2077080627313,10.9042924555078,0 -74.2077088895137,10.9042924889593,0 -74.2077097163598,10.9042925226084,0 -74.2077105432696,10.9042925564604,0 -74.2077113702433,10.9042925905206,0 -74.2077121972809,10.9042926247945,0 -74.2077130243827,10.9042926592874,0 -74.2077138515486,10.9042926940046,0 -74.2077146787789,10.9042927289515,0 -74.2077155060735,10.9042927641334,0 -74.2077163334326,10.9042927995558,0 -74.2077171608563,10.9042928352239,0 -74.2077179883447,10.9042928711432,0 -74.2077188158979,10.9042929073189,0 -74.207719643516,10.9042929437565,0 -74.2077204711992,10.9042929804612,0 -74.2077212989474,10.9042930174387,0 -74.2077221267608,10.9042930546945,0 -74.2077229546394,10.9042930922341,0 -74.2077237825833,10.9042931300629,0 -74.2077246105927,10.9042931681863,0 -74.2077254386676,10.9042932066098,0 -74.207726266808,10.9042932453387,0 -74.2077270950142,10.9042932843784,0 -74.2077279232861,10.9042933237344,0 -74.2077287516239,10.9042933634122,0 -74.2077295800276,10.904293403417,0 -74.2077304084973,10.9042934437544,0 -74.2077312370332,10.9042934844297,0 -74.2077320656353,10.9042935254484,0 -74.2077328943037,10.9042935668159,0 -74.2077337230384,10.9042936085376,0 -74.2077345518397,10.9042936506189,0 -74.2077353807075,10.9042936930652,0 -74.2077362096419,10.904293735882,0 -74.2077370386431,10.9042937790746,0 -74.2077378677111,10.9042938226486,0 -74.207738696846,10.9042938666092,0 -74.2077395260479,10.904293910962,0 -74.207740355317,10.9042939557124,0 -74.2077411846531,10.9042940008656,0 -74.2077420140566,10.9042940464273,0 -74.2077428435274,10.9042940924027,0 -74.2077436730656,10.9042941387974,0 -74.2077445026714,10.9042941856167,0 -74.2077453323448,10.904294232866,0 -74.2077461620859,10.9042942805508,0 -74.2077469918947,10.9042943286764,0 -74.2077478217715,10.9042943772484,0 -74.2077486517162,10.9042944262721,0 -74.207749481729,10.9042944757529,0 -74.2077503118099,10.9042945256963,0 -74.207751141959,10.9042945761076,0 -74.2077519721765,10.9042946269923,0 -74.2077528024624,10.9042946783558,0 -74.2077536327741,10.9042947302388,0 -74.2077544630473,10.9042947826842,0 -74.2077552932763,10.9042948356753,0 -74.2077561234558,10.9042948891955,0 -74.2077569535808,10.9042949432278,0 -74.2077577836459,10.9042949977555,0 -74.207758613646,10.9042950527617,0 -74.2077594435758,10.9042951082295,0 -74.2077602734301,10.9042951641421,0 -74.2077611032037,10.9042952204827,0 -74.2077619328914,10.9042952772344,0 -74.207762762488,10.9042953343804,0 -74.2077635919882,10.9042953919039,0 -74.2077644213869,10.9042954497879,0 -74.2077652506788,10.9042955080158,0 -74.2077660798587,10.9042955665705,0 -74.2077669089214,10.9042956254354,0 -74.2077677378618,10.9042956845935,0 -74.2077685666744,10.904295744028,0 -74.2077693953543,10.904295803722,0 -74.2077702238961,10.9042958636589,0 -74.2077710522946,10.9042959238215,0 -74.2077718805447,10.9042959841933,0 -74.207772708641,10.9042960447572,0 -74.2077743643518,10.9042961663944,0 -74.2077760193852,10.9042962885983,0 -74.2077776736995,10.9042964112342,0 -74.2077793272531,10.9042965341675,0 -74.207782631911,10.9042967803871,0 -74.2077842829319,10.904296903404,0 -74.2077859330539,10.904297026171,0 -74.2077875824172,10.9042971485028,0 -74.2077892310417,10.9042972702516,0 -74.2077900550753,10.9042973308636,0 -74.207790878922,10.9042973912772,0 -74.2077917025812,10.9042974514749,0 -74.2077925260521,10.9042975114392,0 -74.2077933493341,10.9042975711526,0 -74.2077941724264,10.9042976305976,0 -74.2077949953284,10.9042976897565,0 -74.2077958180392,10.904297748612,0 -74.2077966405582,10.9042978071465,0 -74.2077974628847,10.9042978653424,0 -74.2077982850179,10.9042979231822,0 -74.2077991069571,10.9042979806484,0 -74.2077999287017,10.9042980377235,0 -74.2078007502508,10.9042980943899,0 -74.2078015716038,10.9042981506302,0 -74.20780239276,10.9042982064267,0 -74.2078032137186,10.904298261762,0 -74.207804034479,10.9042983166185,0 -74.2078048550403,10.9042983709788,0 -74.207805675402,10.9042984248252,0 -74.2078064955632,10.9042984781403,0 -74.2078073155233,10.9042985309065,0 -74.2078081352815,10.9042985831063,0 -74.2078089548372,10.9042986347223,0 -74.2078097741896,10.9042986857367,0 -74.207810593338,10.9042987361322,0 -74.2078114122816,10.9042987858912,0 -74.2078122310198,10.9042988349962,0 -74.2078130495519,10.9042988834296,0 -74.207813867877,10.9042989311739,0 -74.2078146859946,10.9042989782117,0 -74.2078155039039,10.9042990245253,0 -74.2078159127802,10.9042990474051,0 -74.2078163216042,10.9042990700972,0 -74.2078167303757,10.9042990925996,0 -74.2078171390947,10.90429911491,0 -74.2078175477611,10.9042991370262,0 -74.2078179563748,10.904299158946,0 -74.2078183649357,10.9042991806673,0 -74.2078187734437,10.9042992021879,0 -74.2078191818987,10.9042992235055,0 -74.2078195903007,10.9042992446179,0 -74.2078199986495,10.9042992655231,0 -74.2078204069451,10.9042992862187,0 -74.2078208151874,10.9042993067027,0 -74.2078212233762,10.9042993269727,0 -74.2078216315115,10.9042993470266,0 -74.2078220395933,10.9042993668623,0 -74.2078224476213,10.9042993864775,0 -74.2078228555956,10.9042994058701,0 -74.2078232635159,10.9042994250378,0 -74.2078236713824,10.9042994439785,0 -74.2078240791948,10.9042994626899,0 -74.207824486953,10.9042994811699,0 -74.207824894657,10.9042994994163,0 -74.2078253023067,10.9042995174269,0 -74.2078257099021,10.9042995351995,0 -74.2078261174429,10.9042995527319,0 -74.2078265249291,10.904299570022,0 -74.2078269323606,10.9042995870675,0 -74.207827339736,10.9042996038661,0 -74.2078277470462,10.9042996204146,0 -74.2078281542899,10.9042996367108,0 -74.2078285614674,10.9042996527526,0 -74.2078289685789,10.904299668538,0 -74.2078293756247,10.9042996840648,0 -74.2078297826051,10.9042996993311,0 -74.2078301895205,10.9042997143346,0 -74.2078305963709,10.9042997290734,0 -74.2078310031569,10.9042997435454,0 -74.2078314098786,10.9042997577485,0 -74.2078318165363,10.9042997716806,0 -74.2078322231304,10.9042997853397,0 -74.207832629661,10.9042997987236,0 -74.2078330361285,10.9042998118304,0 -74.2078334425332,10.9042998246579,0 -74.2078338488753,10.904299837204,0 -74.2078342551551,10.9042998494668,0 -74.207834661373,10.904299861444,0 -74.2078350675291,10.9042998731337,0 -74.2078354736238,10.9042998845338,0 -74.2078358796574,10.9042998956421,0 -74.2078362856301,10.9042999064567,0 -74.2078366915423,10.9042999169754,0 -74.2078370973942,10.9042999271962,0 -74.2078375031861,10.904299937117,0 -74.2078379089182,10.9042999467357,0 -74.2078383145909,10.9042999560503,0 -74.2078387202045,10.9042999650587,0 -74.2078391257592,10.9042999737587,0 -74.2078395312553,10.9042999821484,0 -74.2078399366931,10.9042999902257,0 -74.2078403420729,10.9042999979884,0 -74.2078407473949,10.9043000054345,0 -74.2078411526595,10.904300012562,0 -74.2078415578669,10.9043000193688,0 -74.2078419630175,10.9043000258527,0 -74.2078423681114,10.9043000320118,0 -74.207842773149,10.9043000378439,0 -74.2078431781306,10.904300043347,0 -74.2078435830564,10.9043000485189,0 -74.2078439879268,10.9043000533577,0 -74.207844392742,10.9043000578613,0 -74.2078447975023,10.9043000620275,0 -74.2078452022079,10.9043000658543,0 -74.2078456068593,10.9043000693397,0 -74.2078460114565,10.9043000724815,0 -74.2078464160001,10.9043000752777,0 -74.2078468204901,10.9043000777262,0 -74.2078472249269,10.904300079825,0 -74.2078476293108,10.9043000815719,0 -74.2078480336421,10.9043000829649,0 -74.207848437921,10.9043000840019,0 -74.2078488421479,10.9043000846809,0 -74.207849246323,10.9043000849997,0 -74.2078496504466,10.9043000849563,0 -74.207850054519,10.9043000845486,0 -74.2078504585404,10.9043000837747,0 -74.2078508625112,10.9043000826322,0 -74.2078512664316,10.9043000811193,0 -74.207851670302,10.9043000792338,0 -74.2078520741226,10.9043000769736,0 -74.2078524778936,10.9043000743368,0 -74.2078528816154,10.9043000713211,0 -74.2078532852883,10.9043000679246,0 -74.2078536889125,10.9043000641452,0 -74.2078540924883,10.9043000599807,0 -74.207854496016,10.9043000554291,0 -74.2078548994959,10.9043000504884,0 -74.2078553029283,10.9043000451565,0 -74.2078557063134,10.9043000394312,0 -74.2078561096516,10.9043000333106,0 -74.2078565129431,10.9043000267925,0 -74.2078569161882,10.9043000198748,0 -74.2078573193872,10.9043000125556,0 -74.2078577225404,10.9043000048327,0 -74.207858125648,10.9042999967041,0 -74.2078585287103,10.9042999881677,0 -74.2078589317277,10.9042999792213,0 -74.2078593347004,10.904299969863,0 -74.2078597376287,10.9042999600906,0 -74.2078601405129,10.9042999499022,0 -74.2078605433531,10.9042999392955,0 -74.2078609461499,10.9042999282686,0 -74.2078613489034,10.9042999168193,0 -74.2078617516138,10.9042999049456,0 -74.2078621542816,10.9042998926455,0 -74.207862556907,10.9042998799168,0 -74.2078629594902,10.9042998667575,0 -74.2078633620315,10.9042998531654,0 -74.2078637645313,10.9042998391386,0 -74.2078641669898,10.904299824675,0 -74.2078645694072,10.9042998097724,0 -74.207864971784,10.9042997944288,0 -74.2078653741203,10.9042997786421,0 -74.2078657764164,10.9042997624104,0 -74.2078661786727,10.9042997457314,0 -74.2078665808894,10.9042997286031,0 -74.2078669830668,10.9042997110234,0 -74.2078673852051,10.9042996929903,0 -74.2078677873047,10.9042996745017,0 -74.2078681893659,10.9042996555555,0 -74.2078685913889,10.9042996361497,0 -74.2078689934079,10.9042996162923,0 -74.2078693954659,10.904299595997,0 -74.2078697975632,10.9042995752666,0 -74.2078701996998,10.9042995541035,0 -74.2078706018759,10.9042995325104,0 -74.2078710040915,10.9042995104898,0 -74.2078714063468,10.9042994880444,0 -74.2078718086419,10.9042994651767,0 -74.2078722109767,10.9042994418892,0 -74.2078726133514,10.9042994181846,0 -74.2078730157661,10.9042993940655,0 -74.207873418221,10.9042993695344,0 -74.207873820716,10.904299344594,0 -74.2078742232512,10.9042993192467,0 -74.2078746258269,10.9042992934952,0 -74.207875028443,10.9042992673421,0 -74.2078754310996,10.90429924079,0 -74.2078758337969,10.9042992138414,0 -74.2078762365349,10.9042991864989,0 -74.2078766393137,10.9042991587651,0 -74.2078770421335,10.9042991306426,0 -74.2078774449942,10.904299102134,0 -74.207877847896,10.9042990732418,0 -74.207878250839,10.9042990439687,0 -74.2078786538233,10.9042990143172,0 -74.207879056849,10.9042989842899,0 -74.2078794599161,10.9042989538893,0 -74.2078798630247,10.9042989231181,0 -74.207880266175,10.9042988919789,0 -74.207880669367,10.9042988604742,0 -74.2078810726008,10.9042988286067,0 -74.2078814758766,10.9042987963788,0 -74.2078818791944,10.9042987637932,0 -74.2078822825542,10.9042987308525,0 -74.2078826859562,10.9042986975592,0 -74.2078830894005,10.904298663916,0 -74.2078834928872,10.9042986299254,0 -74.2078838964163,10.9042985955899,0 -74.207884299988,10.9042985609123,0 -74.2078847036023,10.904298525895,0 -74.2078851072593,10.9042984905407,0 -74.2078855109592,10.9042984548519,0 -74.207885914702,10.9042984188312,0 -74.2078863184877,10.9042983824812,0 -74.2078867223166,10.9042983458045,0 -74.2078871261887,10.9042983088037,0 -74.207887530104,10.9042982714813,0 -74.2078879340627,10.9042982338399,0 -74.2078883380649,10.9042981958821,0 -74.2078887421106,10.9042981576106,0 -74.2078891461999,10.9042981190278,0 -74.207889550333,10.9042980801364,0 -74.2078899545099,10.9042980409389,0 -74.2078903587307,10.9042980014379,0 -74.2078907629956,10.9042979616361,0 -74.2078911673045,10.9042979215359,0 -74.2078915716576,10.90429788114,0 -74.207891976055,10.904297840451,0 -74.2078923804967,10.9042977994714,0 -74.2078927849829,10.9042977582039,0 -74.2078931895137,10.9042977166509,0 -74.2078935940891,10.9042976748152,0 -74.2078939987092,10.9042976326992,0 -74.2078944033742,10.9042975903056,0 -74.207894808084,10.9042975476369,0 -74.2078952128389,10.9042975046958,0 -74.2078956176389,10.9042974614847,0 -74.2078960224841,10.9042974180064,0 -74.2078964273745,10.9042973742633,0 -74.2078968323103,10.9042973302581,0 -74.2078972372916,10.9042972859933,0 -74.2078976423184,10.9042972414715,0 -74.2078980473909,10.9042971966953,0 -74.2078984525091,10.9042971516674,0 -74.2078988576731,10.9042971063902,0 -74.2078992628831,10.9042970608663,0 -74.207899668139,10.9042970150984,0 -74.2079000734411,10.904296969089,0 -74.2079004787893,10.9042969228408,0 -74.2079008841838,10.9042968763562,0 -74.2079012896247,10.9042968296378,0 -74.2079016951121,10.9042967826884,0 -74.207902100646,10.9042967355103,0 -74.2079025062265,10.9042966881063,0 -74.2079029118538,10.9042966404789,0 -74.207903317528,10.9042965926306,0 -74.207903723249,10.9042965445642,0 -74.207904129017,10.9042964962821,0 -74.2079045348322,10.9042964477869,0 -74.2079049406945,10.9042963990812,0 -74.2079053466041,10.9042963501676,0 -74.2079057525611,10.9042963010488,0 -74.2079061585655,10.9042962517271,0 -74.2079065646175,10.9042962022054,0 -74.2079069707171,10.9042961524861,0 -74.2079073768645,10.9042961025717,0 -74.2079077830597,10.904296052465,0 -74.207908595594,10.9042959516847,0 -74.2079094083207,10.9042958501658,0 -74.2079102212405,10.9042957479289,0 -74.2079110343542,10.9042956449948,0 -74.2079118476624,10.904295541384,0 -74.2079126611659,10.9042954371173,0 -74.2079134748656,10.9042953322153,0 -74.207914288762,10.9042952266987,0 -74.2079151028558,10.9042951205881,0 -74.2079159171479,10.9042950139043,0 -74.207916731639,10.9042949066678,0 -74.2079175463298,10.9042947988993,0 -74.2079183612209,10.9042946906195,0 -74.2079191763132,10.9042945818492,0 -74.2079199916074,10.9042944726088,0 -74.2079208071042,10.9042943629191,0 -74.2079216228043,10.9042942528008,0 -74.2079224387084,10.9042941422745,0 -74.2079232548174,10.9042940313609,0 -74.2079240711318,10.9042939200807,0 -74.2079248876525,10.9042938084544,0 -74.2079257043802,10.9042936965028,0 -74.2079265213155,10.9042935842466,0 -74.2079273384593,10.9042934717064,0 -74.2079281558122,10.9042933589029,0 -74.207928973375,10.9042932458567,0 -74.2079306091332,10.904293019119,0 -74.2079322457396,10.9042927916586,0 -74.2079338832001,10.904292563642,0 -74.2079355215204,10.9042923352565,0 -74.2079388007694,10.9042918780923,0 -74.207940441713,10.9042916496599,0 -74.2079420835458,10.9042914215583,0 -74.2079437262753,10.9042911939608,0 -74.2079445479787,10.9042910804052,0 -74.207945369909,10.9042909670405,0 -74.2079461920673,10.9042908538885,0 -74.2079470144543,10.9042907409708,0 -74.2079478370712,10.9042906283089,0 -74.2079486599187,10.9042905159247,0 -74.2079494829978,10.9042904038397,0 -74.2079503063095,10.9042902920756,0 -74.2079511298546,10.9042901806541,0 -74.2079519536342,10.9042900695967,0 -74.2079527776491,10.9042899589252,0 -74.2079536019002,10.9042898486612,0 -74.2079544263886,10.9042897388263,0 -74.207955251115,10.9042896294423,0 -74.2079560760806,10.9042895205307,0 -74.2079569012861,10.9042894121133,0 -74.2079577267325,10.9042893042116,0 -74.2079585524208,10.9042891968474,0 -74.2079593783518,10.9042890900422,0 -74.2079602045266,10.9042889838178,0 -74.2079610309459,10.9042888781958,0 -74.2079618576109,10.9042887731978,0 -74.2079626845223,10.9042886688454,0 -74.2079635116812,10.9042885651605,0 -74.2079639253537,10.904288513575,0 -74.2079643390883,10.9042884621645,0 -74.2079647528853,10.9042884109317,0 -74.2079651667448,10.9042883598792,0 -74.2079655806668,10.9042883090098,0 -74.2079659946515,10.9042882583262,0 -74.2079664086995,10.9042882078314,0 -74.2079668228271,10.9042881575376,0 -74.2079672370408,10.9042881074513,0 -74.2079676513399,10.9042880575747,0 -74.2079680657232,10.9042880079102,0 -74.2079684801898,10.9042879584598,0 -74.2079688947386,10.9042879092258,0 -74.2079693093687,10.9042878602104,0 -74.2079697240791,10.9042878114157,0 -74.2079701388687,10.904287762844,0 -74.2079705537367,10.9042877144974,0 -74.2079709686819,10.9042876663781,0 -74.2079713837034,10.9042876184884,0 -74.2079717988001,10.9042875708304,0 -74.2079722139711,10.9042875234064,0 -74.2079726292155,10.9042874762184,0 -74.2079730445321,10.9042874292688,0 -74.20797345992,10.9042873825596,0 -74.2079738753782,10.9042873360932,0 -74.2079742909057,10.9042872898717,0 -74.2079747065014,10.9042872438972,0 -74.2079751221645,10.9042871981721,0 -74.2079755378939,10.9042871526984,0 -74.2079759536885,10.9042871074784,0 -74.2079763695475,10.9042870625142,0 -74.2079767854698,10.9042870178082,0 -74.2079772014544,10.9042869733623,0 -74.2079776175003,10.904286929179,0 -74.2079780336065,10.9042868852602,0 -74.207978449772,10.9042868416083,0 -74.2079788659958,10.9042867982255,0 -74.207979282277,10.9042867551138,0 -74.2079796986144,10.9042867122756,0 -74.2079801150072,10.9042866697131,0 -74.2079805314543,10.9042866274283,0 -74.2079809479548,10.9042865854235,0 -74.2079813645075,10.9042865437009,0 -74.2079817811116,10.9042865022627,0 -74.207982197766,10.9042864611112,0 -74.2079826144698,10.9042864202484,0 -74.2079830312218,10.9042863796765,0 -74.2079834480213,10.9042863393979,0 -74.207983864867,10.9042862994146,0 -74.2079842817581,10.9042862597289,0 -74.2079846986935,10.9042862203429,0 -74.2079851156723,10.9042861812589,0 -74.2079855326934,10.904286142479,0 -74.2079859497559,10.9042861040055,0 -74.2079863668587,10.9042860658405,0 -74.2079867840009,10.9042860279862,0 -74.2079872011815,10.9042859904448,0 -74.2079876183993,10.9042859532186,0 -74.2079880356536,10.9042859163097,0 -74.2079884529432,10.9042858797203,0 -74.2079888702671,10.9042858434525,0 -74.2079892876245,10.9042858075087,0 -74.2079897050142,10.904285771891,0 -74.2079901224352,10.9042857366015,0 -74.2079905398867,10.9042857016426,0 -74.2079909573675,10.9042856670163,0 -74.2079913748766,10.9042856327248,0 -74.2079917924132,10.9042855987705,0 -74.2079922099762,10.9042855651553,0 -74.2079926275645,10.9042855318817,0 -74.2079930451772,10.9042854989517,0 -74.2079934628132,10.9042854663675,0 -74.2079938804717,10.9042854341313,0 -74.2079942981515,10.9042854022454,0 -74.2079947158518,10.9042853707119,0 -74.2079951335714,10.904285339533,0 -74.2079955513095,10.904285308711,0 -74.2079959690649,10.9042852782479,0 -74.2079963868367,10.904285248146,0 -74.2079968046239,10.9042852184076,0 -74.2079972224256,10.9042851890347,0 -74.2079976402406,10.9042851600296,0 -74.207998058068,10.9042851313945,0 -74.2079984759069,10.9042851031315,0 -74.2079988937561,10.904285075243,0 -74.2079993116148,10.9042850477309,0 -74.2079997294813,10.9042850205957,0 -74.208000147346,10.9042849938079,0 -74.2080005652059,10.9042849673562,0 -74.2080009830607,10.9042849412396,0 -74.2080014009104,10.9042849154572,0 -74.2080018187551,10.9042848900078,0 -74.2080022365946,10.9042848648906,0 -74.2080026544289,10.9042848401044,0 -74.2080030722578,10.9042848156482,0 -74.2080034900815,10.9042847915212,0 -74.2080039078997,10.9042847677221,0 -74.2080043257124,10.9042847442501,0 -74.2080047435196,10.9042847211041,0 -74.2080051613213,10.9042846982831,0 -74.2080055791173,10.9042846757861,0 -74.2080059969076,10.9042846536121,0 -74.2080064146921,10.90428463176,0 -74.2080068324708,10.9042846102288,0 -74.2080072502436,10.9042845890176,0 -74.2080076680105,10.9042845681254,0 -74.2080080857713,10.904284547551,0 -74.2080085035261,10.9042845272935,0 -74.2080089212748,10.904284507352,0 -74.2080093390173,10.9042844877253,0 -74.2080097567536,10.9042844684124,0 -74.2080101744835,10.9042844494124,0 -74.2080105922071,10.9042844307242,0 -74.2080110099243,10.9042844123469,0 -74.208011427635,10.9042843942794,0 -74.2080118453392,10.9042843765206,0 -74.2080122630367,10.9042843590697,0 -74.2080126807276,10.9042843419255,0 -74.2080130984118,10.904284325087,0 -74.2080135160893,10.9042843085534,0 -74.2080139337599,10.9042842923234,0 -74.2080143514235,10.9042842763962,0 -74.2080147690803,10.9042842607707,0 -74.20801518673,10.9042842454458,0 -74.2080156043726,10.9042842304207,0 -74.2080160220082,10.9042842156942,0 -74.2080164396365,10.9042842012654,0 -74.2080168572575,10.9042841871332,0 -74.2080172748713,10.9042841732966,0 -74.2080176924777,10.9042841597547,0 -74.2080181100767,10.9042841465064,0 -74.2080185276681,10.9042841335506,0 -74.2080189452521,10.9042841208865,0 -74.2080193628284,10.9042841085129,0 -74.208019780397,10.9042840964289,0 -74.2080201979579,10.9042840846334,0 -74.2080206155111,10.9042840731254,0 -74.2080210330564,10.904284061904,0 -74.2080214505937,10.904284050968,0 -74.2080218681232,10.9042840403166,0 -74.2080222856445,10.9042840299486,0 -74.2080227031579,10.9042840198631,0 -74.208023120663,10.904284010059,0 -74.20802353816,10.9042840005354,0 -74.2080239556487,10.9042839912912,0 -74.208024373129,10.9042839823255,0 -74.208024790601,10.9042839736371,0 -74.2080252080646,10.9042839652251,0 -74.2080256255197,10.9042839570885,0 -74.2080260429662,10.9042839492263,0 -74.208026460404,10.9042839416374,0 -74.2080268778332,10.9042839343208,0 -74.2080272952537,10.9042839272756,0 -74.2080277126654,10.9042839205007,0 -74.2080281300681,10.9042839139951,0 -74.208028547462,10.9042839077578,0 -74.208028964847,10.9042839017877,0 -74.2080293822228,10.9042838960839,0 -74.2080297995896,10.9042838906454,0 -74.2080302169473,10.9042838854711,0 -74.2080306342957,10.90428388056,0 -74.2080310516348,10.9042838759112,0 -74.2080314689646,10.9042838715235,0 -74.208031886285,10.904283867396,0 -74.208032303596,10.9042838635277,0 -74.2080327208974,10.9042838599176,0 -74.2080331381893,10.9042838565646,0 -74.2080335554716,10.9042838534677,0 -74.2080339727442,10.904283850626,0 -74.208034390007,10.9042838480384,0 -74.20803480726,10.9042838457038,0 -74.2080352245031,10.9042838436214,0 -74.2080356417363,10.9042838417896,0 -74.2080360589595,10.9042838402074,0 -74.2080364761727,10.9042838388738,0 -74.2080368933758,10.9042838377877,0 -74.2080373105687,10.9042838369482,0 -74.2080377277515,10.9042838363543,0 -74.208038144924,10.904283836005,0 -74.2080385620863,10.9042838358993,0 -74.2080389792383,10.9042838360363,0 -74.2080393963798,10.9042838364149,0 -74.208039813511,10.9042838370341,0 -74.2080402306317,10.9042838378929,0 -74.2080406477419,10.9042838389904,0 -74.2080410648415,10.9042838403256,0 -74.2080414819305,10.9042838418975,0 -74.2080418990089,10.904283843705,0 -74.2080423160766,10.9042838457472,0 -74.2080427331335,10.9042838480231,0 -74.2080431501796,10.9042838505318,0 -74.2080435672149,10.9042838532721,0 -74.2080439842393,10.9042838562432,0 -74.2080444012527,10.904283859444,0 -74.2080448182552,10.9042838628735,0 -74.2080452352466,10.9042838665308,0 -74.208045652227,10.9042838704149,0 -74.2080460691962,10.9042838745247,0 -74.2080464861542,10.9042838788593,0 -74.2080469031011,10.9042838834177,0 -74.2080473200366,10.9042838881989,0 -74.2080477369609,10.9042838932019,0 -74.2080481538737,10.9042838984257,0 -74.2080485707752,10.9042839038694,0 -74.2080489876652,10.9042839095318,0 -74.2080494045437,10.9042839154121,0 -74.2080498214107,10.9042839215093,0 -74.208050238266,10.9042839278223,0 -74.2080506551097,10.9042839343501,0 -74.2080510719418,10.9042839410919,0 -74.208051488762,10.9042839480465,0 -74.2080519055705,10.904283955213,0 -74.2080523223671,10.9042839625905,0 -74.2080527391519,10.9042839701778,0 -74.2080531559247,10.9042839779741,0 -74.2080535726856,10.9042839859782,0 -74.2080539894344,10.9042839941894,0 -74.2080544061711,10.9042840026064,0 -74.2080548228957,10.9042840112284,0 -74.2080552396082,10.9042840200544,0 -74.2080556563084,10.9042840290833,0 -74.2080560729964,10.9042840383143,0 -74.2080564896721,10.9042840477462,0 -74.2080569063354,10.9042840573781,0 -74.2080573229863,10.9042840672091,0 -74.2080577396247,10.904284077238,0 -74.2080581562507,10.9042840874639,0 -74.2080585728641,10.904284097886,0 -74.2080589894649,10.904284108503,0 -74.2080594060531,10.9042841193141,0 -74.2080598226285,10.9042841303182,0 -74.2080602391913,10.9042841415144,0 -74.2080606557412,10.9042841529017,0 -74.2080610722783,10.9042841644791,0 -74.2080614888026,10.9042841762456,0 -74.2080619053139,10.9042841882002,0 -74.2080623218122,10.9042842003419,0 -74.2080627382975,10.9042842126696,0 -74.2080631547698,10.9042842251826,0 -74.2080635712289,10.9042842378797,0 -74.2080639876749,10.9042842507599,0 -74.2080644041077,10.9042842638223,0 -74.2080652369334,10.9042842904895,0 -74.2080660697057,10.9042843178735,0 -74.2080669024242,10.9042843459663,0 -74.2080677350886,10.90428437476,0 -74.2080685676984,10.9042844042466,0 -74.2080694002533,10.9042844344182,0 -74.2080702327529,10.9042844652669,0 -74.2080710651967,10.9042844967847,0 -74.2080718975846,10.9042845289638,0 -74.208072729916,10.9042845617962,0 -74.2080735621906,10.9042845952739,0 -74.208074394408,10.904284629389,0 -74.2080752265678,10.9042846641337,0 -74.2080760586696,10.9042846994999,0 -74.2080768907132,10.9042847354798,0 -74.208077722698,10.9042847720654,0 -74.2080785546237,10.9042848092487,0 -74.20807938649,10.904284847022,0 -74.2080802182964,10.9042848853771,0 -74.2080810500426,10.9042849243062,0 -74.2080818817281,10.9042849638015,0 -74.2080827133527,10.9042850038548,0 -74.208083544916,10.9042850444583,0 -74.2080843764175,10.9042850856042,0 -74.2080852078569,10.9042851272843,0 -74.2080860392337,10.9042851694909,0 -74.2080868705477,10.904285212216,0 -74.2080877017985,10.9042852554516,0 -74.2080885329856,10.9042852991899,0 -74.2080893641087,10.9042853434228,0 -74.2080901951674,10.9042853881425,0 -74.2080910261613,10.9042854333411,0 -74.2080918570901,10.9042854790106,0 -74.2080926879533,10.904285525143,0 -74.2080935187507,10.9042855717305,0 -74.2080943494818,10.9042856187651,0 -74.2080951801462,10.9042856662389,0 -74.2080960107435,10.904285714144,0 -74.2080968412734,10.9042857624724,0 -74.2080976717356,10.9042858112162,0 -74.2080985021295,10.9042858603674,0 -74.2080993324549,10.9042859099183,0 -74.2081001627114,10.9042859598606,0 -74.2081009928985,10.9042860101868,0 -74.208101823016,10.9042860608886,0 -74.2081026530633,10.9042861119583,0 -74.2081034830403,10.9042861633878,0 -74.2081043129463,10.9042862151694,0 -74.2081051427812,10.9042862672949,0 -74.2081059725445,10.9042863197566,0 -74.2081068022359,10.9042863725464,0 -74.2081076318548,10.9042864256565,0 -74.2081084614011,10.9042864790789,0 -74.2081092908742,10.9042865328057,0 -74.2081101202739,10.9042865868289,0 -74.2081109495997,10.9042866411407,0 -74.2081117788513,10.904286695733,0 -74.2081126080282,10.9042867505981,0 -74.2081134371302,10.9042868057278,0 -74.2081142661568,10.9042868611144,0 -74.2081150951076,10.9042869167498,0 -74.2081159239823,10.9042869726262,0 -74.2081167527805,10.9042870287356,0 -74.2081175815018,10.9042870850701,0 -74.2081184101458,10.9042871416218,0 -74.2081192387122,10.9042871983826,0 -74.2081200672005,10.9042872553448,0 -74.2081208956105,10.9042873125003,0 -74.2081217239416,10.9042873698413,0 -74.2081233803661,10.9042874850479,0 -74.2081250364708,10.9042876009011,0 -74.2081266922529,10.9042877173374,0 -74.2081283477092,10.9042878342934,0 -74.2081300028369,10.9042879517096,0 -74.2081316576331,10.9042880695272,0 -74.2081333120943,10.9042881876844,0 -74.2081349662174,10.9042883061191,0 -74.2081382734359,10.9042885435735,0 -74.2081415792622,10.9042887813946,0 -74.20814488367,10.9042890190867,0 -74.2081465353337,10.9042891377294,0 -74.2081481866329,10.9042892561541,0 -74.2081498375643,10.9042893742986,0 -74.2081514881246,10.9042894921011,0 -74.2081531383105,10.9042896094995,0 -74.2081547881187,10.9042897264319,0 -74.208156437546,10.9042898428364,0 -74.2081580865889,10.904289958651,0 -74.2081597352444,10.9042900738136,0 -74.208161383509,10.9042901882625,0 -74.2081622074937,10.9042902451998,0 -74.2081630313795,10.9042903019355,0 -74.2081638551659,10.9042903584617,0 -74.2081646788525,10.9042904147707,0 -74.2081655024389,10.9042904708548,0 -74.2081663259248,10.9042905267062,0 -74.2081671493096,10.9042905823171,0 -74.2081679725931,10.9042906376799,0 -74.2081687957747,10.9042906927868,0 -74.208169618854,10.90429074763,0 -74.2081704418308,10.9042908022018,0 -74.2081712647044,10.9042908564945,0 -74.2081720874746,10.9042909105002,0 -74.2081729101409,10.9042909642113,0 -74.2081737327029,10.9042910176201,0 -74.2081745551602,10.9042910707186,0 -74.2081753775413,10.9042911234871,0 -74.2081761998864,10.9042911759071,0 -74.2081770221971,10.9042912279809,0 -74.2081778444746,10.9042912797105,0 -74.2081786667201,10.9042913310984,0 -74.2081794889349,10.9042913821466,0 -74.2081803111202,10.9042914328576,0 -74.2081811332773,10.9042914832334,0 -74.2081819554074,10.9042915332764,0 -74.2081827775118,10.9042915829888,0 -74.2081835995917,10.9042916323729,0 -74.2081844216483,10.9042916814308,0 -74.208185243683,10.9042917301649,0 -74.2081860656969,10.9042917785774,0 -74.2081868876914,10.9042918266705,0 -74.2081877096675,10.9042918744465,0 -74.2081885316267,10.9042919219076,0 -74.2081893535702,10.9042919690561,0 -74.2081901754991,10.9042920158941,0 -74.2081909974148,10.9042920624241,0 -74.2081918193185,10.9042921086481,0 -74.2081926412114,10.9042921545685,0 -74.2081934630948,10.9042922001875,0 -74.2081942849699,10.9042922455072,0 -74.208195106838,10.9042922905301,0 -74.2081959287003,10.9042923352584,0 -74.2081967505582,10.9042923796941,0 -74.2081975724127,10.9042924238397,0 -74.2081983942653,10.9042924676974,0 -74.208199216117,10.9042925112694,0 -74.2082000379692,10.9042925545579,0 -74.2082008598232,10.9042925975652,0 -74.2082016816801,10.9042926402935,0 -74.2082025035411,10.9042926827452,0 -74.2082033254077,10.9042927249224,0 -74.208204147281,10.9042927668273,0 -74.2082049691622,10.9042928084623,0 -74.2082057910526,10.9042928498295,0 -74.2082066129535,10.9042928909313,0 -74.2082074348661,10.9042929317698,0 -74.2082082567916,10.9042929723473,0 -74.2082090787313,10.9042930126661,0 -74.2082099006865,10.9042930527283,0 -74.2082107226583,10.9042930925363,0 -74.2082115446481,10.9042931320923,0 -74.2082123666571,10.9042931713985,0 -74.2082131886864,10.9042932104572,0 -74.2082140107375,10.9042932492706,0 -74.2082148328115,10.9042932878409,0 -74.2082156549097,10.9042933261705,0 -74.2082164770332,10.9042933642615,0 -74.2082172991835,10.9042934021162,0 -74.2082181213617,10.9042934397369,0 -74.208218943569,10.9042934771257,0 -74.2082197658068,10.904293514285,0 -74.2082205880762,10.904293551217,0 -74.2082214103727,10.9042935879223,0 -74.2082222326869,10.9042936244006,0 -74.2082230550192,10.9042936606547,0 -74.2082238773704,10.9042936966872,0 -74.208224699741,10.9042937325009,0 -74.2082255221317,10.9042937680984,0 -74.208226344543,10.9042938034826,0 -74.2082271669757,10.904293838656,0 -74.2082279894303,10.9042938736215,0 -74.2082288119076,10.9042939083817,0 -74.208229634408,10.9042939429394,0 -74.2082304569323,10.9042939772973,0 -74.2082312794811,10.904294011458,0 -74.2082321020551,10.9042940454244,0 -74.2082329246548,10.9042940791991,0 -74.2082337472808,10.9042941127848,0 -74.2082345699339,10.9042941461843,0 -74.2082353926147,10.9042941794003,0 -74.2082370380617,10.9042942452926,0 -74.2082386836268,10.9042943104835,0 -74.2082403293153,10.9042943749946,0 -74.2082419751321,10.9042944388478,0 -74.2082436210823,10.9042945020647,0 -74.208245267171,10.9042945646672,0 -74.2082469134031,10.9042946266768,0 -74.2082485597839,10.9042946881155,0 -74.2082502063183,10.9042947490049,0 -74.2082518530114,10.9042948093667,0 -74.2082534998683,10.9042948692228,0 -74.208255146894,10.9042949285948,0 -74.2082567940936,10.9042949875044,0 -74.2082584414721,10.9042950459735,0 -74.2082600890347,10.9042951040238,0 -74.2082617367863,10.904295161677,0 -74.2082633847321,10.9042952189548,0 -74.2082650328771,10.904295275879,0 -74.2082666812264,10.9042953324713,0 -74.2082683297849,10.9042953887535,0 -74.2082699785579,10.9042954447473,0 -74.2082716275503,10.9042955004744,0 -74.2082732767672,10.9042955559566,0 -74.2082749262137,10.9042956112156,0 -74.2082765758949,10.9042956662732,0 -74.2082798759262,10.9042957760051,0 -74.2082864784671,10.9042959951765,0 -74.2082897809263,10.9042961051495,0 -74.2082930841447,10.904296215736,0 -74.2082947360307,10.9042962713426,0 -74.208296388097,10.9042963272024,0 -74.2082980403406,10.9042963833489,0 -74.2082996927583,10.9042964398154,0 -74.2083013453469,10.904296496635,0 -74.2083029981033,10.9042965538413,0 -74.2083046510245,10.9042966114673,0 -74.2083063041072,10.9042966695466,0 -74.2083079573482,10.9042967281123,0 -74.2083096107446,10.9042967871979,0 -74.2083112642931,10.9042968468365,0 -74.2083129179906,10.9042969070615,0 -74.2083145718339,10.9042969679063,0 -74.20831622582,10.9042970294041,0 -74.2083178799457,10.9042970915883,0 -74.2083187070599,10.9042971229481,0 -74.2083195342079,10.9042971544921,0 -74.2083203613891,10.9042971862243,0 -74.2083211886033,10.9042972181489,0 -74.2083220158501,10.90429725027,0 -74.208322843129,10.9042972825919,0 -74.2083236704397,10.9042973151187,0 -74.2083244977817,10.9042973478546,0 -74.2083253251547,10.9042973808036,0 -74.2083261525583,10.9042974139701,0 -74.2083269799921,10.9042974473581,0 -74.2083278074557,10.9042974809719,0 -74.2083286349487,10.9042975148155,0 -74.2083294624707,10.9042975488932,0 -74.2083302900214,10.904297583209,0 -74.2083311176003,10.9042976177673,0 -74.208331945207,10.904297652572,0 -74.2083327728412,10.9042976876275,0 -74.2083336005024,10.9042977229379,0 -74.2083344281903,10.9042977585072,0 -74.2083352559045,10.9042977943398,0 -74.2083360836446,10.9042978304397,0 -74.2083369114101,10.9042978668112,0 -74.2083377392008,10.9042979034583,0 -74.2083385670161,10.9042979403852,0 -74.2083393948558,10.9042979775962,0 -74.2083402227194,10.9042980150954,0 -74.2083410506065,10.9042980528868,0 -74.2083418785167,10.9042980909748,0 -74.2083427064498,10.9042981293635,0 -74.2083435344051,10.904298168057,0 -74.2083443623824,10.9042982070595,0 -74.2083451903813,10.9042982463751,0 -74.2083460184014,10.904298286008,0 -74.2083468464423,10.9042983259625,0 -74.2083476745035,10.9042983662426,0 -74.2083485025848,10.9042984068525,0 -74.2083493306856,10.9042984477965,0 -74.2083501588057,10.904298489079,0 -74.2083509869447,10.9042985307042,0 -74.2083518151021,10.9042985726762,0 -74.2083526432776,10.9042986149994,0 -74.2083534714707,10.9042986576779,0 -74.2083542996811,10.9042987007158,0 -74.2083551279083,10.9042987441175,0 -74.208355956152,10.9042987878871,0 -74.2083567844118,10.9042988320288,0 -74.2083576126872,10.9042988765468,0 -74.2083584409779,10.9042989214453,0 -74.2083592692835,10.9042989667286,0 -74.2083600976036,10.9042990124008,0 -74.2083609259377,10.9042990584662,0 -74.2083617542856,10.9042991049289,0 -74.2083625826467,10.9042991517932,0 -74.2083634110208,10.9042991990632,0 -74.2083642394073,10.9042992467432,0 -74.208365067806,10.9042992948374,0 -74.2083658962163,10.9042993433499,0 -74.208366724638,10.904299392285,0 -74.2083675530706,10.9042994416469,0 -74.2083683815137,10.9042994914398,0 -74.2083692099669,10.9042995416679,0 -74.2083700384298,10.9042995923354,0 -74.2083708669021,10.9042996434465,0 -74.2083716953833,10.9042996950053,0 -74.208372523873,10.9042997470163,0 -74.2083733523709,10.9042997994834,0 -74.2083741808765,10.9042998524109,0 -74.2083750093895,10.9042999058031,0 -74.2083758379094,10.9042999596641,0 -74.2083766664359,10.9043000139982,0 -74.2083774949685,10.9043000688095,0 -74.2083783235069,10.9043001241022,0 -74.2083791520507,10.9043001798806,0 -74.2083799805994,10.9043002361489,0 -74.2083808091526,10.9043002929112,0 -74.2083816377101,10.9043003501718,0 -74.2083824662714,10.9043004079348,0 -74.208383294836,10.9043004662046,0 -74.2083841234036,10.9043005249852,0 -74.208384951971,10.9043005842922,0 -74.2083857805192,10.9043006441946,0 -74.2083866090418,10.9043007046963,0 -74.2083874375351,10.9043007657894,0 -74.2083882659956,10.9043008274655,0 -74.2083890944195,10.9043008897166,0 -74.2083899228033,10.9043009525345,0 -74.2083907511433,10.9043010159109,0 -74.2083915794359,10.9043010798378,0 -74.2084996850106,10.9043061508978,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#lindero">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2067077985936,10.9042189962326,0 -74.2067109542421,10.904170118565,0 -74.2067129549751,10.9041556684249,0 -74.2067139551196,10.9041484433274,0 -74.2067149550625,10.9041412182051,0 -74.2067159547632,10.904133993053,0 -74.2067169541815,10.9041267678661,0 -74.2067179532771,10.9041195426394,0 -74.2067189520096,10.904112317368,0 -74.2067199503386,10.9041050920469,0 -74.2067209482239,10.9040978666711,0 -74.206721945625,10.9040906412356,0 -74.2067229425017,10.9040834157356,0 -74.2067239388137,10.9040761901659,0 -74.2067249345204,10.9040689645217,0 -74.2067259295818,10.904061738798,0 -74.2067269239573,10.9040545129898,0 -74.2067274208753,10.9040509000524,0 -74.2067279176067,10.9040472870921,0 -74.2067284141464,10.9040436741081,0 -74.2067289104895,10.9040400611,0 -74.2067294066309,10.9040364480669,0 -74.2067299025656,10.9040328350084,0 -74.2067303982885,10.9040292219238,0 -74.2067308937945,10.9040256088125,0 -74.2067313890787,10.9040219956738,0 -74.2067318841359,10.9040183825072,0 -74.2067323789612,10.9040147693121,0 -74.2067328735495,10.9040111560877,0 -74.2067333678958,10.9040075428334,0 -74.2067338619949,10.9040039295488,0 -74.2067343558419,10.9040003162331,0 -74.2067348494318,10.9039967028857,0 -74.2067353427594,10.903993089506,0 -74.2067358358198,10.9039894760933,0 -74.2067363286079,10.9039858626472,0 -74.2067368211186,10.9039822491668,0 -74.206737313347,10.9039786356517,0 -74.206737805288,10.9039750221011,0 -74.2067382969364,10.9039714085145,0 -74.2067387882874,10.9039677948912,0 -74.2067392793358,10.9039641812307,0 -74.2067397700766,10.9039605675323,0 -74.2067402605048,10.9039569537953,0 -74.2067407506153,10.9039533400192,0 -74.2067412404031,10.9039497262034,0 -74.2067417298631,10.9039461123472,0 -74.2067422189903,10.9039424984499,0 -74.2067427077797,10.9039388845111,0 -74.2067431962262,10.90393527053,0 -74.2067436843247,10.903931656506,0 -74.2067441720703,10.9039280424385,0 -74.2067446594578,10.903924428327,0 -74.2067451464823,10.9039208141707,0 -74.2067456331387,10.903917199969,0 -74.2067461194219,10.9039135857214,0 -74.206746605327,10.9039099714271,0 -74.2067470908488,10.9039063570857,0 -74.2067475759823,10.9039027426964,0 -74.2067480607226,10.9038991282587,0 -74.2067485450644,10.9038955137719,0 -74.2067490290029,10.9038918992353,0 -74.206749512533,10.9038882846485,0 -74.2067499956495,10.9038846700107,0 -74.2067504783476,10.9038810553213,0 -74.206750960622,10.9038774405798,0 -74.2067514424679,10.9038738257854,0 -74.2067519238801,10.9038702109377,0 -74.2067524048536,10.9038665960358,0 -74.2067528853833,10.9038629810793,0 -74.2067533654643,10.9038593660675,0 -74.2067538450915,10.9038557509998,0 -74.2067543242598,10.9038521358756,0 -74.2067548029642,10.9038485206942,0 -74.2067552811996,10.903844905455,0 -74.2067557589611,10.9038412901574,0 -74.2067562362435,10.9038376748008,0 -74.2067567130419,10.9038340593846,0 -74.2067571893511,10.9038304439081,0 -74.2067576651662,10.9038268283707,0 -74.206758140482,10.9038232127718,0 -74.2067586152936,10.9038195971108,0 -74.206759089596,10.903815981387,0 -74.206759563384,10.9038123655999,0 -74.2067600366526,10.9038087497487,0 -74.2067605093968,10.903805133833,0 -74.2067609816116,10.903801517852,0 -74.2067614532918,10.9037979018052,0 -74.2067619244326,10.9037942856919,0 -74.2067623950287,10.9037906695115,0 -74.2067628650752,10.9037870532634,0 -74.206763334567,10.9037834369469,0 -74.2067638034992,10.9037798205615,0 -74.2067642718665,10.9037762041065,0 -74.2067647396641,10.9037725875813,0 -74.2067652068869,10.9037689709853,0 -74.2067656735297,10.9037653543178,0 -74.2067661395877,10.9037617375783,0 -74.2067666050557,10.903758120766,0 -74.2067670699286,10.9037545038805,0 -74.2067675342015,10.903750886921,0 -74.2067679978694,10.903747269887,0 -74.2067684609271,10.9037436527778,0 -74.2067689233696,10.9037400355929,0 -74.2067693851919,10.9037364183314,0 -74.206769846389,10.903732800993,0 -74.2067703069592,10.9037291835774,0 -74.2067707669051,10.9037255660848,0 -74.2067712262296,10.9037219485157,0 -74.2067716849356,10.9037183308704,0 -74.2067721430261,10.9037147131494,0 -74.206772600504,10.9037110953529,0 -74.2067730573721,10.9037074774814,0 -74.2067735136335,10.9037038595352,0 -74.206773969291,10.9037002415148,0 -74.2067744243475,10.9036966234203,0 -74.206774878806,10.9036930052524,0 -74.2067753326694,10.9036893870112,0 -74.2067757859407,10.9036857686972,0 -74.2067762386226,10.9036821503108,0 -74.2067766907182,10.9036785318523,0 -74.2067771422304,10.9036749133221,0 -74.206777593162,10.9036712947206,0 -74.2067780435161,10.9036676760481,0 -74.2067784932955,10.9036640573051,0 -74.2067789425031,10.9036604384918,0 -74.206779391142,10.9036568196086,0 -74.2067798392148,10.9036532006561,0 -74.2067802867248,10.9036495816344,0 -74.2067807336746,10.9036459625439,0 -74.2067811800673,10.9036423433851,0 -74.2067816259058,10.9036387241584,0 -74.2067820711929,10.903635104864,0 -74.2067825159316,10.9036314855024,0 -74.2067829601249,10.9036278660739,0 -74.2067834037756,10.9036242465789,0 -74.2067838468867,10.9036206270177,0 -74.2067842894611,10.9036170073909,0 -74.2067847315017,10.9036133876986,0 -74.2067851730114,10.9036097679413,0 -74.2067856139931,10.9036061481194,0 -74.2067860544499,10.9036025282332,0 -74.2067864943845,10.9035989082831,0 -74.2067869337999,10.9035952882695,0 -74.206787372699,10.9035916681927,0 -74.2067878110848,10.9035880480532,0 -74.2067882489601,10.9035844278512,0 -74.206788686328,10.9035808075872,0 -74.2067891231912,10.9035771872615,0 -74.2067895595527,10.9035735668745,0 -74.2067899954155,10.9035699464266,0 -74.2067904307825,10.9035663259182,0 -74.2067908656565,10.9035627053495,0 -74.2067913000405,10.9035590847211,0 -74.2067917339375,10.9035554640332,0 -74.2067921673503,10.9035518432862,0 -74.2067926002819,10.9035482224805,0 -74.2067930327351,10.9035446016166,0 -74.206793464713,10.9035409806946,0 -74.2067938962183,10.9035373597151,0 -74.2067943272541,10.9035337386784,0 -74.2067947578233,10.9035301175848,0 -74.2067951879288,10.9035264964348,0 -74.2067956175734,10.9035228752286,0 -74.2067960467602,10.9035192539668,0 -74.206796475492,10.9035156326495,0 -74.2067969037717,10.9035120112773,0 -74.2067973316024,10.9035083898505,0 -74.2067977589868,10.9035047683695,0 -74.206798185928,10.9035011468346,0 -74.2067986124288,10.9034975252462,0 -74.2067990384922,10.9034939036046,0 -74.206799464121,10.9034902819104,0 -74.2067998893182,10.9034866601637,0 -74.2068003140868,10.903483038365,0 -74.2068007384296,10.9034794165147,0 -74.2068011623495,10.9034757946131,0 -74.2068015858495,10.9034721726607,0 -74.2068020089325,10.9034685506577,0 -74.2068024316015,10.9034649286045,0 -74.2068028538592,10.9034613065016,0 -74.2068032757088,10.9034576843493,0 -74.2068036971529,10.9034540621479,0 -74.2068041181947,10.9034504398979,0 -74.206804538837,10.9034468175995,0 -74.2068049590828,10.9034431952533,0 -74.2068053789349,10.9034395728595,0 -74.2068057983962,10.9034359504185,0 -74.2068062174698,10.9034323279307,0 -74.2068066361585,10.9034287053965,0 -74.2068070544652,10.9034250828162,0 -74.2068074723929,10.9034214601902,0 -74.2068078899444,10.9034178375189,0 -74.2068083071227,10.9034142148026,0 -74.2068087239307,10.9034105920418,0 -74.2068091403714,10.9034069692368,0 -74.2068095564476,10.9034033463879,0 -74.2068099721623,10.9033997234955,0 -74.2068103875184,10.9033961005601,0 -74.2068108025188,10.903392477582,0 -74.2068112171664,10.9033888545615,0 -74.2068116314642,10.903385231499,0 -74.2068120454151,10.9033816083949,0 -74.2068124590219,10.9033779852496,0 -74.2068128722876,10.9033743620634,0 -74.2068132852152,10.9033707388367,0 -74.2068136978075,10.9033671155699,0 -74.2068141100675,10.9033634922634,0 -74.2068145219981,10.9033598689175,0 -74.2068149336022,10.9033562455325,0 -74.2068153448827,10.903352622109,0 -74.2068157558426,10.9033489986471,0 -74.2068161664847,10.9033453751474,0 -74.206816576812,10.9033417516102,0 -74.2068169868274,10.9033381280358,0 -74.2068173965339,10.9033345044247,0 -74.2068178059343,10.9033308807771,0 -74.2068182150316,10.9033272570935,0 -74.2068186238286,10.9033236333743,0 -74.2068190323284,10.9033200096197,0 -74.2068194405338,10.9033163858303,0 -74.2068198484477,10.9033127620063,0 -74.2068202560731,10.9033091381481,0 -74.2068206634129,10.9033055142561,0 -74.2068210704699,10.9033018903307,0 -74.2068214772472,10.9032982663722,0 -74.2068218837477,10.9032946423811,0 -74.2068222899742,10.9032910183576,0 -74.2068226959297,10.9032873943021,0 -74.2068231016171,10.9032837702151,0 -74.2068235070393,10.9032801460969,0 -74.2068239121993,10.9032765219479,0 -74.2068243170999,10.9032728977684,0 -74.2068247217442,10.9032692735588,0 -74.2068251261349,10.9032656493195,0 -74.206825530275,10.9032620250508,0 -74.2068259341675,10.9032584007532,0 -74.2068263378152,10.903254776427,0 -74.2068267412211,10.9032511520725,0 -74.2068271443881,10.9032475276902,0 -74.2068275473192,10.9032439032804,0 -74.2068279500172,10.9032402788435,0 -74.206828352485,10.9032366543798,0 -74.2068287547256,10.9032330298898,0 -74.2068291567419,10.9032294053738,0 -74.2068295585369,10.9032257808321,0 -74.2068299601134,10.9032221562652,0 -74.2068303614743,10.9032185316734,0 -74.2068307626226,10.9032149070571,0 -74.2068311635612,10.9032112824166,0 -74.2068315642931,10.9032076577524,0 -74.206831964821,10.9032040330647,0 -74.2068323651481,10.903200408354,0 -74.2068327652771,10.9031967836207,0 -74.206833165211,10.9031931588651,0 -74.2068335649527,10.9031895340876,0 -74.2068339645051,10.9031859092885,0 -74.2068343638712,10.9031822844683,0 -74.2068347630539,10.9031786596272,0 -74.2068355608807,10.9031714098842,0 -74.2068363580088,10.9031641600625,0 -74.2068371544616,10.903156910165,0 -74.2068379502625,10.9031496601947,0 -74.2068387454348,10.9031424101546,0 -74.2068395400018,10.9031351600477,0 -74.206840333987,10.9031279098768,0 -74.2068411274137,10.903120659645,0 -74.2068419203052,10.9031134093554,0 -74.2068427126849,10.9031061590107,0 -74.2068435045762,10.9030989086141,0 -74.2068442960024,10.9030916581684,0 -74.2068450869869,10.9030844076768,0 -74.206845877553,10.903077157142,0 -74.2068466677241,10.9030699065671,0 -74.2068474575236,10.9030626559551,0 -74.2068482469747,10.903055405309,0 -74.206849036101,10.9030481546317,0 -74.2068498249256,10.9030409039261,0 -74.2068506134721,10.9030336531953,0 -74.2068514017636,10.9030264024423,0 -74.2068521898237,10.90301915167,0 -74.2068529776756,10.9030119008813,0 -74.2068545528485,10.9029973992669,0 -74.2068561274691,10.9029828976229,0 -74.2068577017243,10.9029683959731,0 -74.20686084978,10.9029393927371,0 -74.2068639974971,10.9029103896149,0 -74.2068671448951,10.9028813866017,0 -74.2068702919901,10.902852383692,0 -74.2068734387979,10.9028233808804,0 -74.2068765853343,10.9027943781613,0 -74.2068797316154,10.9027653755294,0 -74.2068828776572,10.9027363729791,0 -74.2068860234753,10.9027073705051,0 -74.206889169086,10.9026783681019,0 -74.2068954597482,10.902620363486,0 -74.2069017497711,10.9025623590878,0 -74.2069080392822,10.9025043548638,0 -74.2069143284089,10.9024463507702,0 -74.2069269060183,10.9023303428002,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+</Folder>
+</Document></kml>

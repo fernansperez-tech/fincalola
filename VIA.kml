@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document id="root_doc">
+<Schema name="via" id="via">
+	<SimpleField name="descriptio" type="string"></SimpleField>
+	<SimpleField name="timestamp" type="string"></SimpleField>
+	<SimpleField name="begin" type="string"></SimpleField>
+	<SimpleField name="end" type="string"></SimpleField>
+	<SimpleField name="altitudeMo" type="string"></SimpleField>
+	<SimpleField name="tessellate" type="float"></SimpleField>
+	<SimpleField name="extrude" type="float"></SimpleField>
+	<SimpleField name="visibility" type="float"></SimpleField>
+	<SimpleField name="drawOrder" type="float"></SimpleField>
+	<SimpleField name="icon" type="string"></SimpleField>
+</Schema>
+<Folder><name>via</name>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#via">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.208692553088,10.9009103537735,0 -74.2087389225847,10.902356801868,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#via">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2114805952216,10.9004336018202,0 -74.2102814437503,10.9006330578266,0 -74.2088359877896,10.9008860928809,0 -74.2085005781718,10.9009451738615,0 -74.2079836574269,10.9010362264937,0 -74.2074118970769,10.9011360194439,0 -74.2070827604266,10.9011379531229,0 -74.2065968851544,10.9010547244006,0 -74.2055505350667,10.9010219748844,0 -74.2038582973821,10.9010044532016,0 -74.2037613944127,10.9010029547052,0 -74.2031137988519,10.9010933728356,0 -74.2030945985253,10.9010926027451,0 -74.2029565523835,10.9010208186227,0 -74.2028569850658,10.9007780270778,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#via">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2114805828599,10.9004061012041,0 -74.2102767736124,10.9006063319506,0 -74.2088311874187,10.9008593898014,0 -74.2084957633445,10.900918473328,0 -74.2079788639248,10.9010095222032,0 -74.2074094117555,10.9011089122936,0 -74.2070850398902,10.9011108179792,0 -74.2065996761847,10.9010276768824,0 -74.2055511131422,10.900994858105,0 -74.2038586558075,10.9009773341471,0 -74.2037596793934,10.9009758035868,0 -74.2031124247541,10.9010661741216,0 -74.2031018970116,10.9010657518729,0 -74.2029782134769,10.9010014363218,0 -74.2028824168494,10.9007678395181,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#via">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2114806075832,10.9004611024361,0 -74.2102861138891,10.9006597837024,0 -74.2088407881613,10.9009127959603,0 -74.208505393,10.9009718743949,0 -74.2079884509299,10.901062930784,0 -74.2074143823987,10.9011631265942,0 -74.2070804809625,10.9011650882665,0 -74.2065940941236,10.9010817719187,0 -74.2055499569911,10.9010490916638,0 -74.2038579389566,10.9010315722559,0 -74.2037631094324,10.9010301058236,0 -74.2031151729501,10.9011205715494,0 -74.2030873000377,10.901119453617,0 -74.2029348912875,10.9010402009221,0 -74.2028315532804,10.9007882146354,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#via">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.208738922981,10.9023577059102,0 -74.2086934632876,10.9009387466597,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#via">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2087114952712,10.9023585642391,0 -74.2086660357075,10.9009396049831,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#via">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2087663506906,10.9023568475789,0 -74.2087208908674,10.9009378883339,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#via">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1973079900912,10.9010354865552,0 -74.1960467109632,10.9009835651753,0 -74.1945327960923,10.9009260300682,0 -74.1936439222166,10.9008546167974,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#via">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1973091320158,10.9010083887639,0 -74.1960478091579,10.9009564655824,0 -74.1945344357371,10.9008989510528,0 -74.1936461456113,10.9008275846794,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#via">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.1973102739401,10.9009812909726,0 -74.1960489073523,10.9009293659896,0 -74.1945360753816,10.9008718720373,0 -74.1936483690056,10.9008005525614,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#via">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2092922588949,10.9089209111492,0 -74.2090066789256,10.9089140303608,0 -74.2065087578895,10.9087288292133,0 -74.2064031858779,10.9087221537691,0 -74.2051332504019,10.9085955578218,0 -74.2031965494911,10.9084571265169,0 -74.2030672643528,10.9084428844646,0 -74.2026609944908,10.908375508662,0 -74.2018817949376,10.908259889809,0 -74.1999950370416,10.9081437725506,0 -74.1980796132995,10.9080485508339,0 -74.1950125238148,10.9078574372261,0 -74.1936466180023,10.9077653522492,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#via">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2092915900945,10.9089480243514,0 -74.2090053172465,10.9089411268687,0 -74.206506855257,10.90875588562,0 -74.2064009320843,10.9087491879716,0 -74.205130883182,10.9086225807204,0 -74.203194038772,10.9084841391577,0 -74.2030634708369,10.9084697557926,0 -74.2026566863316,10.9084022946425,0 -74.2018788995487,10.9082868854206,0 -74.1999934949091,10.9081708514449,0 -74.1980780605889,10.9080756292033,0 -74.1950107266065,10.9078845003643,0 -74.1936466286104,10.9077925372704,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#via">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.209290921294,10.9089751375535,0 -74.2090039555672,10.9089682233765,0 -74.2065049526241,10.9087829420268,0 -74.2063986782902,10.9087762221739,0 -74.2051285159618,10.908649603619,0 -74.2031915280526,10.9085111517985,0 -74.2030596773204,10.9084966271205,0 -74.2026523781716,10.908429080623,0 -74.2018760041593,10.9083138810323,0 -74.1999919527764,10.9081979303392,0 -74.1980765078781,10.9081027075727,0 -74.1950089293979,10.9079115635025,0 -74.1936466392185,10.9078197222915,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#via">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2092922588949,10.9089209111492,0 -74.210733753536,10.9090681506538,0 -74.2114844885102,10.9090912477803,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#via">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.2092915900945,10.9089480243514,0 -74.2107319136681,10.9090952284413,0 -74.2114845007176,10.9091183825481,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<name>0.000000</name>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#via">
+		<SimpleData name="tessellate">-1</SimpleData>
+		<SimpleData name="extrude">0</SimpleData>
+		<SimpleData name="visibility">-1</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-74.209290921294,10.9089751375535,0 -74.2107300737999,10.9091223062288,0 -74.2114845129251,10.9091455173159,0</coordinates></LineString></MultiGeometry>
+  </Placemark>
+</Folder>
+</Document></kml>
