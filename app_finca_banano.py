@@ -1106,7 +1106,8 @@ elif rol == "Administrador":
             c_hasta = rc2.date_input("Hasta fecha corte:", value=f_max_c, min_value=f_min_c, max_value=f_max_c, key="corte_hasta")
 
             f1, f2, f3 = st.columns(3)
-            filtro_anio = f1.selectbox("Año:", ["Todos"] + sorted(solo_cortes["Anio"].unique().tolist(), reverse=True), key="corte_anio")
+            anios_c_disp = sorted(solo_cortes["Anio"].dropna().astype(str).str.strip().unique().tolist(), reverse=True)
+            filtro_anio = f1.multiselect("Años (vacío = todos):", anios_c_disp, key="corte_anio_multi")
             semanas_c_disp = sorted(solo_cortes["Semana"].unique().tolist(), reverse=True)
             filtro_sem = f2.multiselect("Semanas de Corte (vacío = todas):", semanas_c_disp, key="corte_sem")
             semanas_e_disp = sorted(solo_cortes["Sem_Embolse"].unique().tolist(), reverse=True)
@@ -1115,22 +1116,24 @@ elif rol == "Administrador":
             f4, f5, f6 = st.columns(3)
             edades_disp = [f"{e} sem" for e in sorted(solo_cortes["Edad_Num"].unique().tolist(), reverse=True)]
             filtro_edad = f4.multiselect("Edades al Corte (vacío = todas):", edades_disp, key="corte_edad")
-            filtro_lote = f5.selectbox("Lote:", ["Todos"] + sorted(solo_cortes["Lote"].unique().tolist()), key="corte_lote")
-            filtro_color = f6.selectbox("Color:", ["Todos"] + sorted(solo_cortes["Color_Cinta"].unique().tolist()), key="corte_color")
+            lotes_c_disp = sorted(solo_cortes["Lote"].dropna().astype(str).str.strip().unique().tolist())
+            filtro_lote = f5.multiselect("Lotes (vacío = todos):", lotes_c_disp, key="corte_lote_multi")
+            colores_c_disp = sorted(solo_cortes["Color_Cinta"].dropna().astype(str).str.strip().unique().tolist())
+            filtro_color = f6.multiselect("Colores (vacío = todos):", colores_c_disp, key="corte_color_multi")
 
             df_filtrado = solo_cortes[(solo_cortes["Fecha_Dt"] >= c_desde) & (solo_cortes["Fecha_Dt"] <= c_hasta)].copy()
-            if filtro_anio != "Todos":
-                df_filtrado = df_filtrado[df_filtrado["Anio"] == filtro_anio]
+            if filtro_anio:
+                df_filtrado = df_filtrado[df_filtrado["Anio"].astype(str).str.strip().isin(filtro_anio)]
             if filtro_sem:
                 df_filtrado = df_filtrado[df_filtrado["Semana"].isin(filtro_sem)]
             if filtro_sem_emb:
                 df_filtrado = df_filtrado[df_filtrado["Sem_Embolse"].isin(filtro_sem_emb)]
             if filtro_edad:
                 df_filtrado = df_filtrado[df_filtrado["Edad_Texto"].isin(filtro_edad)]
-            if filtro_lote != "Todos":
-                df_filtrado = df_filtrado[df_filtrado["Lote"] == filtro_lote]
-            if filtro_color != "Todos":
-                df_filtrado = df_filtrado[df_filtrado["Color_Cinta"] == filtro_color]
+            if filtro_lote:
+                df_filtrado = df_filtrado[df_filtrado["Lote"].astype(str).str.strip().isin(filtro_lote)]
+            if filtro_color:
+                df_filtrado = df_filtrado[df_filtrado["Color_Cinta"].astype(str).str.strip().isin(filtro_color)]
 
             pct_vastago = st.number_input("Descuento Vástago (%):", min_value=0.0, max_value=30.0, value=13.0, step=0.5, key="corte_pct_vastago")
 
