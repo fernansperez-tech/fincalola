@@ -1187,7 +1187,18 @@ elif rol == "Administrador":
                 Suma_Neto=("Peso_Neto_kg", "sum")
             )
 
-            mat_corte = pd.DataFrame({"Lote": LOTES})
+            hay_filtro_corte = bool(
+                filtro_anio or filtro_sem or filtro_sem_emb or filtro_edad
+                or filtro_lote or filtro_color or (c_desde > f_min_c) or (c_hasta < f_max_c)
+            )
+            if hay_filtro_corte:
+                lotes_con_corte = set(df_filtrado["Lote"].astype(str).str.strip().unique()) if not df_filtrado.empty else set()
+                lotes_mostrar_c = [lt for lt in LOTES if lt in lotes_con_corte]
+            else:
+                lotes_mostrar_c = LOTES
+
+            mat_corte = pd.DataFrame({"Lote": lotes_mostrar_c})
+
             for col_ce in piv_corte.columns:
                 mat_corte[col_ce] = mat_corte["Lote"].map(piv_corte[col_ce]).fillna(0).astype(int)
 
