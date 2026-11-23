@@ -270,7 +270,7 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     st.write("### 1. Rendimiento por Lote y Hectárea")
     if sel_lote:
         lotes_activos_rep = [str(x).strip() for x in sel_lote]
-    elif sel_color or sel_emp or sel_sem or sel_edad:
+    elif sel_anio or sel_color or sel_emp or sel_sem or sel_edad or (f_desde > fecha_min) or (f_hasta < fecha_max):
         lotes_con_datos = set(df_res["Lote"].astype(str).str.strip().unique()) if not df_res.empty else set()
         lotes_activos_rep = [lt for lt in LOTES if lt in lotes_con_datos]
     else:
