@@ -1619,15 +1619,18 @@ elif rol == "Administrador":
                 gc1, gc2, gc3, gc4 = st.columns(4)
                 c_desde_g = gc1.date_input("Desde corte:", value=min_gc, min_value=min_gc, max_value=max_gc, key="g_c_desde")
                 c_hasta_g = gc2.date_input("Hasta corte:", value=max_gc, min_value=min_gc, max_value=max_gc, key="g_c_hasta")
-                c_lote_g = gc3.selectbox("Lote (Corte):", ["Todos"] + LOTES, key="g_c_lote")
+                lotes_c_g = sorted(cortes_base["Lote"].dropna().astype(str).str.strip().unique().tolist())
+                c_lote_g = gc3.multiselect("Lotes (vacío = todos):", lotes_c_g, key="g_c_lotes_multi")
+
                 sems_c_g = sorted(cortes_base["Semana"].unique().tolist(), reverse=True)
                 ult_sem_corte = [sems_c_g[0]] if sems_c_g else []
                 c_sems_g = gc4.multiselect("Semanas de Corte (vacío = todas):", sems_c_g, default=ult_sem_corte, key="g_c_sems")
 
 
                 cortes_g = cortes_base[(cortes_base["Fecha_Dt"] >= c_desde_g) & (cortes_base["Fecha_Dt"] <= c_hasta_g)].copy()
-                if c_lote_g != "Todos":
-                    cortes_g = cortes_g[cortes_g["Lote"] == c_lote_g]
+                if c_lote_g:
+                    cortes_g = cortes_g[cortes_g["Lote"].astype(str).str.strip().isin(c_lote_g)]
+
                 if c_sems_g:
                     cortes_g = cortes_g[cortes_g["Semana"].isin(c_sems_g)]
 
@@ -1693,10 +1696,11 @@ elif rol == "Administrador":
                 e_eds_g = ge6.multiselect("Edades de Cinta (vacío = todas):", eds_e_g, key="g_e_eds")
 
                 emb_g = emb_base[(emb_base["Fecha_Dt"] >= e_desde_g) & (emb_base["Fecha_Dt"] <= e_hasta_g)].copy()
-                if e_lote_g != "Todos":
-                    emb_g = emb_g[emb_g["Lote"] == e_lote_g]
-                if e_parc_g != "Todos":
-                    emb_g = emb_g[emb_g["Parcelero"] == e_parc_g]
+                if e_lote_g:
+                    emb_g = emb_g[emb_g["Lote"].astype(str).str.strip().isin(e_lote_g)]
+                if e_parc_g:
+                    emb_g = emb_g[emb_g["Parcelero"].astype(str).str.strip().isin(e_parc_g)]
+
                 if e_sems_g:
                     emb_g = emb_g[emb_g["Semana"].isin(e_sems_g)]
                 if e_eds_g:
@@ -1737,8 +1741,9 @@ elif rol == "Administrador":
 
                 st.write("#### 3. Saldos en Mata por Lote y Color de Cinta")
                 df_saldo_g = df_g.copy()
-                if e_lote_g != "Todos":
-                    df_saldo_g = df_saldo_g[df_saldo_g["Lote"] == e_lote_g]
+               if e_lote_g:
+                    df_saldo_g = df_saldo_g[df_saldo_g["Lote"].astype(str).str.strip().isin(e_lote_g)]
+
 
                 ent_sg = df_saldo_g[df_saldo_g["Racimos"] > 0]
                 if e_parc_g != "Todos":
