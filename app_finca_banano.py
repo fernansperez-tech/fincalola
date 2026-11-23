@@ -1257,7 +1257,7 @@ elif rol == "Administrador":
                 use_container_width=True, hide_index=True
             )
 
-                        import io
+            import io
             from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
             from openpyxl.utils import get_column_letter
 
