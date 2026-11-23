@@ -1683,12 +1683,11 @@ elif rol == "Administrador":
                 ge1, ge2, ge3 = st.columns(3)
                 e_desde_g = ge1.date_input("Desde embolse:", value=min_ge, min_value=min_ge, max_value=max_ge, key="g_e_desde")
                 e_hasta_g = ge2.date_input("Hasta embolse:", value=max_ge, min_value=min_ge, max_value=max_ge, key="g_e_hasta")
-                e_lote_g = ge3.selectbox("Lote (Embolse/Saldo):", ["Todos"] + LOTES, key="g_e_lote")
+                e_lote_g = ge3.multiselect("Lotes (Embolse/Saldo, vacío = todos):", LOTES, key="g_e_lotes_multi")
 
                 ge4, ge5, ge6 = st.columns(3)
-                parcs_emb = sorted(emb_base["Parcelero"].astype(str).unique().tolist())
-                e_parc_g = ge4.selectbox("Parcelero:", ["Todos"] + parcs_emb, key="g_e_parc")
-                sems_e_g = sorted(emb_base["Semana"].unique().tolist(), reverse=True)
+                parcs_emb = sorted(emb_base["Parcelero"].dropna().astype(str).str.strip().unique().tolist())
+                e_parc_g = ge4.multiselect("Parceleros (vacío = todos):", parcs_emb, key="g_e_parcs_multi")
                 sems_e_g = sorted(emb_base["Semana"].unique().tolist(), reverse=True)
                 sem_act_def_g = [sem_act_g] if sem_act_g in sems_e_g else []
                 e_sems_g = ge5.multiselect("Semanas de Embolse (vacío = todas):", sems_e_g, default=sem_act_def_g, key="g_e_sems")
@@ -1700,7 +1699,6 @@ elif rol == "Administrador":
                     emb_g = emb_g[emb_g["Lote"].astype(str).str.strip().isin(e_lote_g)]
                 if e_parc_g:
                     emb_g = emb_g[emb_g["Parcelero"].astype(str).str.strip().isin(e_parc_g)]
-
                 if e_sems_g:
                     emb_g = emb_g[emb_g["Semana"].isin(e_sems_g)]
                 if e_eds_g:
