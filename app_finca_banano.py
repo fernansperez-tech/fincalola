@@ -1743,8 +1743,8 @@ elif rol == "Administrador":
                     df_saldo_g = df_saldo_g[df_saldo_g["Lote"].astype(str).str.strip().isin(e_lote_g)]
 
 
-                ent_sg = df_saldo_g[df_saldo_g["Racimos"] > 0]
-                if e_parc_g != "Todos":
+            ent_sg = df_saldo_g[df_saldo_g["Racimos"] > 0]
+            if e_parc_g != "Todos":
                     ent_sg = ent_sg[ent_sg["Parcelero"] == e_parc_g]
                 ent_sg = ent_sg.groupby(["Lote", "Color_Cinta", "Anio", "Semana", "Edad_Txt"])["Racimos"].sum().reset_index()
                 ent_sg = ent_sg.sort_values(by=["Lote", "Color_Cinta", "Anio", "Semana"])
