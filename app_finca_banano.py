@@ -250,8 +250,9 @@ def mostrar_reportes_embolse(df, prefijo, lote_qr="Todos"):
     sel_emp = c_em.multiselect("Empleados (vacío = todos):", emps_disp, key=f"{prefijo}_emp_multi")
 
     df_res = solo_emb[(solo_emb["Fecha_Dt"] >= f_desde) & (solo_emb["Fecha_Dt"] <= f_hasta)].copy()
-    if sel_anio != "Todos":
-        df_res = df_res[df_res["Anio"] == sel_anio]
+    if sel_anio:
+        df_res = df_res[df_res["Anio"].astype(str).str.strip().isin(sel_anio)]
+
     if sel_sem:
         df_res = df_res[df_res["Semana"].isin(sel_sem)]
     if sel_edad:
