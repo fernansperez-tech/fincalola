@@ -1740,7 +1740,7 @@ elif rol == "Administrador":
                 st.write("#### 3. Saldos en Mata por Lote y Color de Cinta")
                 df_saldo_g = df_g.copy()
             
-                       if e_lote_g:
+            if e_lote_g:
                 df_saldo_g = df_saldo_g[df_saldo_g["Lote"].astype(str).str.strip().isin(e_lote_g)]
 
             ent_sg = df_saldo_g[df_saldo_g["Racimos"] > 0]
