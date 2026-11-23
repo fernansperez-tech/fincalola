@@ -1005,6 +1005,7 @@ if rol == "Parcelero (Embolse)":
     racimos = col_cant.number_input("Cantidad de racimos:", min_value=0, max_value=1000, value=0, key=f"reg_cant_{fid}")
     edad_reg = col_edad.number_input("Edad al embolsar (sem):", min_value=0, max_value=15, value=1, key=f"reg_edad_{fid}")
     if st.button("Guardar Embolse", type="primary", key=f"btn_save_emb_{fid}"):
+        lote_sel = lote if "lote" in locals() else lote_detectado
         if lote_sel == "Selecciona Lote..." or parcelero in ["Selecciona Parcelero...", ""] or racimos <= 0:
             st.warning("⚠️ Selecciona el Lote, el Parcelero y escribe una cantidad mayor a 0.")
         else:
