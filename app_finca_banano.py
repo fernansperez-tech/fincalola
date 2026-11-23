@@ -8,6 +8,15 @@ import time
 import gspread
 from google.oauth2.service_account import Credentials
 from datetime import datetime, timedelta
+import os
+import re
+import xml.etree.ElementTree as ET
+import folium
+from streamlit_folium import st_folium
+
+
+
+
 
 st.set_page_config(page_title="Bananera la Lola S.a", page_icon="🍌", layout="centered")
 
@@ -930,6 +939,205 @@ if lote_url_global in LOTES:
     st.session_state["lote_qr_global"] = lote_url_global
 elif "lote_qr_global" not in st.session_state:
     st.session_state["lote_qr_global"] = "Todos"
+    
+def leer_geometrias_kml(nombre_archivo):
+    rutas_posibles = [nombre_archivo, os.path.join("gis", nombre_archivo)]
+    ruta_real = next((r for r in rutas_posibles if os.path.exists(r)), None)
+    if not ruta_real:
+        return []
+    try:
+        tree = ET.parse(ruta_real)
+        root = tree.getroot()
+        elementos = []
+        for pm in root.iter():
+            if pm.tag.endswith("Placemark"):
+                nombre = ""
+                for child in pm:
+                    if child.tag.endswith("name") and child.text:
+                        nombre = child.text.strip()
+                for elem in pm.iter():
+                    if elem.tag.endswith("Polygon"):
+                        for coord_el in elem.iter():
+                            if coord_el.tag.endswith("coordinates") and coord_el.text:
+                                pts = []
+                                for token in coord_el.text.strip().split():
+                                    partes = token.split(",")
+                                    if len(partes) >= 2:
+                                        pts.append([float(partes[1]), float(partes[0])])
+                                if pts:
+                                    elementos.append({"tipo": "polygon", "nombre": nombre, "coords": pts})
+                                break
+                    elif elem.tag.endswith("LineString"):
+                        for coord_el in elem.iter():
+                            if coord_el.tag.endswith("coordinates") and coord_el.text:
+                                pts = []
+                                for token in coord_el.text.strip().split():
+                                    partes = token.split(",")
+                                    if len(partes) >= 2:
+                                        pts.append([float(partes[1]), float(partes[0])])
+                                if pts:
+                                    elementos.append({"tipo": "line", "nombre": nombre, "coords": pts})
+                    elif elem.tag.endswith("Point"):
+                        for coord_el in elem.iter():
+                            if coord_el.tag.endswith("coordinates") and coord_el.text:
+                                partes = coord_el.text.strip().split(",")
+                                if len(partes) >= 2:
+                                    elementos.append({"tipo": "point", "nombre": nombre, "coords": [float(partes[1]), float(partes[0])]})
+        return elementos
+    except Exception:
+        return []
+
+def normalizar_nombre_lote_gis(texto):
+    m = re.search(r"(\d+)", str(texto))
+    if m:
+        num = int(m.group(1))
+        cand = f"Lote {num:02d}"
+        if cand in LOTES:
+            return cand
+    return str(texto).strip()
+
+def punto_en_poligono(lat, lon, poly):
+    dentro = False
+    j = len(poly) - 1
+    for i in range(len(poly)):
+        yi, xi = poly[i][0], poly[i][1]
+        yj, xj = poly[j][0], poly[j][1]
+        if ((yi > lat) != (yj > lat)) and (lon < (xj - xi) * (lat - yi) / (yj - yi + 1e-12) + xi):
+            dentro = not dentro
+        j = i
+    return dentro
+
+def mostrar_mapa_gis(df):
+    st.subheader("🗺️ Mapa Satelital GIS — Bananera la Lola S.A.")
+    linderos = leer_geometrias_kml("LINDERO.kml")
+    if not linderos:
+        st.warning("No se encontró el archivo LINDERO.kml en el repositorio.")
+        return
+
+    textos = leer_geometrias_kml("TEXTO.kml")
+    cables = leer_geometrias_kml("CABLEVIA.kml") + leer_geometrias_kml("CABLE.kml")
+    canales = leer_geometrias_kml("CANAL.kml") + leer_geometrias_kml("CANAL2.kml") + leer_geometrias_kml("CALAN3.kml")
+    vias = leer_geometrias_kml("VIA.kml")
+
+    indicador = st.radio(
+        "Indicador de Calor en Lotes:",
+        ["Saldo en Mata (9-12 sem)", "Total Racimos Embolsados", "Rendimiento (Racimos / Ha)"],
+        horizontal=True, key="gis_indicador"
+    )
+
+    valores_lote = {lt: 0.0 for lt in LOTES}
+    detalle_lote = {lt: "Sin datos registrados" for lt in LOTES}
+
+    if not df.empty:
+        df_g = df.copy()
+        df_g["Racimos"] = pd.to_numeric(df_g["Racimos"], errors="coerce").fillna(0)
+        df_g["Lote_Clean"] = df_g["Lote"].apply(normalizar_nombre_lote_gis)
+
+        if indicador == "Total Racimos Embolsados":
+            emb_g = df_g[df_g["Racimos"] > 0].groupby("Lote_Clean")["Racimos"].sum()
+            for lt in LOTES:
+                val = float(emb_g.get(lt, 0))
+                valores_lote[lt] = val
+                detalle_lote[lt] = f"Embolsados: <b>{int(val):,}</b> racimos"
+        elif indicador == "Rendimiento (Racimos / Ha)":
+            emb_g = df_g[df_g["Racimos"] > 0].groupby("Lote_Clean")["Racimos"].sum()
+            for lt in LOTES:
+                ha = float(HECTAREAS_LOTE.get(lt, 0))
+                rac = float(emb_g.get(lt, 0))
+                val = round(rac / ha, 2) if ha > 0 else 0.0
+                valores_lote[lt] = val
+                detalle_lote[lt] = f"Rendimiento: <b>{val:.2f} rac/ha</b> ({int(rac):,} rac / {ha:.2f} ha)"
+        else:
+            ahora_g = datetime.now() - timedelta(hours=5)
+            anio_g, sem_g, _ = ahora_g.isocalendar()
+            emb_pos = df_g[df_g["Racimos"] > 0].copy()
+            if not emb_pos.empty and "Semana" in emb_pos.columns:
+                emb_pos["Sem_Num"] = pd.to_numeric(emb_pos["Semana"], errors="coerce").fillna(sem_g)
+                emb_pos["Edad_G"] = (sem_g - emb_pos["Sem_Num"]).clip(lower=0)
+                corte_9_12 = emb_pos[(emb_pos["Edad_G"] >= 9) & (emb_pos["Edad_G"] <= 12)].groupby("Lote_Clean")["Racimos"].sum()
+                for lt in LOTES:
+                    val = float(corte_9_12.get(lt, 0))
+                    valores_lote[lt] = val
+                    detalle_lote[lt] = f"Fruta 9-12 sem: <b>{int(val):,}</b> racimos"
+
+    todos_pts = [pt for item in linderos for pt in item["coords"]]
+    centro_lat = sum(p[0] for p in todos_pts) / len(todos_pts)
+    centro_lon = sum(p[1] for p in todos_pts) / len(todos_pts)
+
+    mapa = folium.Map(location=[centro_lat, centro_lon], zoom_start=15, tiles=None)
+    folium.TileLayer(
+        tiles="https://arcgisonline.com{z}/{y}/{x}",
+        attr="Esri Satellite", name="Satélite", overlay=False, control=True
+    ).add_to(mapa)
+
+    fg_lotes = folium.FeatureGroup(name="🟩 Lotes (Semáforo)", show=True)
+    max_val = max(valores_lote.values()) if valores_lote else 1.0
+    max_val = max(max_val, 1.0)
+
+    for idx_p, poly_item in enumerate(linderos):
+        coords = poly_item["coords"]
+        lote_asig = normalizar_nombre_lote_gis(poly_item["nombre"])
+        if lote_asig not in LOTES:
+            for txt_item in textos:
+                if txt_item["tipo"] == "point":
+                    if punto_en_poligono(txt_item["coords"][0], txt_item["coords"][1], coords):
+                        cand = normalizar_nombre_lote_gis(txt_item["nombre"])
+                        if cand in LOTES:
+                            lote_asig = cand
+                            break
+        if lote_asig not in LOTES and idx_p < len(LOTES):
+            lote_asig = LOTES[idx_p]
+
+        val_actual = valores_lote.get(lote_asig, 0.0)
+        ratio_c = val_actual / max_val
+        color_hex = "#22c55e" if ratio_c >= 0.65 else ("#eab308" if ratio_c >= 0.30 else "#ef4444")
+        ha_txt = HECTAREAS_LOTE.get(lote_asig, 0)
+        popup_html = f"""
+        <div style="font-family:sans-serif; min-width:170px;">
+            <h4 style="margin:0 0 4px 0; color:#1b4332;">🍌 {lote_asig}</h4>
+            <p style="margin:2px 0;"><b>Área:</b> {ha_txt} ha</p>
+            <p style="margin:2px 0;">{detalle_lote.get(lote_asig, '')}</p>
+        </div>
+        """
+        folium.Polygon(
+            locations=coords,
+            color="#ffffff", weight=2,
+            fill=True, fill_color=color_hex, fill_opacity=0.45,
+            tooltip=f"{lote_asig} | {detalle_lote.get(lote_asig, '').replace('<b>','').replace('</b>','')}",
+            popup=folium.Popup(popup_html, max_width=250)
+        ).add_to(fg_lotes)
+
+        c_lat = sum(p[0] for p in coords) / len(coords)
+        c_lon = sum(p[1] for p in coords) / len(coords)
+        folium.Marker(
+            location=[c_lat, c_lon],
+            icon=folium.DivIcon(html=f'<div style="font-size:10px; font-weight:bold; color:white; text-shadow:1px 1px 2px black; white-space:nowrap;">{lote_asig}<br>({int(val_actual):,})</div>')
+        ).add_to(fg_lotes)
+    fg_lotes.add_to(mapa)
+
+    if cables:
+        fg_cable = folium.FeatureGroup(name="🟡 Cable Vía", show=True)
+        for c_item in cables:
+            if c_item["tipo"] == "line":
+                folium.PolyLine(c_item["coords"], color="#facc15", weight=3, dash_array="6,4", tooltip="Cable Vía").add_to(fg_cable)
+        fg_cable.add_to(mapa)
+
+    if canales:
+        fg_canal = folium.FeatureGroup(name="🔵 Canales", show=True)
+        for can_item in canales:
+            if can_item["tipo"] == "line":
+                folium.PolyLine(can_item["coords"], color="#38bdf8", weight=2.5, tooltip="Canal").add_to(fg_canal)
+        fg_canal.add_to(mapa)
+
+    if vias:
+        fg_via = folium.FeatureGroup(name="⬜ Vías Internas", show=False)
+        for v_item in vias:
+            if v_item["tipo"] == "line":
+                folium.PolyLine(v_item["coords"], color="#e2e8f0", weight=2, tooltip="Vía").add_to(fg_via)
+        fg_via.add_to(mapa)
+
+    folium.LayerControl(collapsed=False).add_to(mapa)
+    st_folium(mapa, width=None, height=560, returned_objects=[])
 
 
 if rol == "Parcelero (Embolse)":
@@ -1066,11 +1274,13 @@ elif rol == "Consulta de Embolse":
 
 
     df = cargar_datos()
-    t_cons1, t_cons2 = st.tabs(["🌱 Reportes de Embolse", "📦 Saldos De Racimos"])
+    t_cons1, t_cons2, t_cons3 = st.tabs(["🌱 Reportes de Embolse", "📦 Saldos De Racimos", "🗺️ Mapa GIS"])
     with t_cons1:
         mostrar_reportes_embolse(df, prefijo="cons", lote_qr=lote_qr)
     with t_cons2:
         mostrar_saldos_y_proyeccion(df, prefijo="cons_proy", lote_qr=lote_qr)
+    with t_cons3:
+        mostrar_mapa_gis(df)
 
 
 
@@ -1808,3 +2018,4 @@ elif rol == "Administrador":
                     st.altair_chart(aplicar_tema_tarjeta(bar_s + txt_s_seg + txt_s_tot), use_container_width=True)
             else:
                     st.info("No hay saldos en mata disponibles para los filtros seleccionados.")
+
